@@ -129,4 +129,40 @@ class OrderController extends Controller
 
         return response()->json(['message' => 'Commande supprimée.']);
     }
+
+    /** Printable ticket payload (POS module). */
+    public function ticket(Order $order)
+    {
+        $this->authorize(Permissions::ORDERS_VIEW);
+        $order->load(['items', 'table', 'customer', 'restaurant']);
+
+        $paid = $order->payments()->where('status', 'succeeded')->sum('amount');
+
+        return response()->json([
+            'data' => [
+                'restaurant' => [
+                    'name' => $order->restaurant->name,
+                    'address' => $order->restaurant->address,
+                    'phone' => $order->restaurant->phone,
+                ],
+                'code' => $order->code,
+                'type' => $order->type,
+                'table' => $order->table?->name,
+                'date' => $order->created_at,
+                'items' => $order->items->map(fn ($i) => [
+                    'name' => $i->name,
+                    'quantity' => $i->quantity,
+                    'unit_price' => (float) $i->unit_price,
+                    'total' => (float) $i->total,
+                ]),
+                'subtotal' => (float) $order->subtotal,
+                'tax' => (float) $order->tax,
+                'discount' => (float) $order->discount,
+                'total' => (float) $order->total,
+                'paid' => (float) $paid,
+                'change' => round(max(0, $paid - (float) $order->total), 2),
+                'currency' => $order->restaurant->currency,
+            ],
+        ]);
+    }
 }

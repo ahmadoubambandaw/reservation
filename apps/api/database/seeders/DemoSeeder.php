@@ -5,10 +5,13 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Employee;
+use App\Models\Expense;
+use App\Models\Ingredient;
 use App\Models\MenuItem;
 use App\Models\Reservation;
 use App\Models\RestaurantTable;
 use App\Models\Role;
+use App\Models\Supplier;
 use App\Models\User;
 use App\Services\RestaurantProvisioner;
 use App\Tenancy\TenantManager;
@@ -118,6 +121,14 @@ class DemoSeeder extends Seeder
                 'guest_name' => $customer->name,
                 'guest_phone' => $customer->phone,
             ]);
+
+            // Inventory (stocks) demo
+            $supplier = Supplier::create(['name' => 'Marché Kermel', 'phone' => '+221 77 555 00 00']);
+            Ingredient::create(['supplier_id' => $supplier->id, 'name' => 'Riz brisé', 'unit' => 'kg', 'stock_quantity' => 4, 'reorder_level' => 20, 'cost_per_unit' => 600]);
+            Ingredient::create(['supplier_id' => $supplier->id, 'name' => 'Poisson thiof', 'unit' => 'kg', 'stock_quantity' => 30, 'reorder_level' => 10, 'cost_per_unit' => 3500]);
+
+            // Accounting demo
+            Expense::create(['category' => 'utilities', 'description' => 'Électricité', 'amount' => 85000, 'spent_at' => now()->startOfMonth()]);
         });
     }
 

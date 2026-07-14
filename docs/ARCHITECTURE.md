@@ -78,7 +78,36 @@ Route::post(...)->middleware('permission:menu.manage');
 Route::get(...)->middleware('role:manager,cashier');
 ```
 
-## 3. Modularité / réutilisation pour d'autres SaaS
+## 3. Modules activables par abonnement (Restaurant OS)
+
+Le produit est un **Restaurant OS modulaire** : chaque module (POS, cuisine,
+stocks, comptabilité, marketing, rapports, personnel, paramètres…) s'active ou
+se désactive **selon le plan** du restaurant.
+
+| Pièce | Rôle |
+|-------|------|
+| `App\Support\Modules` | Catalogue des modules (clé, nom, description, `core`). |
+| `plans.modules` (JSON) | Liste des modules débloqués par chaque plan. |
+| `App\Services\ModuleManager` | Résout les modules actifs d'un restaurant (via son abonnement) + cache par requête. |
+| `App\Http\Middleware\EnsureModule` | `module:<clé>` → 403 si le module n'est pas inclus. |
+
+Ajouter un module = 1) une clé dans `Modules`, 2) l'ajouter aux plans voulus
+(`PlanSeeder`), 3) grouper ses routes sous `->middleware('module:<clé>')`. Rien
+d'autre à toucher — l'existant n'est jamais impacté.
+
+```php
+Route::middleware('module:inventory')->group(function () {
+    Route::apiResource('ingredients', IngredientController::class);
+    // ...
+});
+```
+
+Les modules actifs sont exposés au client dans `GET /auth/me` (`modules`) et
+détaillés via `GET /modules`, pour que le web et l'app Flutter affichent ou
+masquent les fonctionnalités. La double barrière **module (abonnement)** +
+**permission (RBAC)** protège chaque action.
+
+## 4. Modularité / réutilisation pour d'autres SaaS
 
 Le socle est conçu pour être réextrait :
 
@@ -90,7 +119,7 @@ Le socle est conçu pour être réextrait :
 - Services découplés (`RestaurantProvisioner`, `TwoFactorService`) : logique
   métier hors des contrôleurs, testable et remplaçable.
 
-## 4. Sécurité
+## 5. Sécurité
 
 - **Auth** : Sanctum (tokens API + support SPA stateful).
 - **2FA** : TOTP RFC 6238 autonome (`TwoFactorService`), compatible Google
@@ -102,12 +131,20 @@ Le socle est conçu pour être réextrait :
 - **CSRF** via le stateful guard Sanctum pour le front SPA.
 - Table `audit_logs` prête pour la traçabilité.
 
-## 5. Schéma de données (22 tables)
+## 6. Schéma de données
 
-`users`, `restaurants`, `plans`, `subscriptions`, `roles`, `permissions`,
-`permission_role`, `employees`, `customers`, `restaurant_tables`, `categories`,
-`menus`, `menu_items`, `reservations`, `orders`, `order_items`, `payments`
-(polymorphe), `invoices`, `reviews`, `coupons`, `audit_logs`, `settings`.
+**Cœur** : `users`, `restaurants`, `plans`, `subscriptions`, `roles`,
+`permissions`, `permission_role`, `employees`, `customers`, `restaurant_tables`,
+`categories`, `menus`, `menu_items`, `reservations`, `orders`, `order_items`,
+`payments` (polymorphe), `invoices`, `reviews`, `coupons`, `audit_logs`,
+`settings`.
+
+**Modules Restaurant OS** : `cash_sessions` (POS/caisse), `suppliers`,
+`ingredients`, `purchases`, `purchase_items`, `stock_movements` (stocks),
+`expenses` (comptabilité), `shifts`, `attendances` (personnel), `campaigns`
+(marketing). `plans.modules` porte les modules débloqués par plan ; les colonnes
+de branding (`theme`, `primary_color`, `secondary_color`, `custom_domain`) sont
+sur `restaurants`.
 
 Tables **globales** (non scopées) : `users`, `plans`, `roles`, `permissions`,
 `restaurants`. Toutes les autres portent `restaurant_id` et sont filtrées par le

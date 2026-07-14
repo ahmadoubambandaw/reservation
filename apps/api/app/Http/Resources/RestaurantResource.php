@@ -31,6 +31,12 @@ class RestaurantResource extends JsonResource
             'opening_hours' => $this->opening_hours,
             'services' => $this->services ?? [],
             'status' => $this->status,
+            'branding' => [
+                'theme' => $this->theme,
+                'primary_color' => $this->primary_color,
+                'secondary_color' => $this->secondary_color,
+                'custom_domain' => $this->custom_domain,
+            ],
             'subscription' => new SubscriptionResource($this->whenLoaded('subscription')),
             'created_at' => $this->created_at,
         ];

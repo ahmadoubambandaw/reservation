@@ -24,6 +24,7 @@ class Restaurant extends Model
         'email', 'phone', 'website', 'address', 'city', 'country',
         'latitude', 'longitude', 'timezone', 'currency',
         'opening_hours', 'services', 'status',
+        'theme', 'primary_color', 'secondary_color', 'custom_domain',
     ];
 
     protected function casts(): array

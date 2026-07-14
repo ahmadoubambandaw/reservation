@@ -11,7 +11,7 @@ class Payment extends Model
     use BelongsToTenant;
 
     protected $fillable = [
-        'restaurant_id', 'payable_type', 'payable_id', 'amount', 'currency',
+        'restaurant_id', 'cash_session_id', 'payable_type', 'payable_id', 'amount', 'currency',
         'method', 'status', 'provider_ref', 'meta', 'paid_at',
     ];
 

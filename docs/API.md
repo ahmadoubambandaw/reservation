@@ -84,6 +84,76 @@ POST /api/v1/orders
 Les totaux (`subtotal`, `tax`, `discount`, `total`) sont recalculés côté serveur
 à partir des prix réels des plats et d'un éventuel coupon.
 
+## Modules Restaurant OS (authentifié, gate `module:<clé>` + RBAC)
+
+Chaque groupe n'est accessible que si le **plan** du restaurant inclut le module
+(sinon `403`). Les modules actifs sont listés dans `GET /auth/me` et `GET /modules`.
+
+### POS / caisse (`module:pos`)
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/pos/sessions` | Historique des sessions de caisse |
+| GET | `/pos/sessions/current` | Caisse actuellement ouverte |
+| POST | `/pos/sessions` | Ouvrir la caisse (`opening_float`) |
+| POST | `/pos/sessions/{id}/close` | Clôturer (`counted_amount`) + réconciliation |
+| GET/POST | `/orders/{order}/payments` | Lister / enregistrer un paiement |
+| GET | `/orders/{order}/ticket` | Ticket imprimable |
+
+### Kitchen Display (`module:kitchen_display`)
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/kitchen/queue` | File des commandes actives + résumé |
+| PATCH | `/kitchen/items/{orderItem}` | Statut d'un plat (pending→preparing→ready→served) |
+| POST | `/kitchen/orders/{order}/bump` | Faire avancer toute la commande |
+
+### Stocks (`module:inventory`)
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| `apiResource` | `/suppliers` | Fournisseurs |
+| `apiResource` | `/ingredients` | Ingrédients |
+| GET | `/ingredients/alerts` | Ingrédients sous le seuil de réappro |
+| POST | `/ingredients/{id}/adjust` | Ajustement de stock (in/out/adjustment) |
+| GET/POST | `/purchases` | Achats (avec lignes) |
+| POST | `/purchases/{id}/receive` | Réception → entrée en stock |
+
+### Comptabilité (`module:accounting`)
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/accounting/summary` | Revenus − dépenses = bénéfice (par période) |
+| `apiResource` | `/expenses` | Dépenses |
+
+### Personnel (`module:staff`)
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| `apiResource` | `/shifts` | Horaires / planning |
+| GET | `/attendances` | Registre de présence |
+| POST | `/attendances/clock-in` · `/clock-out` | Pointage entrée / sortie |
+
+### Marketing (`module:marketing`)
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| `apiResource` | `/campaigns` | Campagnes SMS/Email/WhatsApp/Push |
+| GET | `/campaigns/{id}/audience` | Taille de l'audience ciblée |
+| POST | `/campaigns/{id}/send` | Envoyer maintenant |
+
+### Rapports (`module:reports`)
+
+| Méthode | Endpoint |
+|--------|----------|
+| GET | `/reports/sales` · `/reports/reservations` · `/reports/popular-dishes` · `/reports/employees` |
+
+### Paramètres / branding (`module:settings`)
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| GET/PUT | `/settings/branding` | Thème, couleurs, logo, domaine personnalisé |
+
 ## Super Admin (`/admin`, rôle `super_admin`)
 
 | Méthode | Endpoint | Description |

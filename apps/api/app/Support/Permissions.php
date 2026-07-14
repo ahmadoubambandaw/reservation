@@ -64,6 +64,30 @@ class Permissions
 
     public const BILLING_MANAGE = 'billing.manage';
 
+    // POS / caisse
+    public const POS_OPERATE = 'pos.operate';
+
+    // Inventory / stocks
+    public const INVENTORY_VIEW = 'inventory.view';
+
+    public const INVENTORY_MANAGE = 'inventory.manage';
+
+    // Accounting
+    public const ACCOUNTING_VIEW = 'accounting.view';
+
+    public const ACCOUNTING_MANAGE = 'accounting.manage';
+
+    // Marketing
+    public const MARKETING_MANAGE = 'marketing.manage';
+
+    // Reports
+    public const REPORTS_VIEW = 'reports.view';
+
+    // Staff scheduling & attendance
+    public const STAFF_VIEW = 'staff.view';
+
+    public const STAFF_MANAGE = 'staff.manage';
+
     /**
      * All permissions grouped by module (used to seed the permissions table).
      *
@@ -115,6 +139,27 @@ class Permissions
                 self::PAYMENTS_VIEW => 'Voir les paiements',
                 self::BILLING_MANAGE => 'Gérer la facturation',
             ],
+            'Point de vente' => [
+                self::POS_OPERATE => 'Utiliser la caisse (POS)',
+            ],
+            'Stocks' => [
+                self::INVENTORY_VIEW => 'Voir les stocks',
+                self::INVENTORY_MANAGE => 'Gérer les stocks',
+            ],
+            'Comptabilité' => [
+                self::ACCOUNTING_VIEW => 'Voir la comptabilité',
+                self::ACCOUNTING_MANAGE => 'Gérer la comptabilité',
+            ],
+            'Marketing' => [
+                self::MARKETING_MANAGE => 'Gérer le marketing',
+            ],
+            'Rapports' => [
+                self::REPORTS_VIEW => 'Voir les rapports',
+            ],
+            'Personnel' => [
+                self::STAFF_VIEW => 'Voir horaires et présence',
+                self::STAFF_MANAGE => 'Gérer horaires et présence',
+            ],
         ];
     }
 
@@ -155,6 +200,8 @@ class Permissions
                 self::MENU_VIEW,
                 self::TABLES_VIEW,
                 self::PAYMENTS_VIEW,
+                self::POS_OPERATE,
+                self::INVENTORY_VIEW,
             ],
 
             Role::WAITER => [
@@ -164,11 +211,13 @@ class Permissions
                 self::TABLES_VIEW,
                 self::MENU_VIEW,
                 self::CUSTOMERS_VIEW,
+                self::POS_OPERATE,
             ],
 
             Role::KITCHEN => [
                 self::ORDERS_VIEW, self::ORDERS_KITCHEN,
                 self::MENU_VIEW,
+                self::INVENTORY_VIEW,
             ],
 
             Role::CUSTOMER => [],
