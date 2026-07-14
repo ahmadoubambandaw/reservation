@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Plan;
+use App\Support\Modules;
 use App\Support\Permissions;
 use Illuminate\Database\Seeder;
 
@@ -15,6 +16,7 @@ class PlanSeeder extends Seeder
                 'name' => 'Free', 'slug' => 'free', 'price' => 0, 'trial_days' => 0,
                 'description' => 'Pour démarrer et tester la plateforme.',
                 'features' => [Permissions::RESERVATIONS_MANAGE, Permissions::MENU_MANAGE, Permissions::TABLES_MANAGE],
+                'modules' => [Modules::RESERVATIONS, Modules::MENU],
                 'limits' => ['tables' => 5, 'employees' => 2, 'menu_items' => 30],
                 'sort_order' => 1,
             ],
@@ -24,6 +26,9 @@ class PlanSeeder extends Seeder
                 'features' => [
                     Permissions::RESERVATIONS_MANAGE, Permissions::MENU_MANAGE, Permissions::TABLES_MANAGE,
                     Permissions::ORDERS_MANAGE, Permissions::CUSTOMERS_MANAGE,
+                ],
+                'modules' => [
+                    Modules::RESERVATIONS, Modules::MENU, Modules::POS, Modules::CRM, Modules::KITCHEN_DISPLAY,
                 ],
                 'limits' => ['tables' => 20, 'employees' => 8, 'menu_items' => 150],
                 'sort_order' => 2,
@@ -36,6 +41,10 @@ class PlanSeeder extends Seeder
                     Permissions::ORDERS_MANAGE, Permissions::CUSTOMERS_MANAGE, Permissions::COUPONS_MANAGE,
                     Permissions::STATS_VIEW, Permissions::EMPLOYEES_MANAGE,
                 ],
+                'modules' => [
+                    Modules::RESERVATIONS, Modules::MENU, Modules::POS, Modules::CRM, Modules::KITCHEN_DISPLAY,
+                    Modules::INVENTORY, Modules::REPORTS, Modules::STAFF, Modules::MARKETING,
+                ],
                 'limits' => ['tables' => 60, 'employees' => 30, 'menu_items' => null],
                 'sort_order' => 3,
             ],
@@ -43,6 +52,7 @@ class PlanSeeder extends Seeder
                 'name' => 'Enterprise', 'slug' => 'enterprise', 'price' => 79900, 'trial_days' => 30,
                 'description' => 'Chaînes et groupes multi-établissements.',
                 'features' => Permissions::all(),
+                'modules' => Modules::all(),
                 'limits' => ['tables' => null, 'employees' => null, 'menu_items' => null],
                 'sort_order' => 4,
             ],

@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\RestaurantProvisioner;
 use App\Services\TwoFactorService;
+use App\Support\Modules;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -86,14 +87,16 @@ class AuthController extends Controller
     {
         $user = $request->user();
         $employee = $user->employeeFor();
+        $restaurant = $employee?->restaurant;
 
         return response()->json([
             'user' => new UserResource($user),
-            'restaurant' => $employee
-                ? new RestaurantResource($employee->restaurant->load('subscription.plan'))
+            'restaurant' => $restaurant
+                ? new RestaurantResource($restaurant->load('subscription.plan'))
                 : null,
             'role' => $employee?->role?->slug ?? ($user->isSuperAdmin() ? 'super_admin' : null),
             'permissions' => $employee?->role?->permissions->pluck('slug') ?? [],
+            'modules' => $restaurant ? $restaurant->enabledModules() : Modules::all(),
             'restaurants' => RestaurantResource::collection($user->restaurants),
         ]);
     }

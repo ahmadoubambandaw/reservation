@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\EmployeeController;
 use App\Http\Controllers\Api\V1\MenuController;
 use App\Http\Controllers\Api\V1\MenuItemController;
+use App\Http\Controllers\Api\V1\ModuleController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\Public\PlanController;
 use App\Http\Controllers\Api\V1\Public\RestaurantController as PublicRestaurantController;
@@ -50,6 +51,7 @@ Route::prefix('v1')->group(function () {
         // Restaurant workspace
         Route::get('dashboard', [DashboardController::class, 'index']);
         Route::get('stats/overview', [StatsController::class, 'overview']);
+        Route::get('modules', [ModuleController::class, 'index']);
 
         Route::apiResource('tables', TableController::class);
         Route::apiResource('categories', CategoryController::class);

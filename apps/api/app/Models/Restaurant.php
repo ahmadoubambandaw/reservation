@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ModuleManager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -127,6 +128,19 @@ class Restaurant extends Model
     public function settings(): HasMany
     {
         return $this->hasMany(Setting::class);
+    }
+
+    // Modules ----------------------------------------------------------
+
+    /** Module keys enabled for this restaurant (via its subscription plan). */
+    public function enabledModules(): array
+    {
+        return app(ModuleManager::class)->enabledFor($this);
+    }
+
+    public function hasModule(string $module): bool
+    {
+        return app(ModuleManager::class)->isEnabled($this, $module);
     }
 
     // Scopes -----------------------------------------------------------

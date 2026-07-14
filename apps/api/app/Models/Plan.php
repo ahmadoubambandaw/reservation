@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Modules;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -9,7 +10,7 @@ class Plan extends Model
 {
     protected $fillable = [
         'name', 'slug', 'description', 'price', 'currency',
-        'billing_period', 'trial_days', 'features', 'limits',
+        'billing_period', 'trial_days', 'features', 'modules', 'limits',
         'is_active', 'sort_order',
     ];
 
@@ -17,6 +18,7 @@ class Plan extends Model
     {
         return [
             'features' => 'array',
+            'modules' => 'array',
             'limits' => 'array',
             'price' => 'decimal:2',
             'is_active' => 'boolean',
@@ -44,5 +46,19 @@ class Plan extends Model
     public function hasFeature(string $feature): bool
     {
         return in_array($feature, $this->features ?? [], true);
+    }
+
+    /** Module keys unlocked by this plan (core modules are always included). */
+    public function modules(): array
+    {
+        return array_values(array_unique([
+            ...Modules::core(),
+            ...($this->modules ?? []),
+        ]));
+    }
+
+    public function hasModule(string $module): bool
+    {
+        return in_array($module, $this->modules(), true);
     }
 }

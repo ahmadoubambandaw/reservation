@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\ModuleManager;
 use App\Support\Permissions;
 use App\Tenancy\TenantManager;
 use Illuminate\Support\Facades\Gate;
@@ -14,6 +15,9 @@ class AppServiceProvider extends ServiceProvider
         // One tenant context per request/job lifecycle.
         $this->app->singleton(TenantManager::class, fn () => new TenantManager);
         $this->app->alias(TenantManager::class, 'tenant');
+
+        // Module gating resolver (per-subscription activation).
+        $this->app->singleton(ModuleManager::class);
     }
 
     public function boot(): void

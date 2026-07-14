@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureModule;
 use App\Http\Middleware\EnsurePermission;
 use App\Http\Middleware\EnsureRole;
 use App\Http\Middleware\ResolveTenant;
@@ -36,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant' => ResolveTenant::class,
             'role' => EnsureRole::class,
             'permission' => EnsurePermission::class,
+            'module' => EnsureModule::class,
         ]);
 
         // The tenant must be resolved AFTER authentication but BEFORE route
