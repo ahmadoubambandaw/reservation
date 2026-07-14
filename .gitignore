@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Build / cache
+dist/
+.next/
+.turbo/
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

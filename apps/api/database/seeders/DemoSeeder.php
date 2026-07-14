@@ -1,0 +1,139 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Category;
+use App\Models\Customer;
+use App\Models\Employee;
+use App\Models\MenuItem;
+use App\Models\Reservation;
+use App\Models\RestaurantTable;
+use App\Models\Role;
+use App\Models\User;
+use App\Services\RestaurantProvisioner;
+use App\Tenancy\TenantManager;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+class DemoSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // Super admin -------------------------------------------------
+        User::updateOrCreate(
+            ['email' => 'admin@ndaw-resto.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('password'),
+                'is_super_admin' => true,
+                'email_verified_at' => now(),
+            ],
+        );
+
+        // Demo restaurant owner + tenant ------------------------------
+        $owner = User::updateOrCreate(
+            ['email' => 'owner@ledakar.com'],
+            [
+                'name' => 'Awa Diop',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ],
+        );
+
+        // Avoid duplicating the demo restaurant on re-seed.
+        if ($owner->ownedRestaurants()->exists()) {
+            return;
+        }
+
+        $restaurant = app(RestaurantProvisioner::class)->provision($owner, 'Le Dakar', 'pro');
+        $restaurant->update([
+            'description' => 'Cuisine sénégalaise moderne au cœur de Dakar.',
+            'email' => 'contact@ledakar.com',
+            'phone' => '+221 33 800 00 00',
+            'address' => 'Avenue Cheikh Anta Diop',
+            'city' => 'Dakar',
+            'country' => 'SN',
+            'latitude' => 14.6928,
+            'longitude' => -17.4467,
+            'services' => ['dine_in', 'takeaway', 'delivery'],
+            'opening_hours' => [
+                'mon' => [['open' => '11:00', 'close' => '23:00']],
+                'tue' => [['open' => '11:00', 'close' => '23:00']],
+            ],
+        ]);
+
+        // Seed tenant-owned data inside the restaurant's context.
+        app(TenantManager::class)->forRestaurant($restaurant, function () use ($restaurant) {
+            // Staff
+            $this->addStaff($restaurant, 'Manager Fatou', 'manager@ledakar.com', Role::MANAGER);
+            $this->addStaff($restaurant, 'Serveur Modou', 'waiter@ledakar.com', Role::WAITER);
+            $this->addStaff($restaurant, 'Cuisine Ndeye', 'kitchen@ledakar.com', Role::KITCHEN);
+
+            // Tables
+            foreach (range(1, 8) as $n) {
+                RestaurantTable::create([
+                    'name' => "Table {$n}",
+                    'capacity' => $n % 2 === 0 ? 4 : 2,
+                    'location' => $n <= 4 ? 'indoor' : 'terrace',
+                ]);
+            }
+
+            // Menu
+            $catFood = Category::create(['name' => 'Plats', 'type' => 'food', 'sort_order' => 1]);
+            $catDrink = Category::create(['name' => 'Boissons', 'type' => 'drink', 'sort_order' => 2]);
+            $catDessert = Category::create(['name' => 'Desserts', 'type' => 'dessert', 'sort_order' => 3]);
+
+            $items = [
+                [$catFood, 'Thiéboudienne', 4500, true],
+                [$catFood, 'Yassa Poulet', 4000, true],
+                [$catFood, 'Mafé', 3800, false],
+                [$catDrink, 'Bissap', 1000, false],
+                [$catDrink, 'Jus de Bouye', 1200, false],
+                [$catDessert, 'Thiakry', 1500, false],
+            ];
+            foreach ($items as [$cat, $name, $price, $featured]) {
+                MenuItem::create([
+                    'category_id' => $cat->id,
+                    'name' => $name,
+                    'price' => $price,
+                    'is_featured' => $featured,
+                ]);
+            }
+
+            // Customers + reservations
+            $customer = Customer::create([
+                'name' => 'Ibrahima Fall',
+                'phone' => '+221 77 123 45 67',
+                'email' => 'ibrahima@example.com',
+                'loyalty_points' => 120,
+                'visits_count' => 6,
+            ]);
+
+            Reservation::create([
+                'customer_id' => $customer->id,
+                'table_id' => RestaurantTable::first()->id,
+                'reserved_at' => now()->addDay()->setTime(20, 0),
+                'party_size' => 4,
+                'status' => 'confirmed',
+                'guest_name' => $customer->name,
+                'guest_phone' => $customer->phone,
+            ]);
+        });
+    }
+
+    private function addStaff($restaurant, string $name, string $email, string $roleSlug): void
+    {
+        $user = User::updateOrCreate(
+            ['email' => $email],
+            ['name' => $name, 'password' => Hash::make('password'), 'email_verified_at' => now()],
+        );
+
+        Employee::create([
+            'restaurant_id' => $restaurant->id,
+            'user_id' => $user->id,
+            'role_id' => Role::where('slug', $roleSlug)->first()->id,
+            'status' => 'active',
+            'hired_at' => now(),
+        ]);
+    }
+}
