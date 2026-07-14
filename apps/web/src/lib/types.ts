@@ -113,3 +113,81 @@ export interface DashboardData {
   tables: { total: number; occupied: number; reserved: number; available: number };
   orders_by_status: Record<string, number>;
 }
+
+export interface OrderItem {
+  id: number;
+  menu_item_id: number | null;
+  name: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+}
+
+export interface Order {
+  id: number;
+  code: string;
+  type: "dine_in" | "takeaway" | "delivery";
+  status: string;
+  payment_status: "unpaid" | "partial" | "paid" | "refunded";
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  table?: { id: number; name: string } | null;
+  items?: OrderItem[];
+  created_at?: string;
+}
+
+export interface CashSession {
+  id: number;
+  opening_float: number;
+  expected_amount: number | null;
+  counted_amount: number | null;
+  difference: number | null;
+  status: "open" | "closed";
+  opened_at: string | null;
+  closed_at: string | null;
+}
+
+export interface Ticket {
+  restaurant: { name: string; address: string | null; phone: string | null };
+  code: string;
+  type: string;
+  table: string | null;
+  date: string;
+  items: { name: string; quantity: number; unit_price: number; total: number }[];
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  paid: number;
+  change: number;
+  currency: string;
+}
+
+export interface SalesReport {
+  range: { from: string; to: string };
+  total_revenue: number;
+  orders_count: number;
+  average_ticket: number;
+  by_type: { type: string; count: number; revenue: number }[];
+  by_day: { day: string; revenue: number }[];
+}
+
+export interface PopularDish {
+  name: string;
+  quantity: number;
+  revenue: number;
+}
+
+export interface ReservationsReport {
+  total: number;
+  by_status: Record<string, number>;
+  covers: number;
+}
+
+export interface EmployeeReport {
+  employee: string | null;
+  orders: number;
+  revenue: number;
+}

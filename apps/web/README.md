@@ -30,9 +30,13 @@ L'API Laravel doit tourner (voir `apps/api`). Par défaut le front pointe vers
   l'abonnement** (via `/auth/me`), mode clair/sombre.
   - Vue d'ensemble (KPIs `/dashboard`), Réservations (liste + création + statut),
     Menu (catégories + plats), Clients (CRM).
-  - Modules POS, Cuisine, Stocks, Comptabilité, Marketing, Rapports, Personnel,
-    Paramètres : pages présentes et gardées par plan, interfaces détaillées en
-    cours d'itération.
+  - **POS** : ouverture/clôture de caisse, catalogue + panier, encaissement
+    (espèces/Wave/Orange Money), commandes récentes et ticket imprimable.
+  - **Rapports** : KPIs, graphique d'évolution du CA, plats populaires, ventes
+    par type, performance des employés, période 7/30/90 jours.
+  - Modules Cuisine, Stocks, Comptabilité, Marketing, Personnel, Paramètres :
+    pages présentes et gardées par plan, interfaces détaillées en cours
+    d'itération.
   - Espace Super Admin (stats plateforme).
 
 ## Design system

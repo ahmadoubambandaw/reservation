@@ -8,6 +8,8 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\Ingredient;
 use App\Models\MenuItem;
+use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\RestaurantTable;
 use App\Models\Role;
@@ -129,7 +131,62 @@ class DemoSeeder extends Seeder
 
             // Accounting demo
             Expense::create(['category' => 'utilities', 'description' => 'Électricité', 'amount' => 85000, 'spent_at' => now()->startOfMonth()]);
+
+            // Orders + payments demo (populate POS & Reports).
+            $this->seedOrders($restaurant);
         });
+    }
+
+    /** Create a spread of paid orders over the last two weeks. */
+    private function seedOrders($restaurant): void
+    {
+        $menuItems = MenuItem::all();
+        $tables = RestaurantTable::all();
+        $ownerEmployee = Employee::where('user_id', $restaurant->owner_id)->first();
+        $methods = ['cash', 'wave', 'orange_money'];
+        $types = ['dine_in', 'dine_in', 'takeaway', 'delivery'];
+
+        for ($i = 0; $i < 24; $i++) {
+            $when = now()->subDays(random_int(0, 13))->setTime(random_int(11, 22), random_int(0, 59));
+            $type = $types[array_rand($types)];
+
+            $order = Order::create([
+                'employee_id' => $ownerEmployee?->id,
+                'table_id' => $type === 'dine_in' ? $tables->random()->id : null,
+                'type' => $type,
+                'status' => 'completed',
+                'payment_status' => 'paid',
+            ]);
+
+            foreach ($menuItems->random(random_int(1, 3)) as $mi) {
+                $qty = random_int(1, 3);
+                $order->items()->create([
+                    'menu_item_id' => $mi->id,
+                    'name' => $mi->name,
+                    'quantity' => $qty,
+                    'unit_price' => $mi->price,
+                    'total' => $mi->price * $qty,
+                    'status' => 'served',
+                ]);
+            }
+
+            $order->load('items');
+            $order->recalculate(0.0);
+            $order->save();
+
+            $payment = $order->payments()->create([
+                'restaurant_id' => $restaurant->id,
+                'amount' => $order->total,
+                'currency' => 'XOF',
+                'method' => $methods[array_rand($methods)],
+                'status' => 'succeeded',
+                'paid_at' => $when,
+            ]);
+
+            // Backdate rows so Reports show a realistic time series.
+            Order::whereKey($order->id)->update(['created_at' => $when, 'updated_at' => $when]);
+            Payment::whereKey($payment->id)->update(['created_at' => $when, 'updated_at' => $when]);
+        }
     }
 
     private function addStaff($restaurant, string $name, string $email, string $roleSlug): void
