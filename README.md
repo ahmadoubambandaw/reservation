@@ -13,8 +13,8 @@ s'active ou se désactive selon le plan d'abonnement du restaurant**.
 ```
 reservation/
 ├─ apps/
-│  └─ api/            # API Laravel 12 (Sanctum, PostgreSQL, Redis)  ← livré
-│  └─ web/            # Frontend Next.js 15 (à venir)
+│  ├─ api/            # API Laravel 13 (Sanctum, PostgreSQL, Redis)      ← livré
+│  └─ web/            # Frontend Next.js 16 (Tailwind, shadcn-like, FM)  ← livré
 ├─ docs/
 │  ├─ ARCHITECTURE.md # Multi-tenant, RBAC, modularité
 │  └─ API.md          # Référence des endpoints
@@ -54,9 +54,16 @@ branchement des providers à venir — config prête dans `.env.example`.
 
 | Suite | Statut |
 |-------|--------|
-| Tests (isolation, RBAC, gating modules, POS, stocks, compta, staff, marketing, KDS) | ✅ 26 tests verts |
-| Frontend Next.js | 🔜 |
+| Tests API (isolation, RBAC, gating modules, POS, stocks, compta, staff, marketing, KDS) | ✅ 26 tests verts |
+| **Frontend Next.js 16** (site public + auth + dashboard modulaire) | ✅ Livré |
 | App mobile Flutter | 🔜 (consomme la même API) |
+
+### Frontend (`apps/web`)
+
+Site public premium (accueil, tarifs, restaurants, réservation invité), auth
+(connexion 2FA + inscription), et **dashboard dont la navigation s'adapte aux
+modules de l'abonnement** — mode clair/sombre, responsive. Détails :
+[`apps/web/README.md`](apps/web/README.md).
 
 ## Démarrage rapide (API)
 

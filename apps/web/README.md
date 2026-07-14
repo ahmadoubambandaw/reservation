@@ -1,0 +1,52 @@
+# Ndaw-Resto Web (Next.js 16)
+
+Frontend du Restaurant OS Ndaw-Resto : site public + dashboard, consommant
+l'API Laravel. Voir la doc d'ensemble à la racine : [`../../README.md`](../../README.md).
+
+## Stack
+
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS v4 ·
+Framer Motion · next-themes (mode clair/sombre) · lucide-react.
+
+## Démarrage
+
+```bash
+cp .env.example .env.local   # définit NEXT_PUBLIC_API_URL
+npm install
+npm run dev                  # http://localhost:3000
+```
+
+L'API Laravel doit tourner (voir `apps/api`). Par défaut le front pointe vers
+`http://localhost:8000/api/v1`.
+
+## Ce qui est inclus
+
+- **Site public** : accueil premium (hero, modules, FAQ, CTA), tarifs (depuis
+  `/plans`), annuaire des restaurants + recherche, page restaurant avec menu et
+  réservation invité.
+- **Authentification** : connexion (avec 2FA), inscription (crée le restaurant),
+  session par token Sanctum persistée.
+- **Dashboard** : shell responsive, **navigation adaptée aux modules actifs de
+  l'abonnement** (via `/auth/me`), mode clair/sombre.
+  - Vue d'ensemble (KPIs `/dashboard`), Réservations (liste + création + statut),
+    Menu (catégories + plats), Clients (CRM).
+  - Modules POS, Cuisine, Stocks, Comptabilité, Marketing, Rapports, Personnel,
+    Paramètres : pages présentes et gardées par plan, interfaces détaillées en
+    cours d'itération.
+  - Espace Super Admin (stats plateforme).
+
+## Design system
+
+`src/app/globals.css` définit les tokens (couleurs, rayons) pour les thèmes clair
+et sombre. Primitives dans `src/components/ui` (Button, Card, Input, Badge,
+Dialog, Toaster…). Client API typé dans `src/lib/api.ts`, contexte d'auth dans
+`src/lib/auth.tsx`, catalogue des modules dans `src/lib/modules.tsx`.
+
+## Scripts
+
+```bash
+npm run dev      # développement
+npm run build    # build de production
+npm run start    # serveur de production
+npm run lint     # ESLint
+```
