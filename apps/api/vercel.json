@@ -1,11 +1,7 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "index.php": {
-      "runtime": "vercel-php@0.8.0",
-      "maxDuration": 60
-    }
-  },
+  "builds": [
+    { "src": "index.php", "use": "vercel-php@0.8.0" }
+  ],
   "routes": [
     { "src": "/(.*)", "dest": "/index.php" }
   ]
