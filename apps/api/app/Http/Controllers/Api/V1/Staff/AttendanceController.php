@@ -21,7 +21,7 @@ class AttendanceController extends Controller
             $query->whereDate('work_date', $date);
         }
 
-        return response()->json(['data' => $query->latest('work_date')->paginate(30)]);
+        return $query->latest('work_date')->paginate(30);
     }
 
     /** Clock the current user in (creates today's open attendance row). */

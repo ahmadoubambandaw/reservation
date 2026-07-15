@@ -24,7 +24,7 @@ class ExpenseController extends Controller
             $query->where('spent_at', '<=', $to);
         }
 
-        return response()->json(['data' => $query->latest('spent_at')->paginate(20)]);
+        return $query->latest('spent_at')->paginate(20);
     }
 
     public function store(Request $request)

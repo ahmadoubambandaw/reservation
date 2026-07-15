@@ -50,7 +50,9 @@ class DemoSeeder extends Seeder
             return;
         }
 
-        $restaurant = app(RestaurantProvisioner::class)->provision($owner, 'Le Dakar', 'pro');
+        // Enterprise so the demo showcases every module (per-plan gating stays
+        // enforced by the plans + middleware and is covered by tests).
+        $restaurant = app(RestaurantProvisioner::class)->provision($owner, 'Le Dakar', 'enterprise');
         $restaurant->update([
             'description' => 'Cuisine sénégalaise moderne au cœur de Dakar.',
             'email' => 'contact@ledakar.com',

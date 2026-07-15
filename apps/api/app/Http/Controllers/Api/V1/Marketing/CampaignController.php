@@ -14,7 +14,7 @@ class CampaignController extends Controller
     {
         $this->authorize(Permissions::MARKETING_MANAGE);
 
-        return response()->json(['data' => Campaign::latest()->paginate(20)]);
+        return Campaign::latest()->paginate(20);
     }
 
     public function store(Request $request)

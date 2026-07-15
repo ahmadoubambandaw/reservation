@@ -15,9 +15,7 @@ class PurchaseController extends Controller
     {
         $this->authorize(Permissions::INVENTORY_VIEW);
 
-        return response()->json([
-            'data' => Purchase::with('supplier', 'items')->latest()->paginate(20),
-        ]);
+        return Purchase::with('supplier', 'items')->latest()->paginate(20);
     }
 
     public function store(Request $request)

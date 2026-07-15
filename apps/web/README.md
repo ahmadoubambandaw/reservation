@@ -40,9 +40,17 @@ L'API Laravel doit tourner (voir `apps/api`). Par défaut le front pointe vers
   - **Stocks** : ingrédients (liste + ajout + ajustement entrée/sortie),
     alertes de réapprovisionnement, fournisseurs, achats (création multi-lignes
     + réception → entrée en stock).
-  - Modules Comptabilité, Marketing, Personnel, Paramètres : pages présentes et
-    gardées par plan, interfaces détaillées en cours d'itération.
+  - **Comptabilité** : synthèse revenus/dépenses/bénéfice/marge, dépenses par
+    catégorie, saisie et suppression de dépenses, période Ce mois/30j/90j.
+  - **Marketing** : campagnes SMS/Email/WhatsApp/Push par audience
+    (tous/fidèles/anniversaires), aperçu d'audience et envoi.
+  - **Personnel** : planning (créneaux) + présence (pointage entrée/sortie).
+  - **Paramètres** : thème, couleurs, logo, domaine personnalisé, aperçu live.
   - Espace Super Admin (stats plateforme).
+
+  Les 12 pages du dashboard sont connectées à l'API. Le compte de démo est en
+  plan Enterprise pour exposer les 11 modules ; le gating par plan reste
+  appliqué par l'API (middleware `module:*`) et couvert par les tests.
 
 ## Design system
 

@@ -249,3 +249,58 @@ export interface Purchase {
     total: number;
   }[];
 }
+
+export interface Expense {
+  id: number;
+  category: string;
+  description: string | null;
+  amount: number;
+  spent_at: string;
+}
+
+export interface AccountingSummary {
+  range: { from: string; to: string };
+  revenue: number;
+  expenses: number;
+  profit: number;
+  margin: number;
+  expenses_by_category: { category: string; total: number }[];
+}
+
+export interface Campaign {
+  id: number;
+  name: string;
+  channel: "sms" | "email" | "whatsapp" | "push";
+  audience: "all" | "loyalty" | "birthday";
+  subject: string | null;
+  message: string;
+  status: "draft" | "scheduled" | "sending" | "sent" | "failed";
+  scheduled_at: string | null;
+  sent_at: string | null;
+  recipients_count: number;
+}
+
+export interface EmployeeSummary {
+  id: number;
+  job_title: string | null;
+  status: string;
+  user?: { id: number; name: string; email: string };
+  role?: { id: number; name: string; slug: string };
+}
+
+export interface Shift {
+  id: number;
+  starts_at: string;
+  ends_at: string;
+  role_label: string | null;
+  notes: string | null;
+  employee?: { id: number; user?: { name: string } };
+}
+
+export interface Attendance {
+  id: number;
+  work_date: string;
+  clock_in: string | null;
+  clock_out: string | null;
+  employee?: { id: number; user?: { name: string } };
+}
