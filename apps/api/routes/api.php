@@ -46,6 +46,11 @@ Route::prefix('v1')->group(function () {
     Route::get('sites/{restaurant}', [SiteController::class, 'show']);
 
     // -------------------------------------------------------------
+    // One-time provisioning (serverless bootstrap; guarded by SETUP_TOKEN).
+    // No throttle middleware: it relies on the cache table, which does not yet
+    // exist on a fresh schema (chicken-and-egg). The secret token is the guard.
+    Route::post('system/setup', [\App\Http\Controllers\Api\V1\SystemController::class, 'setup']);
+
     // Auth
     // -------------------------------------------------------------
     Route::post('auth/register', [AuthController::class, 'register'])->middleware('throttle:10,1');

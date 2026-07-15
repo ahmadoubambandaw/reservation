@@ -1,6 +1,53 @@
 # Déploiement de Ndaw-Resto
 
-Architecture recommandée (robuste, faible coût) :
+## ✅ Chemin retenu : tout sur Vercel + Supabase (schéma dédié)
+
+Frontend **et** API sur Vercel ; base de données dans un **schéma isolé
+`ndaw_resto`** d'un projet Supabase existant (non destructif). Aucun nouveau
+compte/projet requis.
+
+### A. API Laravel → Vercel (PHP serverless)
+
+1. **vercel.com** → *Add New… Project* → importe `ahmadoubambandaw/reservation`.
+2. **Root Directory** = `apps/api`. Vercel lit `apps/api/vercel.json`
+   (runtime `vercel-php`).
+3. **Environment Variables** (voir `apps/api/.env.production.example`) :
+   - `APP_KEY` (fournie), `APP_ENV=production`, `APP_DEBUG=false`
+   - `APP_URL=https://<ton-api>.vercel.app`
+   - Supabase (Settings → Database → **Connection string / pooler**) :
+     `DB_CONNECTION=pgsql`, `DB_HOST`, `DB_PORT=5432`, `DB_DATABASE=postgres`,
+     `DB_USERNAME`, `DB_PASSWORD`, `DB_SSLMODE=require`, **`DB_SCHEMA=ndaw_resto`**
+   - `CACHE_STORE=database`, `SESSION_DRIVER=database`, `QUEUE_CONNECTION=database`
+   - `VIEW_COMPILED_PATH=/tmp`, `LOG_CHANNEL=stderr`
+   - `SETUP_TOKEN=<chaîne-aléatoire-longue>`
+   - (Optionnel) `CLOUDINARY_*` pour des uploads persistants.
+4. Déploie. Vérifie `https://<ton-api>.vercel.app/up` → `200`.
+5. **Provisionne la base une seule fois** (crée le schéma + migre + seed) :
+   ```bash
+   curl -X POST "https://<ton-api>.vercel.app/api/v1/system/setup?seed=1" \
+     -H "X-Setup-Token: <ton-SETUP_TOKEN>"
+   ```
+   Réponse `{"ok":true,...}`. Ensuite, **retire `SETUP_TOKEN`** des variables
+   pour désactiver l'endpoint, puis redéploie.
+
+### B. Frontend Next.js → Vercel
+
+1. *Add New Project* → même repo → **Root Directory** = `apps/web`.
+2. Variables : `NEXT_PUBLIC_API_URL=https://<ton-api>.vercel.app/api/v1`,
+   `NEXT_PUBLIC_APP_HOST=<ton-front>.vercel.app`. Déploie.
+
+Comptes démo (mdp `password`) : `owner@ledakar.com` (Enterprise),
+`admin@ndaw-resto.com` (super admin).
+
+> ⚠️ Serverless PHP : cold starts possibles, et le disque est éphémère → les
+> uploads d'images nécessitent des clés Cloudinary pour persister. Pour une
+> prod à fort trafic, préfère l'option Railway ci-dessous.
+
+---
+
+## Alternative robuste : API sur Railway
+
+Architecture recommandée si un plan Railway est disponible :
 
 | Composant | Hébergeur | Pourquoi |
 |-----------|-----------|----------|

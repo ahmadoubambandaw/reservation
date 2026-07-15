@@ -15,6 +15,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // One-time provisioning token for POST /api/v1/system/setup on serverless
+    // hosts that have no release phase. Leave empty to disable the endpoint.
+    'setup_token' => env('SETUP_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
