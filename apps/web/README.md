@@ -49,7 +49,9 @@ L'API Laravel doit tourner (voir `apps/api`). Par défaut le front pointe vers
   - **Marketing** : campagnes SMS/Email/WhatsApp/Push par audience
     (tous/fidèles/anniversaires), aperçu d'audience et envoi.
   - **Personnel** : planning (créneaux) + présence (pointage entrée/sortie).
-  - **Paramètres** : thème, couleurs, logo, domaine personnalisé, aperçu live.
+  - **Paramètres** : thème, couleurs, **upload logo + couverture** (Cloudinary
+    ou disque local), domaine personnalisé, aperçu live.
+  - **Menu** : **upload de photos de plats**, affichées sur le mini-site.
   - Espace Super Admin (stats plateforme).
 
   Les 12 pages du dashboard sont connectées à l'API. Le compte de démo est en

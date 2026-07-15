@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +32,7 @@ export default function SettingsPage() {
     primary_color: "#4f46e5",
     secondary_color: "#f59e0b",
     logo: "",
+    cover: "",
     custom_domain: "",
   });
 
@@ -48,6 +50,7 @@ export default function SettingsPage() {
           primary_color: b?.primary_color ?? "#4f46e5",
           secondary_color: b?.secondary_color ?? "#f59e0b",
           logo: r.data.logo ?? "",
+          cover: r.data.cover ?? "",
           custom_domain: b?.custom_domain ?? "",
         });
         setReady(true);
@@ -66,6 +69,7 @@ export default function SettingsPage() {
         primary_color: form.primary_color,
         secondary_color: form.secondary_color,
         logo: form.logo || null,
+        cover: form.cover || null,
         custom_domain: form.custom_domain || null,
       });
       toast("Paramètres enregistrés.", "success");
@@ -143,9 +147,25 @@ export default function SettingsPage() {
                   </div>
                 </div>
               </div>
-              <div className="space-y-1.5">
-                <Label>Logo (URL)</Label>
-                <Input value={form.logo} onChange={(e) => setForm({ ...form, logo: e.target.value })} placeholder="https://…" />
+              <div className="grid gap-4 sm:grid-cols-[auto_1fr]">
+                <div className="space-y-1.5">
+                  <Label>Logo</Label>
+                  <ImageUpload
+                    type="logo"
+                    aspect="square"
+                    value={form.logo || null}
+                    onChange={(url) => setForm({ ...form, logo: url ?? "" })}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Image de couverture</Label>
+                  <ImageUpload
+                    type="cover"
+                    aspect="wide"
+                    value={form.cover || null}
+                    onChange={(url) => setForm({ ...form, cover: url ?? "" })}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>

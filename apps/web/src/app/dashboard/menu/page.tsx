@@ -1,12 +1,13 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Plus, UtensilsCrossed } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog } from "@/components/ui/dialog";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -24,7 +25,7 @@ export default function MenuPage() {
   const [openItem, setOpenItem] = useState(false);
   const [openCat, setOpenCat] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [itemForm, setItemForm] = useState({ name: "", price: 0, category_id: "" });
+  const [itemForm, setItemForm] = useState({ name: "", price: 0, category_id: "", image: "" });
   const [catName, setCatName] = useState("");
 
   const load = useCallback(() => {
@@ -42,10 +43,11 @@ export default function MenuPage() {
         name: itemForm.name,
         price: itemForm.price,
         category_id: itemForm.category_id ? Number(itemForm.category_id) : null,
+        image: itemForm.image || null,
       });
       toast("Plat ajouté.", "success");
       setOpenItem(false);
-      setItemForm({ name: "", price: 0, category_id: "" });
+      setItemForm({ name: "", price: 0, category_id: "", image: "" });
       load();
     } catch (err) {
       toast(err instanceof ApiError ? (err.firstError ?? err.message) : "Erreur", "error");
@@ -111,11 +113,21 @@ export default function MenuPage() {
                 <Card className="divide-y divide-border">
                   {catItems.map((it) => (
                     <div key={it.id} className="flex items-center justify-between gap-4 p-4">
-                      <div>
-                        <p className="font-medium">{it.name}</p>
-                        {it.description && (
-                          <p className="text-sm text-muted-foreground">{it.description}</p>
+                      <div className="flex min-w-0 items-center gap-3">
+                        {it.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={it.image} alt="" className="size-12 shrink-0 rounded-lg object-cover" />
+                        ) : (
+                          <span className="grid size-12 shrink-0 place-items-center rounded-lg bg-muted text-muted-foreground">
+                            <UtensilsCrossed className="size-5" />
+                          </span>
                         )}
+                        <div className="min-w-0">
+                          <p className="font-medium">{it.name}</p>
+                          {it.description && (
+                            <p className="truncate text-sm text-muted-foreground">{it.description}</p>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center gap-3">
                         {!it.is_available && <Badge variant="danger">Indisponible</Badge>}
@@ -132,9 +144,20 @@ export default function MenuPage() {
 
       <Dialog open={openItem} onClose={() => setOpenItem(false)} title="Nouveau plat">
         <form onSubmit={createItem} className="space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="in">Nom</Label>
-            <Input id="in" required value={itemForm.name} onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })} />
+          <div className="flex items-start gap-4">
+            <div className="space-y-1.5">
+              <Label>Photo</Label>
+              <ImageUpload
+                type="menu"
+                aspect="square"
+                value={itemForm.image || null}
+                onChange={(url) => setItemForm({ ...itemForm, image: url ?? "" })}
+              />
+            </div>
+            <div className="flex-1 space-y-1.5">
+              <Label htmlFor="in">Nom</Label>
+              <Input id="in" required value={itemForm.name} onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })} />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">

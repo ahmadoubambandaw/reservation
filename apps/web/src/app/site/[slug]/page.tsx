@@ -157,8 +157,12 @@ export default function RestaurantSite() {
                 </h3>
                 <ul className="space-y-4">
                   {(cat.items ?? []).map((item) => (
-                    <li key={item.id} className="flex items-baseline justify-between gap-3">
-                      <div>
+                    <li key={item.id} className="flex items-center gap-3">
+                      {item.image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={item.image} alt="" className="size-14 shrink-0 rounded-lg object-cover" />
+                      )}
+                      <div className="min-w-0 flex-1">
                         <p className="font-medium">{item.name}</p>
                         {item.description && <p className="text-sm text-muted-foreground">{item.description}</p>}
                       </div>

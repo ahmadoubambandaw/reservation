@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\V1\Settings;
 use App\Http\Controllers\Api\V1\Staff;
 use App\Http\Controllers\Api\V1\StatsController;
 use App\Http\Controllers\Api\V1\TableController;
+use App\Http\Controllers\Api\V1\UploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -65,6 +66,7 @@ Route::prefix('v1')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index']);
         Route::get('stats/overview', [StatsController::class, 'overview']);
         Route::get('modules', [ModuleController::class, 'index']);
+        Route::post('uploads', [UploadController::class, 'store']);
 
         Route::apiResource('tables', TableController::class);
         Route::apiResource('categories', CategoryController::class);

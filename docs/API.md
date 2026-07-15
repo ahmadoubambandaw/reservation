@@ -57,6 +57,7 @@ Chaque action est protégée par une permission RBAC.
 |-----------|-----------|-----------------------------|
 | Dashboard | `GET /dashboard` | `dashboard.view` |
 | Statistiques | `GET /stats/overview?from=&to=` | `stats.view` |
+| Upload image | `POST /uploads` (multipart `file`, `type`=logo\|cover\|menu) | authentifié — Cloudinary si configuré, sinon disque local |
 | Tables | `apiResource /tables` | `tables.view` / `tables.manage` |
 | Catégories | `apiResource /categories` | `menu.view` / `menu.manage` |
 | Menus | `/menus` (index, store, update, destroy) | `menu.view` / `menu.manage` |
