@@ -1,0 +1,17 @@
+# Railway / Nixpacks build for the Laravel API.
+# Nixpacks auto-detects PHP from composer.json and serves public/ via
+# nginx + php-fpm on $PORT. We pin PHP 8.3 and warm Laravel's caches.
+
+providers = ["php"]
+
+[phases.setup]
+nixPkgs = ["php83", "php83Extensions.pdo_pgsql", "php83Extensions.redis"]
+
+[phases.install]
+cmds = ["composer install --no-dev --optimize-autoloader --no-interaction"]
+
+[phases.build]
+cmds = [
+  "php artisan config:cache",
+  "php artisan route:cache",
+]

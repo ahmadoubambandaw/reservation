@@ -1,0 +1,4 @@
+# Runs database migrations then serves the app.
+# Railway/Heroku-style process declaration (fallback if Nixpacks default is not used).
+release: php artisan migrate --force
+web: php artisan serve --host 0.0.0.0 --port ${PORT:-8000}
