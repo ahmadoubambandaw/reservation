@@ -134,6 +134,9 @@ class DemoSeeder extends Seeder
 
             // Orders + payments demo (populate POS & Reports).
             $this->seedOrders($restaurant);
+
+            // Active orders in the kitchen queue (populate the KDS).
+            $this->seedKitchenQueue($restaurant);
         });
     }
 
@@ -186,6 +189,47 @@ class DemoSeeder extends Seeder
             // Backdate rows so Reports show a realistic time series.
             Order::whereKey($order->id)->update(['created_at' => $when, 'updated_at' => $when]);
             Payment::whereKey($payment->id)->update(['created_at' => $when, 'updated_at' => $when]);
+        }
+    }
+
+    /** A handful of live orders currently being prepared. */
+    private function seedKitchenQueue($restaurant): void
+    {
+        $menuItems = MenuItem::all();
+        $tables = RestaurantTable::all();
+        $ownerEmployee = Employee::where('user_id', $restaurant->owner_id)->first();
+        $statuses = ['pending', 'pending', 'preparing'];
+
+        foreach ($statuses as $index => $status) {
+            $order = Order::create([
+                'employee_id' => $ownerEmployee?->id,
+                'table_id' => $tables->random()->id,
+                'type' => 'dine_in',
+                'status' => $status,
+                'payment_status' => 'unpaid',
+            ]);
+
+            foreach ($menuItems->random(random_int(2, 3)) as $mi) {
+                $qty = random_int(1, 2);
+                $order->items()->create([
+                    'menu_item_id' => $mi->id,
+                    'name' => $mi->name,
+                    'quantity' => $qty,
+                    'unit_price' => $mi->price,
+                    'total' => $mi->price * $qty,
+                    'status' => $status === 'preparing' ? 'preparing' : 'pending',
+                ]);
+            }
+
+            $order->load('items');
+            $order->recalculate(0.0);
+            $order->save();
+
+            $minutesAgo = ($index + 1) * 6;
+            Order::whereKey($order->id)->update([
+                'created_at' => now()->subMinutes($minutesAgo),
+                'updated_at' => now()->subMinutes($minutesAgo),
+            ]);
         }
     }
 

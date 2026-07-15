@@ -34,9 +34,14 @@ L'API Laravel doit tourner (voir `apps/api`). Par défaut le front pointe vers
     (espèces/Wave/Orange Money), commandes récentes et ticket imprimable.
   - **Rapports** : KPIs, graphique d'évolution du CA, plats populaires, ventes
     par type, performance des employés, période 7/30/90 jours.
-  - Modules Cuisine, Stocks, Comptabilité, Marketing, Personnel, Paramètres :
-    pages présentes et gardées par plan, interfaces détaillées en cours
-    d'itération.
+  - **Écran cuisine (KDS)** : file temps réel (polling), statut par plat
+    (en attente → préparation → prêt → servi), bump commande, alerte visuelle
+    au-delà de 15 min.
+  - **Stocks** : ingrédients (liste + ajout + ajustement entrée/sortie),
+    alertes de réapprovisionnement, fournisseurs, achats (création multi-lignes
+    + réception → entrée en stock).
+  - Modules Comptabilité, Marketing, Personnel, Paramètres : pages présentes et
+    gardées par plan, interfaces détaillées en cours d'itération.
   - Espace Super Admin (stats plateforme).
 
 ## Design system

@@ -191,3 +191,61 @@ export interface EmployeeReport {
   orders: number;
   revenue: number;
 }
+
+export interface KitchenItem {
+  id: number;
+  name: string;
+  quantity: number;
+  status: "pending" | "preparing" | "ready" | "served";
+}
+
+export interface KitchenOrder {
+  id: number;
+  code: string;
+  type: string;
+  status: string;
+  created_at: string;
+  table?: { id: number; name: string } | null;
+  items: KitchenItem[];
+}
+
+export interface KitchenQueue {
+  data: KitchenOrder[];
+  summary: { pending: number; preparing: number; ready: number };
+}
+
+export interface Supplier {
+  id: number;
+  name: string;
+  contact_name: string | null;
+  phone: string | null;
+  email: string | null;
+  is_active: boolean;
+}
+
+export interface Ingredient {
+  id: number;
+  supplier_id: number | null;
+  name: string;
+  unit: string;
+  stock_quantity: number;
+  reorder_level: number;
+  cost_per_unit: number;
+  supplier?: Supplier | null;
+}
+
+export interface Purchase {
+  id: number;
+  reference: string | null;
+  status: string;
+  total: number;
+  purchased_at: string | null;
+  supplier?: Supplier | null;
+  items?: {
+    id: number;
+    name: string;
+    quantity: number;
+    unit_cost: number;
+    total: number;
+  }[];
+}
