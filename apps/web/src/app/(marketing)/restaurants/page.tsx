@@ -56,7 +56,7 @@ export default function RestaurantsPage() {
           </div>
         ) : (
           items.map((r) => (
-            <Link key={r.id} href={`/restaurants/${r.slug}`}>
+            <Link key={r.id} href={`/site/${r.slug}`}>
               <Card className="group h-full overflow-hidden transition-all hover:-translate-y-1 hover:shadow-md">
                 <div className="relative flex h-36 items-center justify-center bg-gradient-to-br from-primary/15 to-accent/15">
                   {r.cover ? (

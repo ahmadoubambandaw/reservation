@@ -22,13 +22,17 @@ L'API Laravel doit tourner (voir `apps/api`). Par défaut le front pointe vers
 ## Ce qui est inclus
 
 - **Site public** : accueil premium (hero, modules, FAQ, CTA), tarifs (depuis
-  `/plans`), annuaire des restaurants + recherche, page restaurant avec menu et
-  réservation invité.
+  `/plans`), annuaire des restaurants + recherche.
+- **Site web par restaurant** (`/site/[slug]`) : mini-site autonome à la marque
+  du restaurant (couleurs, logo, couverture) — hero, menu, horaires, carte,
+  avis et réservation. Routage par hôte via `src/proxy.ts` : un domaine perso
+  ou un sous-domaine sert directement le bon mini-site (`/sites/resolve`).
 - **Authentification** : connexion (avec 2FA), inscription (crée le restaurant),
   session par token Sanctum persistée.
 - **Dashboard** : shell responsive, **navigation adaptée aux modules actifs de
   l'abonnement** (via `/auth/me`), mode clair/sombre.
-  - Vue d'ensemble (KPIs `/dashboard`), Réservations (liste + création + statut),
+  - Vue d'ensemble (KPIs `/dashboard`), **Site web** (URL publique, QR code,
+    domaine perso, aperçu live), Réservations (liste + création + statut),
     Menu (catégories + plats), Clients (CRM).
   - **POS** : ouverture/clôture de caisse, catalogue + panier, encaissement
     (espèces/Wave/Orange Money), commandes récentes et ticket imprimable.

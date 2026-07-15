@@ -20,6 +20,8 @@ Le Super Admin peut cibler un restaurant précis via l'en-tête
 | GET | `/restaurants/{slug}/menu` | Menu public groupé par catégorie |
 | GET | `/restaurants/{slug}/reviews` | Avis approuvés |
 | POST | `/restaurants/{slug}/reservations` | Réservation invité |
+| GET | `/sites/{slug}` | **Site du restaurant** : payload agrégé (infos + branding + menu + avis + note) |
+| GET | `/sites/resolve?domain=` | Résout un restaurant depuis un domaine perso / sous-domaine → `{ slug }` |
 
 ## Authentification
 

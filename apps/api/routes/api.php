@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\Pos;
 use App\Http\Controllers\Api\V1\Public\PlanController;
 use App\Http\Controllers\Api\V1\Public\RestaurantController as PublicRestaurantController;
+use App\Http\Controllers\Api\V1\Public\SiteController;
 use App\Http\Controllers\Api\V1\Reports;
 use App\Http\Controllers\Api\V1\ReservationController;
 use App\Http\Controllers\Api\V1\ReviewController;
@@ -38,6 +39,10 @@ Route::prefix('v1')->group(function () {
     Route::get('restaurants/{restaurant}/menu', [PublicRestaurantController::class, 'menu']);
     Route::get('restaurants/{restaurant}/reviews', [PublicRestaurantController::class, 'reviews']);
     Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'publicStore']);
+
+    // Per-restaurant public website (ecosystem storefront)
+    Route::get('sites/resolve', [SiteController::class, 'resolve']);
+    Route::get('sites/{restaurant}', [SiteController::class, 'show']);
 
     // -------------------------------------------------------------
     // Auth

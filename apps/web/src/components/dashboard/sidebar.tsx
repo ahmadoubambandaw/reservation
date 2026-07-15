@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Shield } from "lucide-react";
+import { Globe, LayoutDashboard, Shield } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { MODULES } from "@/lib/modules";
 import { useAuth } from "@/lib/auth";
@@ -42,6 +42,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
       <nav className="flex-1 space-y-1 overflow-y-auto">
         {item("/dashboard", "Vue d'ensemble", LayoutDashboard)}
+        {item("/dashboard/website", "Site web", Globe)}
 
         <p className="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Modules

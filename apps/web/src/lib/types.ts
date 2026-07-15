@@ -21,6 +21,8 @@ export interface Plan {
   limits: Record<string, number | null>;
 }
 
+export type OpeningHours = Record<string, { open: string; close: string }[]> | null;
+
 export interface Restaurant {
   id: number;
   name: string;
@@ -30,11 +32,13 @@ export interface Restaurant {
   cover: string | null;
   email: string | null;
   phone: string | null;
+  website: string | null;
   address: string | null;
   city: string | null;
   country: string;
   location: { lat: number | null; lng: number | null };
   currency: string;
+  opening_hours: OpeningHours;
   services: string[];
   status: string;
   branding?: {
@@ -44,6 +48,19 @@ export interface Restaurant {
     custom_domain: string | null;
   };
   subscription?: { status: string; plan?: Plan } | null;
+}
+
+export interface SitePayload {
+  restaurant: Restaurant;
+  menu: Category[];
+  reviews: {
+    id: number;
+    rating: number;
+    comment: string | null;
+    created_at: string;
+    customer?: { name: string } | null;
+  }[];
+  rating: { average: number; count: number };
 }
 
 export type ModuleKey =

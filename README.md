@@ -47,6 +47,18 @@ reservation/
 | 8 | **Personnel** (rôles, permissions, horaires, présence) | Pro+ | ✅ |
 | 9 | **Paramètres** (thème, couleurs, logo, domaine perso) | Enterprise | ✅ |
 | 10 | **API REST** (prête pour l'app mobile Flutter) | — | ✅ |
+| ⭐ | **Site web par restaurant** (mini-site à sa marque + domaine perso + QR) | tous plans actifs | ✅ |
+
+### L'écosystème : un site web par restaurant
+
+Après abonnement, chaque restaurant obtient **son propre site public** à sa
+marque (`/site/<slug>`) : hero couverture, menu en ligne, horaires, carte,
+avis, et **réservation intégrée** — le tout aux couleurs et logo du
+restaurant. Un **domaine personnalisé** (ou sous-domaine
+`<slug>.ndaw-resto.com`) pointe directement sur ce site grâce au routage par
+hôte (`proxy.ts` + `/sites/resolve`). Le dashboard **« Site web »** expose
+l'URL, un **QR code** à imprimer sur les tables, la configuration du domaine et
+un aperçu en direct.
 
 Envoi réel des campagnes/notifications (Twilio, FCM) et encaissement en ligne
 (Stripe/Wave/Orange Money) : pilotes par driver déjà en place (driver `log`),
