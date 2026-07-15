@@ -19,9 +19,12 @@ class SystemController extends Controller
     {
         $token = config('app.setup_token');
 
+        // Token may be provided via header (POST) or query string (GET trigger).
+        $provided = $request->header('X-Setup-Token') ?? $request->query('token', '');
+
         abort_if(blank($token), 404);
         abort_unless(
-            hash_equals((string) $token, (string) $request->header('X-Setup-Token')),
+            hash_equals((string) $token, (string) $provided),
             403,
             'Jeton de configuration invalide.',
         );
