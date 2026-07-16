@@ -1,3 +1,4 @@
+// Host-based routing for the multi-tenant ecosystem (see below).
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
