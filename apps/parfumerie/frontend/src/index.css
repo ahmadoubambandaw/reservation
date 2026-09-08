@@ -105,24 +105,38 @@ main {
 
 .logo {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: 1.4rem;
-  letter-spacing: 0.08em;
+  align-items: center;
+  gap: 12px;
   color: var(--cream);
 }
 
-.logo span {
-  color: var(--gold-light);
+.logo-mark {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 
-.logo small {
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.logo-text strong {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.85;
+  color: var(--cream);
+}
+
+.logo-text em {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--gold-light);
 }
 
 .main-nav {
