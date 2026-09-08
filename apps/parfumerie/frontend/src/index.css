@@ -173,13 +173,15 @@ main {
 
 .icon-link {
   color: var(--ink);
-  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
 }
 
 .cart-link {
   position: relative;
   color: var(--ink);
-  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
 }
 
 .cart-badge {
@@ -266,7 +268,10 @@ main {
 }
 
 .trust-badge-icon {
-  font-size: 1.4rem;
+  color: var(--gold-dark);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .trust-badge h4 {
@@ -517,7 +522,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  color: var(--gold-dark);
   overflow: hidden;
 }
 
@@ -535,7 +540,9 @@ main {
 }
 
 .why-choose-icon {
-  font-size: 1.8rem;
+  color: var(--gold-dark);
+  display: flex;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
@@ -1019,8 +1026,11 @@ main {
 }
 
 .footer-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   width: 20px;
+  color: var(--gold-dark);
+  vertical-align: -3px;
 }
 
 .footer-bottom {

@@ -2,6 +2,24 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api.js";
 import ProductCard from "../components/ProductCard.jsx";
+import {
+  BagIcon,
+  ChatIcon,
+  CitrusIcon,
+  DropletIcon,
+  FlowerIcon,
+  GemIcon,
+  HeartIcon,
+  LockIcon,
+  MailIcon,
+  RocketIcon,
+  ShieldIcon,
+  SpaIcon,
+  SparkleIcon,
+  SunsetIcon,
+  TreeIcon,
+  TruckIcon,
+} from "../components/Icons.jsx";
 
 const heroPhoto =
   "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/hero.jpg";
@@ -28,28 +46,28 @@ const COLLECTIONS = [
 ];
 
 const TRUST_BADGES = [
-  { icon: "✨", title: "Sélection soignée", text: "Choisie avec exigence" },
-  { icon: "🚚", title: "Livraison Dakar", text: "Rapide et suivie" },
-  { icon: "🔒", title: "Paiement sécurisé", text: "Via Stripe" },
-  { icon: "💬", title: "Toujours disponible", text: "Sur WhatsApp" },
+  { icon: SparkleIcon, title: "Sélection soignée", text: "Choisie avec exigence" },
+  { icon: TruckIcon, title: "Livraison Dakar", text: "Rapide et suivie" },
+  { icon: LockIcon, title: "Paiement sécurisé", text: "Via Stripe" },
+  { icon: ChatIcon, title: "Toujours disponible", text: "Sur WhatsApp" },
 ];
 
 const CATEGORY_ICONS = [
-  { icon: "🌸", label: "Floral", category: "Floral" },
-  { icon: "🌳", label: "Boisé", category: "Boisé" },
-  { icon: "🌅", label: "Oriental", category: "Oriental" },
-  { icon: "🍊", label: "Hespéridé", category: "Hespéridé" },
-  { icon: "🧴", label: "Soin visage", category: "Soin visage" },
-  { icon: "🧖🏾‍♀️", label: "Soin corps", category: "Soin corps" },
-  { icon: "👜", label: "Sacs", category: "Sacs" },
-  { icon: "💍", label: "Bijoux", category: "Bijoux" },
+  { icon: FlowerIcon, label: "Floral", category: "Floral" },
+  { icon: TreeIcon, label: "Boisé", category: "Boisé" },
+  { icon: SunsetIcon, label: "Oriental", category: "Oriental" },
+  { icon: CitrusIcon, label: "Hespéridé", category: "Hespéridé" },
+  { icon: DropletIcon, label: "Soin visage", category: "Soin visage" },
+  { icon: SpaIcon, label: "Soin corps", category: "Soin corps" },
+  { icon: BagIcon, label: "Sacs", category: "Sacs" },
+  { icon: GemIcon, label: "Bijoux", category: "Bijoux" },
 ];
 
 const WHY_CHOOSE = [
-  { icon: "🤍", title: "Sélection exigeante", text: "Des produits choisis avec soin pour leur qualité." },
-  { icon: "🚀", title: "Livraison rapide", text: "Expédition soignée partout à Dakar et environs." },
-  { icon: "🛡️", title: "Paiement sécurisé", text: "Transactions protégées grâce à Stripe." },
-  { icon: "💌", title: "Un service à l'écoute", text: "Une équipe disponible pour vous conseiller." },
+  { icon: HeartIcon, title: "Sélection exigeante", text: "Des produits choisis avec soin pour leur qualité." },
+  { icon: RocketIcon, title: "Livraison rapide", text: "Expédition soignée partout à Dakar et environs." },
+  { icon: ShieldIcon, title: "Paiement sécurisé", text: "Transactions protégées grâce à Stripe." },
+  { icon: MailIcon, title: "Un service à l'écoute", text: "Une équipe disponible pour vous conseiller." },
 ];
 
 const INSTAGRAM_IMAGES = [
@@ -113,7 +131,9 @@ export default function Home() {
       <div className="container trust-badges">
         {TRUST_BADGES.map((badge) => (
           <div className="trust-badge" key={badge.title}>
-            <span className="trust-badge-icon">{badge.icon}</span>
+            <span className="trust-badge-icon">
+              <badge.icon size={22} />
+            </span>
             <div>
               <h4>{badge.title}</h4>
               <p>{badge.text}</p>
@@ -179,7 +199,9 @@ export default function Home() {
               className="category-icon-card"
               key={cat.category}
             >
-              <span className="category-icon-circle">{cat.icon}</span>
+              <span className="category-icon-circle">
+                <cat.icon size={26} />
+              </span>
               <span>{cat.label}</span>
             </Link>
           ))}
@@ -193,7 +215,9 @@ export default function Home() {
         <div className="why-choose-grid">
           {WHY_CHOOSE.map((item) => (
             <div key={item.title}>
-              <div className="why-choose-icon">{item.icon}</div>
+              <div className="why-choose-icon">
+                <item.icon size={26} />
+              </div>
               <h3>{item.title}</h3>
               <p>{item.text}</p>
             </div>
