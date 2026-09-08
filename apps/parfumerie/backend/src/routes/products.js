@@ -1,60 +1,59 @@
 import { Router } from "express";
-import { db } from "../db.js";
+import { pool } from "../db.js";
 
 export const productsRouter = Router();
 
-function serialize(product) {
-  return { ...product, featured: Boolean(product.featured) };
-}
-
-productsRouter.get("/", (req, res) => {
+productsRouter.get("/", async (req, res) => {
   const { type, category, gender, featured } = req.query;
 
-  let query = "SELECT * FROM products WHERE 1=1";
+  const conditions = [];
   const params = [];
 
   if (type) {
-    query += " AND type = ?";
     params.push(type);
+    conditions.push(`type = $${params.length}`);
   }
   if (category) {
-    query += " AND category = ?";
     params.push(category);
+    conditions.push(`category = $${params.length}`);
   }
   if (gender) {
-    query += " AND gender = ?";
     params.push(gender);
+    conditions.push(`gender = $${params.length}`);
   }
   if (featured === "true") {
-    query += " AND featured = 1";
+    conditions.push("featured = true");
   }
 
-  query += " ORDER BY created_at DESC";
-
-  const products = db.prepare(query).all(...params);
-  res.json(products.map(serialize));
+  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
+  const { rows } = await pool.query(
+    `SELECT * FROM faty_store.products ${where} ORDER BY created_at DESC`,
+    params
+  );
+  res.json(rows);
 });
 
-productsRouter.get("/categories", (req, res) => {
+productsRouter.get("/categories", async (req, res) => {
   const { type } = req.query;
 
-  const categories = db
-    .prepare(
-      type
-        ? "SELECT DISTINCT category FROM products WHERE type = ? ORDER BY category"
-        : "SELECT DISTINCT category FROM products ORDER BY category"
-    )
-    .all(...(type ? [type] : []))
-    .map((row) => row.category);
-  res.json(categories);
+  const { rows } = type
+    ? await pool.query(
+        "SELECT DISTINCT category FROM faty_store.products WHERE type = $1 ORDER BY category",
+        [type]
+      )
+    : await pool.query("SELECT DISTINCT category FROM faty_store.products ORDER BY category");
+
+  res.json(rows.map((row) => row.category));
 });
 
-productsRouter.get("/:id", (req, res) => {
-  const product = db.prepare("SELECT * FROM products WHERE id = ?").get(req.params.id);
+productsRouter.get("/:id", async (req, res) => {
+  const { rows } = await pool.query("SELECT * FROM faty_store.products WHERE id = $1", [
+    req.params.id,
+  ]);
 
-  if (!product) {
+  if (!rows[0]) {
     return res.status(404).json({ error: "Produit introuvable." });
   }
 
-  res.json(serialize(product));
+  res.json(rows[0]);
 });

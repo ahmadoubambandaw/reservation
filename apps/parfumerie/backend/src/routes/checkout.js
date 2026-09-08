@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Stripe from "stripe";
-import { db } from "../db.js";
+import { pool } from "../db.js";
 
 export const checkoutRouter = Router();
 
@@ -18,13 +18,15 @@ checkoutRouter.post("/", async (req, res) => {
     return res.status(400).json({ error: "Le panier est vide." });
   }
 
-  const productStmt = db.prepare("SELECT * FROM products WHERE id = ?");
   const lineItems = [];
   const orderItemsData = [];
   let totalCents = 0;
 
   for (const item of items) {
-    const product = productStmt.get(item.productId);
+    const { rows } = await pool.query("SELECT * FROM faty_store.products WHERE id = $1", [
+      item.productId,
+    ]);
+    const product = rows[0];
 
     if (!product) {
       return res.status(404).json({ error: `Produit ${item.productId} introuvable.` });
@@ -56,16 +58,18 @@ checkoutRouter.post("/", async (req, res) => {
     totalCents += product.price_cents * item.quantity;
   }
 
-  const orderResult = db
-    .prepare("INSERT INTO orders (total_cents, status) VALUES (?, 'pending')")
-    .run(totalCents);
-  const orderId = orderResult.lastInsertRowid;
+  const {
+    rows: [order],
+  } = await pool.query("INSERT INTO faty_store.orders (total_cents, status) VALUES ($1, 'pending') RETURNING id", [
+    totalCents,
+  ]);
+  const orderId = order.id;
 
-  const insertItem = db.prepare(
-    "INSERT INTO order_items (order_id, product_id, product_name, quantity, price_cents) VALUES (?, ?, ?, ?, ?)"
-  );
   for (const item of orderItemsData) {
-    insertItem.run(orderId, item.product_id, item.product_name, item.quantity, item.price_cents);
+    await pool.query(
+      "INSERT INTO faty_store.order_items (order_id, product_id, product_name, quantity, price_cents) VALUES ($1, $2, $3, $4, $5)",
+      [orderId, item.product_id, item.product_name, item.quantity, item.price_cents]
+    );
   }
 
   try {
@@ -80,11 +84,14 @@ checkoutRouter.post("/", async (req, res) => {
       metadata: { order_id: String(orderId) },
     });
 
-    db.prepare("UPDATE orders SET stripe_session_id = ? WHERE id = ?").run(session.id, orderId);
+    await pool.query("UPDATE faty_store.orders SET stripe_session_id = $1 WHERE id = $2", [
+      session.id,
+      orderId,
+    ]);
 
     res.json({ url: session.url });
   } catch (error) {
-    db.prepare("UPDATE orders SET status = 'failed' WHERE id = ?").run(orderId);
+    await pool.query("UPDATE faty_store.orders SET status = 'failed' WHERE id = $1", [orderId]);
     res.status(500).json({ error: error.message });
   }
 });
@@ -94,30 +101,45 @@ checkoutRouter.get("/session/:sessionId", async (req, res) => {
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
 
-    const order = db
-      .prepare("SELECT * FROM orders WHERE stripe_session_id = ?")
-      .get(req.params.sessionId);
+    const { rows: orderRows } = await pool.query(
+      "SELECT * FROM faty_store.orders WHERE stripe_session_id = $1",
+      [req.params.sessionId]
+    );
+    const order = orderRows[0];
 
     if (order && session.payment_status === "paid" && order.status !== "paid") {
-      const items = db.prepare("SELECT * FROM order_items WHERE order_id = ?").all(order.id);
-      const decrementStock = db.prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
-
-      const markPaid = db.transaction(() => {
-        for (const item of items) {
-          decrementStock.run(item.quantity, item.product_id);
-        }
-        db.prepare("UPDATE orders SET status = 'paid', customer_email = ? WHERE id = ?").run(
-          session.customer_details?.email ?? null,
-          order.id
+      const client = await pool.connect();
+      try {
+        await client.query("BEGIN");
+        const { rows: items } = await client.query(
+          "SELECT * FROM faty_store.order_items WHERE order_id = $1",
+          [order.id]
         );
-      });
-      markPaid();
+        for (const item of items) {
+          await client.query("UPDATE faty_store.products SET stock = stock - $1 WHERE id = $2", [
+            item.quantity,
+            item.product_id,
+          ]);
+        }
+        await client.query(
+          "UPDATE faty_store.orders SET status = 'paid', customer_email = $1 WHERE id = $2",
+          [session.customer_details?.email ?? null, order.id]
+        );
+        await client.query("COMMIT");
+      } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+      } finally {
+        client.release();
+      }
     }
 
-    res.json({
-      status: session.payment_status,
-      order: db.prepare("SELECT * FROM orders WHERE stripe_session_id = ?").get(req.params.sessionId),
-    });
+    const { rows: finalRows } = await pool.query(
+      "SELECT * FROM faty_store.orders WHERE stripe_session_id = $1",
+      [req.params.sessionId]
+    );
+
+    res.json({ status: session.payment_status, order: finalRows[0] });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
