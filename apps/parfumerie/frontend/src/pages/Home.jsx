@@ -21,15 +21,23 @@ import {
   TruckIcon,
 } from "../components/Icons.jsx";
 
-const heroPhoto =
-  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/hero.jpg";
+const ASSET_BASE =
+  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets";
+
+const heroPhoto = `${ASSET_BASE}/hero.jpg`;
+const tiktok1 = `${ASSET_BASE}/tiktok-1-ysl.jpg`;
+const tiktok2 = `${ASSET_BASE}/tiktok-2-violet-blossom.jpg`;
+const tiktok3 = `${ASSET_BASE}/tiktok-3-hypnotic.jpg`;
+const tiktok4 = `${ASSET_BASE}/tiktok-4-my-way.jpg`;
+const tiktok5 = `${ASSET_BASE}/tiktok-5-gold-trio.jpg`;
+const tiktok6 = `${ASSET_BASE}/tiktok-6-vials.jpg`;
 
 const COLLECTIONS = [
   {
     type: "Parfum",
     title: "Parfums",
     description: "Des senteurs uniques pour chaque occasion",
-    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600",
+    image: tiktok2,
   },
   {
     type: "Soin",
@@ -70,12 +78,7 @@ const WHY_CHOOSE = [
   { icon: MailIcon, title: "Un service à l'écoute", text: "Une équipe disponible pour vous conseiller." },
 ];
 
-const INSTAGRAM_IMAGES = [
-  heroPhoto,
-  "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400",
-  "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400",
-  "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400",
-];
+const INSTAGRAM_IMAGES = [tiktok1, tiktok3, tiktok4, tiktok5, tiktok6, heroPhoto];
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
