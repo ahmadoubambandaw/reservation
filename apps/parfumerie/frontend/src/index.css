@@ -417,6 +417,16 @@ main {
   align-items: center;
 }
 
+.admin-welcome {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.account-info {
+  margin-bottom: 20px;
+}
+
 .admin-tabs {
   display: flex;
   gap: 8px;
