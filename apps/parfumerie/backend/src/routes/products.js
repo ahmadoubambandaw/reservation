@@ -8,11 +8,15 @@ function serialize(product) {
 }
 
 productsRouter.get("/", (req, res) => {
-  const { category, gender, featured } = req.query;
+  const { type, category, gender, featured } = req.query;
 
   let query = "SELECT * FROM products WHERE 1=1";
   const params = [];
 
+  if (type) {
+    query += " AND type = ?";
+    params.push(type);
+  }
   if (category) {
     query += " AND category = ?";
     params.push(category);
@@ -32,9 +36,15 @@ productsRouter.get("/", (req, res) => {
 });
 
 productsRouter.get("/categories", (req, res) => {
+  const { type } = req.query;
+
   const categories = db
-    .prepare("SELECT DISTINCT category FROM products ORDER BY category")
-    .all()
+    .prepare(
+      type
+        ? "SELECT DISTINCT category FROM products WHERE type = ? ORDER BY category"
+        : "SELECT DISTINCT category FROM products ORDER BY category"
+    )
+    .all(...(type ? [type] : []))
     .map((row) => row.category);
   res.json(categories);
 });

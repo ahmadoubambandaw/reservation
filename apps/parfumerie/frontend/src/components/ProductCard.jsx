@@ -15,7 +15,8 @@ export default function ProductCard({ product }) {
         <p className="product-brand">{product.brand}</p>
         <h3>{product.name}</h3>
         <p className="product-meta">
-          {product.category} · {product.volume_ml} ml
+          {product.category}
+          {product.volume_ml > 0 ? ` · ${product.volume_ml} ml` : ""}
         </p>
         <p className="product-price">{formatPrice(product.price_cents)}</p>
       </div>

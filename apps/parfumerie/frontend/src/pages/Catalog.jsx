@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { api } from "../api.js";
 import ProductCard from "../components/ProductCard.jsx";
 
+const TYPES = [
+  { value: "", label: "Tout" },
+  { value: "Parfum", label: "Parfums" },
+  { value: "Soin", label: "Soins" },
+  { value: "Accessoire", label: "Accessoires" },
+];
+
 export default function Catalog() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const type = searchParams.get("type") || "";
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
@@ -10,13 +21,22 @@ export default function Catalog() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  function selectType(nextType) {
+    setCategory("");
+    setSearchParams(nextType ? { type: nextType } : {});
+  }
+
   useEffect(() => {
-    api.getCategories().then(setCategories).catch(() => {});
-  }, []);
+    api
+      .getCategories(type ? { type } : {})
+      .then(setCategories)
+      .catch(() => {});
+  }, [type]);
 
   useEffect(() => {
     setLoading(true);
     const params = {};
+    if (type) params.type = type;
     if (category) params.category = category;
     if (gender) params.gender = gender;
 
@@ -25,15 +45,27 @@ export default function Catalog() {
       .then(setProducts)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [category, gender]);
+  }, [type, category, gender]);
 
   return (
     <div className="container">
       <h1 className="page-title">Notre catalogue</h1>
 
+      <div className="type-tabs">
+        {TYPES.map((t) => (
+          <button
+            key={t.value}
+            className={type === t.value ? "active" : ""}
+            onClick={() => selectType(t.value)}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       <div className="filters">
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">Toutes les familles</option>
+          <option value="">Toutes les catégories</option>
           {categories.map((c) => (
             <option key={c} value={c}>
               {c}
@@ -53,7 +85,7 @@ export default function Catalog() {
       {loading ? (
         <p>Chargement…</p>
       ) : products.length === 0 ? (
-        <p>Aucun parfum ne correspond à ces critères.</p>
+        <p>Aucun produit ne correspond à ces critères.</p>
       ) : (
         <div className="product-grid">
           {products.map((product) => (

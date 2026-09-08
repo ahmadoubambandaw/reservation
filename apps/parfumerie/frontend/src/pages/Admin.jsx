@@ -6,6 +6,7 @@ const EMPTY_PRODUCT = {
   name: "",
   brand: "",
   description: "",
+  type: "Parfum",
   category: "",
   gender: "Mixte",
   volume_ml: 100,
@@ -224,8 +225,13 @@ export default function Admin() {
                 onChange={(e) => setForm({ ...form, brand: e.target.value })}
                 required
               />
+              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
+                <option value="Parfum">Parfum</option>
+                <option value="Soin">Soin</option>
+                <option value="Accessoire">Accessoire</option>
+              </select>
               <input
-                placeholder="Famille olfactive"
+                placeholder="Catégorie (ex: Floral, Soin visage, Sacs)"
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
               />
@@ -288,6 +294,7 @@ export default function Admin() {
             <thead>
               <tr>
                 <th>Nom</th>
+                <th>Type</th>
                 <th>Marque</th>
                 <th>Prix</th>
                 <th>Stock</th>
@@ -298,6 +305,7 @@ export default function Admin() {
               {products.map((product) => (
                 <tr key={product.id}>
                   <td>{product.name}</td>
+                  <td>{product.type}</td>
                   <td>{product.brand}</td>
                   <td>{formatPrice(product.price_cents)}</td>
                   <td className={product.stock === 0 ? "stock-empty" : ""}>{product.stock}</td>

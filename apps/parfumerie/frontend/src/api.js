@@ -27,7 +27,10 @@ export const api = {
     const query = new URLSearchParams(params).toString();
     return request(`/products${query ? `?${query}` : ""}`);
   },
-  getCategories: () => request("/products/categories"),
+  getCategories: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return request(`/products/categories${query ? `?${query}` : ""}`);
+  },
   getProduct: (id) => request(`/products/${id}`),
   createCheckoutSession: (items) =>
     request("/checkout", { method: "POST", body: JSON.stringify({ items }) }),

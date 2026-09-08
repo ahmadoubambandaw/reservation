@@ -12,7 +12,8 @@ adminRouter.get("/products", (req, res) => {
 });
 
 adminRouter.post("/products", (req, res) => {
-  const { name, brand, description, category, gender, volume_ml, price_cents, stock, image_url, featured } = req.body;
+  const { name, brand, description, type, category, gender, volume_ml, price_cents, stock, image_url, featured } =
+    req.body;
 
   if (!name || !brand || !price_cents) {
     return res.status(400).json({ error: "Nom, marque et prix sont obligatoires." });
@@ -21,16 +22,17 @@ adminRouter.post("/products", (req, res) => {
   const result = db
     .prepare(
       `INSERT INTO products
-        (name, brand, description, category, gender, volume_ml, price_cents, stock, image_url, featured)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        (name, brand, description, type, category, gender, volume_ml, price_cents, stock, image_url, featured)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       name,
       brand,
       description ?? "",
+      type ?? "Parfum",
       category ?? "Autre",
       gender ?? "Mixte",
-      volume_ml ?? 100,
+      volume_ml ?? 0,
       price_cents,
       stock ?? 0,
       image_url ?? "",
@@ -52,13 +54,14 @@ adminRouter.put("/products/:id", (req, res) => {
 
   db.prepare(
     `UPDATE products SET
-      name = ?, brand = ?, description = ?, category = ?, gender = ?,
+      name = ?, brand = ?, description = ?, type = ?, category = ?, gender = ?,
       volume_ml = ?, price_cents = ?, stock = ?, image_url = ?, featured = ?
      WHERE id = ?`
   ).run(
     merged.name,
     merged.brand,
     merged.description,
+    merged.type,
     merged.category,
     merged.gender,
     merged.volume_ml,

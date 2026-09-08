@@ -1,7 +1,7 @@
 {
-  "name": "essence-de-luxe-backend",
+  "name": "faty-store-backend",
   "version": "1.0.0",
-  "description": "API de la boutique de parfumerie Essence de Luxe",
+  "description": "API de la boutique Faty Store — Beauty & Co",
   "type": "module",
   "main": "src/server.js",
   "scripts": {

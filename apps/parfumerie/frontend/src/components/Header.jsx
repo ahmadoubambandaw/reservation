@@ -8,7 +8,8 @@ export default function Header() {
     <header className="site-header">
       <div className="container header-inner">
         <Link to="/" className="logo">
-          Essence <span>de Luxe</span>
+          Faty <span>Store</span>
+          <small>Beauty &amp; Co</small>
         </Link>
         <nav className="main-nav">
           <NavLink to="/" end>

@@ -1,8 +1,8 @@
-# Essence de Luxe — Boutique de parfumerie
+# Faty Store — Beauty & Co
 
-Site e-commerce complet pour une boutique de parfumerie : catalogue produits,
-panier, paiement en ligne via Stripe et back-office d'administration
-(gestion des produits et du stock, suivi des commandes).
+Site e-commerce complet pour **Faty Store** : parfums, soins et accessoires.
+Catalogue produits, panier, paiement en ligne via Stripe et back-office
+d'administration (gestion des produits et du stock, suivi des commandes).
 
 ```
 parfumerie/
@@ -12,14 +12,15 @@ parfumerie/
 
 ## Fonctionnalités
 
-- **Catalogue public** : accueil avec sélection de parfums mis en avant,
-  catalogue filtrable par famille olfactive et par genre, fiche produit détaillée.
+- **Catalogue public** : accueil avec sélection de produits mis en avant,
+  catalogue filtrable par type (Parfums / Soins / Accessoires), par catégorie
+  et par genre, fiche produit détaillée.
 - **Panier** persistant (localStorage) avec gestion des quantités.
 - **Paiement Stripe Checkout** : création d'une session de paiement, pages de
   confirmation (succès/annulation), décrémentation automatique du stock à la
   confirmation du paiement.
 - **Back-office admin** avec un vrai compte (email + mot de passe) :
-  - CRUD complet sur les produits (nom, marque, description, prix, stock, image…)
+  - CRUD complet sur les produits (nom, marque, type, description, prix, stock, image…)
   - vue sur les commandes passées et leur statut
   - la cliente peut changer son mot de passe elle-même depuis l'onglet « Mon compte ».
 
@@ -52,6 +53,12 @@ npm run dev             # http://localhost:5173
 Ouvrir `/admin`, puis se connecter avec l'email et le mot de passe définis
 dans `backend/.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`). La cliente peut
 ensuite changer son mot de passe elle-même depuis l'onglet « Mon compte ».
+
+## Coordonnées de la boutique
+
+Les coordonnées affichées (adresse, WhatsApp, téléphone, réseaux sociaux)
+sont codées dans `frontend/src/components/Footer.jsx` — à mettre à jour si
+elles changent.
 
 ## Paiement Stripe
 

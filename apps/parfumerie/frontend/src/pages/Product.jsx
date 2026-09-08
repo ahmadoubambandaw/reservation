@@ -41,7 +41,8 @@ export default function Product() {
         <p className="product-brand">{product.brand}</p>
         <h1>{product.name}</h1>
         <p className="product-meta">
-          {product.category} · {product.gender} · {product.volume_ml} ml
+          {product.category} · {product.gender}
+          {product.volume_ml > 0 ? ` · ${product.volume_ml} ml` : ""}
         </p>
         <p className="product-price">{formatPrice(product.price_cents)}</p>
         <p className="product-description">{product.description}</p>
@@ -64,7 +65,7 @@ export default function Product() {
             {added && <p className="success-text">Ajouté au panier !</p>}
           </>
         ) : (
-          <p className="error-text">Ce parfum est actuellement épuisé.</p>
+          <p className="error-text">Ce produit est actuellement épuisé.</p>
         )}
       </div>
     </div>
