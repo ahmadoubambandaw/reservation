@@ -18,6 +18,10 @@ async function request(path, options = {}) {
   return response.json();
 }
 
+function authHeader(token) {
+  return { Authorization: `Bearer ${token}` };
+}
+
 export const api = {
   getProducts: (params = {}) => {
     const query = new URLSearchParams(params).toString();
@@ -29,21 +33,30 @@ export const api = {
     request("/checkout", { method: "POST", body: JSON.stringify({ items }) }),
   getCheckoutSession: (sessionId) => request(`/checkout/session/${sessionId}`),
 
-  adminLogin: (token) => request("/admin/login", { method: "POST", body: JSON.stringify({ token }) }),
-  adminGetProducts: (token) => request("/admin/products", { headers: { "x-admin-token": token } }),
+  login: (email, password) =>
+    request("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
+  getMe: (token) => request("/auth/me", { headers: authHeader(token) }),
+  changePassword: (token, currentPassword, newPassword) =>
+    request("/auth/change-password", {
+      method: "POST",
+      headers: authHeader(token),
+      body: JSON.stringify({ currentPassword, newPassword }),
+    }),
+
+  adminGetProducts: (token) => request("/admin/products", { headers: authHeader(token) }),
   adminCreateProduct: (token, product) =>
     request("/admin/products", {
       method: "POST",
-      headers: { "x-admin-token": token },
+      headers: authHeader(token),
       body: JSON.stringify(product),
     }),
   adminUpdateProduct: (token, id, product) =>
     request(`/admin/products/${id}`, {
       method: "PUT",
-      headers: { "x-admin-token": token },
+      headers: authHeader(token),
       body: JSON.stringify(product),
     }),
   adminDeleteProduct: (token, id) =>
-    request(`/admin/products/${id}`, { method: "DELETE", headers: { "x-admin-token": token } }),
-  adminGetOrders: (token) => request("/admin/orders", { headers: { "x-admin-token": token } }),
+    request(`/admin/products/${id}`, { method: "DELETE", headers: authHeader(token) }),
+  adminGetOrders: (token) => request("/admin/orders", { headers: authHeader(token) }),
 };

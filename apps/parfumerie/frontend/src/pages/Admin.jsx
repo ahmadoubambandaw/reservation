@@ -16,9 +16,12 @@ const EMPTY_PRODUCT = {
 };
 
 export default function Admin() {
-  const [token, setToken] = useState(() => sessionStorage.getItem("admin-token") || "");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [loginInput, setLoginInput] = useState("");
+  const [token, setToken] = useState(() => sessionStorage.getItem("admin-jwt") || "");
+  const [user, setUser] = useState(null);
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState(null);
 
   const [tab, setTab] = useState("products");
@@ -28,23 +31,32 @@ export default function Admin() {
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState(null);
 
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      setCheckingSession(false);
+      return;
+    }
     api
-      .adminGetProducts(token)
-      .then(() => setLoggedIn(true))
+      .getMe(token)
+      .then((me) => setUser(me))
       .catch(() => {
-        setLoggedIn(false);
-        sessionStorage.removeItem("admin-token");
-      });
+        sessionStorage.removeItem("admin-jwt");
+        setToken("");
+      })
+      .finally(() => setCheckingSession(false));
   }, [token]);
 
   useEffect(() => {
-    if (!loggedIn) return;
+    if (!user) return;
     refreshProducts();
     refreshOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn]);
+  }, [user]);
 
   function refreshProducts() {
     api.adminGetProducts(token).then(setProducts).catch((err) => setError(err.message));
@@ -58,19 +70,19 @@ export default function Admin() {
     e.preventDefault();
     setLoginError(null);
     try {
-      await api.adminLogin(loginInput);
-      sessionStorage.setItem("admin-token", loginInput);
-      setToken(loginInput);
-      setLoggedIn(true);
+      const { token: newToken, user: me } = await api.login(loginEmail, loginPassword);
+      sessionStorage.setItem("admin-jwt", newToken);
+      setToken(newToken);
+      setUser(me);
     } catch (err) {
       setLoginError(err.message);
     }
   }
 
   function handleLogout() {
-    sessionStorage.removeItem("admin-token");
+    sessionStorage.removeItem("admin-jwt");
     setToken("");
-    setLoggedIn(false);
+    setUser(null);
   }
 
   function startEdit(product) {
@@ -117,18 +129,47 @@ export default function Admin() {
     }
   }
 
-  if (!loggedIn) {
+  async function handleChangePassword(e) {
+    e.preventDefault();
+    setPasswordError(null);
+    setPasswordMessage(null);
+    try {
+      await api.changePassword(token, currentPassword, newPassword);
+      setCurrentPassword("");
+      setNewPassword("");
+      setPasswordMessage("Mot de passe mis à jour avec succès.");
+    } catch (err) {
+      setPasswordError(err.message);
+    }
+  }
+
+  if (checkingSession) {
+    return <div className="container admin-login" />;
+  }
+
+  if (!user) {
     return (
       <div className="container admin-login">
         <h1 className="page-title">Espace administration</h1>
         <form onSubmit={handleLogin} className="admin-login-form">
-          <label htmlFor="admin-token">Jeton d'accès</label>
+          <label htmlFor="admin-email">Email</label>
           <input
-            id="admin-token"
+            id="admin-email"
+            type="email"
+            value={loginEmail}
+            onChange={(e) => setLoginEmail(e.target.value)}
+            placeholder="vous@boutique.com"
+            autoComplete="username"
+            required
+          />
+          <label htmlFor="admin-password">Mot de passe</label>
+          <input
+            id="admin-password"
             type="password"
-            value={loginInput}
-            onChange={(e) => setLoginInput(e.target.value)}
-            placeholder="Jeton admin"
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
+            placeholder="Mot de passe"
+            autoComplete="current-password"
             required
           />
           {loginError && <p className="error-text">{loginError}</p>}
@@ -143,7 +184,10 @@ export default function Admin() {
   return (
     <div className="container admin-page">
       <div className="admin-header">
-        <h1 className="page-title">Back-office</h1>
+        <div>
+          <h1 className="page-title">Back-office</h1>
+          <p className="admin-welcome">Connectée en tant que {user.name || user.email}</p>
+        </div>
         <button className="link-button" onClick={handleLogout}>
           Se déconnecter
         </button>
@@ -156,9 +200,12 @@ export default function Admin() {
         <button className={tab === "orders" ? "active" : ""} onClick={() => setTab("orders")}>
           Commandes
         </button>
+        <button className={tab === "account" ? "active" : ""} onClick={() => setTab("account")}>
+          Mon compte
+        </button>
       </div>
 
-      {error && <p className="error-text">{error}</p>}
+      {error && tab !== "account" && <p className="error-text">{error}</p>}
 
       {tab === "products" && (
         <div className="admin-products">
@@ -296,6 +343,41 @@ export default function Admin() {
             ))}
           </tbody>
         </table>
+      )}
+
+      {tab === "account" && (
+        <div className="admin-form">
+          <h2>Mon compte</h2>
+          <p className="account-info">
+            Email : <strong>{user.email}</strong>
+          </p>
+          <form onSubmit={handleChangePassword} className="admin-login-form">
+            <label htmlFor="current-password">Mot de passe actuel</label>
+            <input
+              id="current-password"
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+            <label htmlFor="new-password">Nouveau mot de passe</label>
+            <input
+              id="new-password"
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              autoComplete="new-password"
+              minLength={6}
+              required
+            />
+            {passwordError && <p className="error-text">{passwordError}</p>}
+            {passwordMessage && <p className="success-text">{passwordMessage}</p>}
+            <button className="btn btn-primary" type="submit">
+              Mettre à jour le mot de passe
+            </button>
+          </form>
+        </div>
       )}
     </div>
   );

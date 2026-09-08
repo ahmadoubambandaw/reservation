@@ -1,20 +1,10 @@
 import { Router } from "express";
 import { db } from "../db.js";
-import { adminAuth } from "../middleware/adminAuth.js";
+import { requireAuth } from "../middleware/auth.js";
 
 export const adminRouter = Router();
 
-adminRouter.post("/login", (req, res) => {
-  const { token } = req.body;
-
-  if (!token || token !== process.env.ADMIN_TOKEN) {
-    return res.status(401).json({ error: "Jeton invalide." });
-  }
-
-  res.json({ ok: true });
-});
-
-adminRouter.use(adminAuth);
+adminRouter.use(requireAuth);
 
 adminRouter.get("/products", (req, res) => {
   const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();

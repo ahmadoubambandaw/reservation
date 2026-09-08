@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import Database from "better-sqlite3";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -41,7 +42,25 @@ db.exec(`
     quantity INTEGER NOT NULL,
     price_cents INTEGER NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS admin_users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    name TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 `);
+
+const userCount = db.prepare("SELECT COUNT(*) AS count FROM admin_users").get();
+
+if (userCount.count === 0 && process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+  db.prepare("INSERT INTO admin_users (email, password_hash, name) VALUES (?, ?, ?)").run(
+    process.env.ADMIN_EMAIL.toLowerCase(),
+    bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10),
+    process.env.ADMIN_NAME || "Propriétaire"
+  );
+}
 
 const productCount = db.prepare("SELECT COUNT(*) AS count FROM products").get();
 

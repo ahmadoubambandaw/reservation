@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import "./db.js";
 import { adminRouter } from "./routes/admin.js";
+import { authRouter } from "./routes/auth.js";
 import { checkoutRouter } from "./routes/checkout.js";
 import { productsRouter } from "./routes/products.js";
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/products", productsRouter);
 app.use("/api/checkout", checkoutRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
 
 app.use((req, res) => {

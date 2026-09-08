@@ -18,9 +18,10 @@ parfumerie/
 - **Paiement Stripe Checkout** : création d'une session de paiement, pages de
   confirmation (succès/annulation), décrémentation automatique du stock à la
   confirmation du paiement.
-- **Back-office admin** protégé par un jeton :
+- **Back-office admin** avec un vrai compte (email + mot de passe) :
   - CRUD complet sur les produits (nom, marque, description, prix, stock, image…)
-  - vue sur les commandes passées et leur statut.
+  - vue sur les commandes passées et leur statut
+  - la cliente peut changer son mot de passe elle-même depuis l'onglet « Mon compte ».
 
 ## Démarrage rapide
 
@@ -28,13 +29,14 @@ parfumerie/
 
 ```bash
 cd backend
-cp .env.example .env   # renseigner ADMIN_TOKEN et les clés Stripe
+cp .env.example .env   # renseigner ADMIN_EMAIL/ADMIN_PASSWORD, JWT_SECRET et les clés Stripe
 npm install
 npm run dev             # http://localhost:4000
 ```
 
 La base SQLite (`data.sqlite`) est créée et pré-remplie automatiquement au
-premier démarrage.
+premier démarrage, avec un compte propriétaire créé à partir de
+`ADMIN_EMAIL`/`ADMIN_PASSWORD` (uniquement s'il n'existe encore aucun compte).
 
 ### Frontend
 
@@ -47,8 +49,9 @@ npm run dev             # http://localhost:5173
 
 ### Accès admin
 
-Ouvrir `/admin`, puis se connecter avec le jeton défini dans `ADMIN_TOKEN`
-(fichier `backend/.env`).
+Ouvrir `/admin`, puis se connecter avec l'email et le mot de passe définis
+dans `backend/.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`). La cliente peut
+ensuite changer son mot de passe elle-même depuis l'onglet « Mon compte ».
 
 ## Paiement Stripe
 
