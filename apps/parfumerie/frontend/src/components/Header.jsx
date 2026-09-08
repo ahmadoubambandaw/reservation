@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import monogram from "../assets/fs-monogram.png";
 import { useCart } from "../context/CartContext.jsx";
+
+const monogram =
+  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/fs-monogram.png";
 
 export default function Header() {
   const { totalItems } = useCart();

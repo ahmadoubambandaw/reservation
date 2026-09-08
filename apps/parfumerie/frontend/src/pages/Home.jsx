@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api.js";
-import heroPhoto from "../assets/hero.jpg";
 import ProductCard from "../components/ProductCard.jsx";
+
+const heroPhoto =
+  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/hero.jpg";
 
 const COLLECTIONS = [
   {
