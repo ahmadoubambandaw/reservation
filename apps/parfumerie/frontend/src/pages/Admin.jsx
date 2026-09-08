@@ -28,6 +28,7 @@ export default function Admin() {
   const [tab, setTab] = useState("products");
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
   const [form, setForm] = useState(EMPTY_PRODUCT);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState(null);
@@ -56,6 +57,7 @@ export default function Admin() {
     if (!user) return;
     refreshProducts();
     refreshOrders();
+    refreshSubscribers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -65,6 +67,10 @@ export default function Admin() {
 
   function refreshOrders() {
     api.adminGetOrders(token).then(setOrders).catch((err) => setError(err.message));
+  }
+
+  function refreshSubscribers() {
+    api.adminGetNewsletter(token).then(setSubscribers).catch((err) => setError(err.message));
   }
 
   async function handleLogin(e) {
@@ -200,6 +206,9 @@ export default function Admin() {
         </button>
         <button className={tab === "orders" ? "active" : ""} onClick={() => setTab("orders")}>
           Commandes
+        </button>
+        <button className={tab === "newsletter" ? "active" : ""} onClick={() => setTab("newsletter")}>
+          Newsletter
         </button>
         <button className={tab === "account" ? "active" : ""} onClick={() => setTab("account")}>
           Mon compte
@@ -347,6 +356,25 @@ export default function Admin() {
                 <td>
                   {order.items.map((item) => `${item.product_name} ×${item.quantity}`).join(", ")}
                 </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {tab === "newsletter" && (
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Inscrit le</th>
+            </tr>
+          </thead>
+          <tbody>
+            {subscribers.map((sub) => (
+              <tr key={sub.id}>
+                <td>{sub.email}</td>
+                <td>{sub.created_at}</td>
               </tr>
             ))}
           </tbody>

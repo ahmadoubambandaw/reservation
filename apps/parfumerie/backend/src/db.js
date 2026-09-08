@@ -51,6 +51,12 @@ db.exec(`
     name TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 `);
 
 const userCount = db.prepare("SELECT COUNT(*) AS count FROM admin_users").get();

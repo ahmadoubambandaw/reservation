@@ -97,3 +97,10 @@ adminRouter.get("/orders", (req, res) => {
 
   res.json(ordersWithItems);
 });
+
+adminRouter.get("/newsletter", (req, res) => {
+  const subscribers = db
+    .prepare("SELECT * FROM newsletter_subscribers ORDER BY created_at DESC")
+    .all();
+  res.json(subscribers);
+});

@@ -4,27 +4,66 @@ import { api } from "../api.js";
 import heroPhoto from "../assets/hero.jpg";
 import ProductCard from "../components/ProductCard.jsx";
 
-const CATEGORIES = [
+const COLLECTIONS = [
   {
-    icon: "🧴",
-    title: "Parfums d'exception",
-    description: "Des senteurs uniques pour chaque occasion.",
+    type: "Parfum",
+    title: "Parfums",
+    description: "Des senteurs uniques pour chaque occasion",
+    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600",
   },
   {
-    icon: "🫙",
-    title: "Soins Premium",
-    description: "Prenez soin de vous avec des produits de qualité.",
+    type: "Soin",
+    title: "Soins",
+    description: "Prenez soin de vous au quotidien",
+    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600",
   },
   {
-    icon: "👜",
-    title: "Accessoires Chic",
-    description: "L'élégance se complète dans les détails.",
+    type: "Accessoire",
+    title: "Accessoires",
+    description: "L'élégance se complète dans les détails",
+    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600",
   },
+];
+
+const TRUST_BADGES = [
+  { icon: "✨", title: "Sélection soignée", text: "Choisie avec exigence" },
+  { icon: "🚚", title: "Livraison Dakar", text: "Rapide et suivie" },
+  { icon: "🔒", title: "Paiement sécurisé", text: "Via Stripe" },
+  { icon: "💬", title: "Toujours disponible", text: "Sur WhatsApp" },
+];
+
+const CATEGORY_ICONS = [
+  { icon: "🌸", label: "Floral", category: "Floral" },
+  { icon: "🌳", label: "Boisé", category: "Boisé" },
+  { icon: "🌅", label: "Oriental", category: "Oriental" },
+  { icon: "🍊", label: "Hespéridé", category: "Hespéridé" },
+  { icon: "🧴", label: "Soin visage", category: "Soin visage" },
+  { icon: "🧖🏾‍♀️", label: "Soin corps", category: "Soin corps" },
+  { icon: "👜", label: "Sacs", category: "Sacs" },
+  { icon: "💍", label: "Bijoux", category: "Bijoux" },
+];
+
+const WHY_CHOOSE = [
+  { icon: "🤍", title: "Sélection exigeante", text: "Des produits choisis avec soin pour leur qualité." },
+  { icon: "🚀", title: "Livraison rapide", text: "Expédition soignée partout à Dakar et environs." },
+  { icon: "🛡️", title: "Paiement sécurisé", text: "Transactions protégées grâce à Stripe." },
+  { icon: "💌", title: "Un service à l'écoute", text: "Une équipe disponible pour vous conseiller." },
+];
+
+const INSTAGRAM_IMAGES = [
+  heroPhoto,
+  "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400",
+  "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400",
+  "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400",
 ];
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [error, setError] = useState(null);
+
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterMessage, setNewsletterMessage] = useState(null);
+  const [newsletterError, setNewsletterError] = useState(null);
 
   useEffect(() => {
     api
@@ -33,33 +72,35 @@ export default function Home() {
       .catch((err) => setError(err.message));
   }, []);
 
+  async function handleNewsletterSubmit(e) {
+    e.preventDefault();
+    setNewsletterError(null);
+    setNewsletterMessage(null);
+    try {
+      await api.subscribeNewsletter(newsletterEmail);
+      setNewsletterMessage("Merci ! Vous êtes bien inscrite à notre newsletter.");
+      setNewsletterEmail("");
+    } catch (err) {
+      setNewsletterError(err.message);
+    }
+  }
+
   return (
     <div>
       <section className="hero">
         <div className="container hero-inner">
           <div className="hero-text">
+            <span className="hero-kicker">Faty Store · Beauty &amp; Co</span>
             <h1>
-              L'élégance <span>à portée de main</span>
+              Révélez votre <em>éclat naturel</em>
             </h1>
             <p>
-              Découvrez une sélection raffinée de parfums, soins et accessoires pour révéler
-              votre beauté au quotidien.
+              Parfums, soins premium et accessoires chic pour révéler votre beauté au
+              quotidien, sélectionnés avec exigence par Faty Store.
             </p>
             <Link to="/catalogue" className="btn btn-primary">
-              Découvrir la collection
+              Découvrir la boutique
             </Link>
-
-            <div className="hero-categories">
-              {CATEGORIES.map((cat) => (
-                <div className="hero-category" key={cat.title}>
-                  <span className="hero-category-icon">{cat.icon}</span>
-                  <div>
-                    <h3>{cat.title}</h3>
-                    <p>{cat.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
           <div className="hero-photo">
             <img src={heroPhoto} alt="Faty Store — Beauty & Co" />
@@ -67,12 +108,146 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="container trust-badges">
+        {TRUST_BADGES.map((badge) => (
+          <div className="trust-badge" key={badge.title}>
+            <span className="trust-badge-icon">{badge.icon}</span>
+            <div>
+              <h4>{badge.title}</h4>
+              <p>{badge.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
       <section className="container">
-        <h2 className="section-title">Nos coups de cœur</h2>
+        <div className="section-heading">
+          <h2>Nos collections</h2>
+          <Link to="/catalogue">Voir tout</Link>
+        </div>
+        <div className="collections-grid">
+          {COLLECTIONS.map((col) => (
+            <Link to={`/catalogue?type=${col.type}`} className="collection-card" key={col.type}>
+              <img src={col.image} alt={col.title} />
+              <div className="collection-card-label">
+                <h3>{col.title}</h3>
+                <p>{col.description}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="container">
+        <div className="section-heading">
+          <h2>Nos meilleures ventes</h2>
+          <Link to="/catalogue">Voir tout</Link>
+        </div>
         {error && <p className="error-text">{error}</p>}
         <div className="product-grid">
           {featured.map((product) => (
             <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section className="container">
+        <div className="promo-banner">
+          <div className="promo-banner-text">
+            <h2>Retrait en boutique</h2>
+            <p>
+              Rendez-vous à Ouest Foire pour récupérer votre commande, ou faites-vous livrer
+              directement à Dakar.
+            </p>
+            <Link to="/catalogue" className="btn btn-primary">
+              Commander maintenant
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="container">
+        <div className="section-heading">
+          <h2>Parcourir par catégorie</h2>
+        </div>
+        <div className="category-icons-grid">
+          {CATEGORY_ICONS.map((cat) => (
+            <Link
+              to={`/catalogue?category=${encodeURIComponent(cat.category)}`}
+              className="category-icon-card"
+              key={cat.category}
+            >
+              <span className="category-icon-circle">{cat.icon}</span>
+              <span>{cat.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="container">
+        <div className="section-heading">
+          <h2>Pourquoi choisir Faty Store</h2>
+        </div>
+        <div className="why-choose-grid">
+          {WHY_CHOOSE.map((item) => (
+            <div key={item.title}>
+              <div className="why-choose-icon">{item.icon}</div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="container" style={{ margin: "64px auto" }}>
+        <div className="testimonial-card">
+          <p className="testimonial-quote">
+            « Toujours des produits authentiques et un service adorable. Faty Store est devenu
+            mon adresse beauté préférée ! »
+          </p>
+          <p className="testimonial-author">Une cliente Faty Store</p>
+          <p className="testimonial-note">Exemple d'avis — à remplacer par vos vrais avis clients.</p>
+        </div>
+      </section>
+
+      <section className="container">
+        <div className="newsletter-section">
+          <h2>Restez à la mode</h2>
+          <p>Inscrivez-vous pour recevoir nos nouveautés et offres exclusives.</p>
+          <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+            <input
+              type="email"
+              placeholder="Votre adresse email"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              required
+            />
+            <button className="btn btn-primary" type="submit">
+              S'inscrire
+            </button>
+          </form>
+          {newsletterMessage && <p className="newsletter-message success-text">{newsletterMessage}</p>}
+          {newsletterError && <p className="newsletter-message error-text">{newsletterError}</p>}
+        </div>
+      </section>
+
+      <section className="container">
+        <div className="section-heading">
+          <h2>Suivez-nous sur Instagram</h2>
+          <a href="https://instagram.com/fatystore01" target="_blank" rel="noreferrer">
+            @fatystore01
+          </a>
+        </div>
+        <div className="instagram-grid">
+          {INSTAGRAM_IMAGES.map((src, i) => (
+            <a
+              href="https://instagram.com/fatystore01"
+              target="_blank"
+              rel="noreferrer"
+              key={i}
+            >
+              <img src={src} alt="Faty Store sur Instagram" loading="lazy" />
+            </a>
           ))}
         </div>
       </section>

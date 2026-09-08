@@ -19,13 +19,20 @@ export default function Header() {
           <NavLink to="/" end>
             Accueil
           </NavLink>
-          <NavLink to="/catalogue">Catalogue</NavLink>
-          <NavLink to="/admin">Admin</NavLink>
+          <NavLink to="/catalogue">Boutique</NavLink>
+          <NavLink to="/catalogue?type=Parfum">Parfums</NavLink>
+          <NavLink to="/catalogue?type=Soin">Soins</NavLink>
+          <NavLink to="/catalogue?type=Accessoire">Accessoires</NavLink>
         </nav>
-        <Link to="/panier" className="cart-link">
-          Panier
-          {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
-        </Link>
+        <div className="header-icons">
+          <Link to="/admin" className="icon-link" title="Espace administration" aria-label="Administration">
+            👤
+          </Link>
+          <Link to="/panier" className="cart-link" aria-label="Panier">
+            🛍️
+            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+          </Link>
+        </div>
       </div>
     </header>
   );

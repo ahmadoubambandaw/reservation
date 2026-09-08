@@ -5,6 +5,7 @@ import "./db.js";
 import { adminRouter } from "./routes/admin.js";
 import { authRouter } from "./routes/auth.js";
 import { checkoutRouter } from "./routes/checkout.js";
+import { newsletterRouter } from "./routes/newsletter.js";
 import { productsRouter } from "./routes/products.js";
 
 const app = express();
@@ -16,6 +17,7 @@ app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/products", productsRouter);
 app.use("/api/checkout", checkoutRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/newsletter", newsletterRouter);
 app.use("/api/admin", adminRouter);
 
 app.use((req, res) => {
@@ -24,5 +26,5 @@ app.use((req, res) => {
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
-  console.log(`API Essence de Luxe démarrée sur http://localhost:${port}`);
+  console.log(`API Faty Store démarrée sur http://localhost:${port}`);
 });

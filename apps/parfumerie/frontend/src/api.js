@@ -36,6 +36,9 @@ export const api = {
     request("/checkout", { method: "POST", body: JSON.stringify({ items }) }),
   getCheckoutSession: (sessionId) => request(`/checkout/session/${sessionId}`),
 
+  subscribeNewsletter: (email) =>
+    request("/newsletter", { method: "POST", body: JSON.stringify({ email }) }),
+
   login: (email, password) =>
     request("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
   getMe: (token) => request("/auth/me", { headers: authHeader(token) }),
@@ -62,4 +65,5 @@ export const api = {
   adminDeleteProduct: (token, id) =>
     request(`/admin/products/${id}`, { method: "DELETE", headers: authHeader(token) }),
   adminGetOrders: (token) => request("/admin/orders", { headers: authHeader(token) }),
+  adminGetNewsletter: (token) => request("/admin/newsletter", { headers: authHeader(token) }),
 };
