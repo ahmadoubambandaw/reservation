@@ -49,14 +49,14 @@ export function CartProvider({ children }) {
     setItems([]);
   }
 
-  const totalCents = useMemo(
-    () => items.reduce((sum, item) => sum + item.product.price_cents * item.quantity, 0),
+  const totalXof = useMemo(
+    () => items.reduce((sum, item) => sum + item.product.price_xof * item.quantity, 0),
     [items]
   );
 
   const totalItems = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
 
-  const value = { items, addItem, updateQuantity, removeItem, clearCart, totalCents, totalItems };
+  const value = { items, addItem, updateQuantity, removeItem, clearCart, totalXof, totalItems };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

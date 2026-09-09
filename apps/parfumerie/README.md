@@ -1,12 +1,13 @@
 # Faty Store — Beauty & Co
 
 Site e-commerce complet pour **Faty Store** : parfums, soins et accessoires.
-Catalogue produits, panier, paiement en ligne via Stripe et back-office
-d'administration (gestion des produits et du stock, suivi des commandes).
+Catalogue produits (prix en Francs CFA), panier, paiement en ligne via
+PayDunya et back-office d'administration (gestion des produits et du stock,
+suivi des commandes).
 
 ```
 parfumerie/
-├─ backend/   # API Node.js/Express + Postgres (Supabase) + Stripe — déployable sur Vercel
+├─ backend/   # API Node.js/Express + Postgres (Supabase) + PayDunya — déployable sur Vercel
 └─ frontend/  # Application React (Vite) — déployable sur Vercel
 ```
 
@@ -16,9 +17,9 @@ parfumerie/
   catalogue filtrable par type (Parfums / Soins / Accessoires), par catégorie
   et par genre, fiche produit détaillée.
 - **Panier** persistant (localStorage) avec gestion des quantités.
-- **Paiement Stripe Checkout** : création d'une session de paiement, pages de
-  confirmation (succès/annulation), décrémentation automatique du stock à la
-  confirmation du paiement.
+- **Paiement PayDunya** (Orange Money, Wave, Free Money, carte) : création
+  d'une facture de paiement, pages de confirmation (succès/annulation),
+  décrémentation automatique du stock à la confirmation du paiement.
 - **Back-office admin** avec un vrai compte (email + mot de passe) :
   - CRUD complet sur les produits (nom, marque, type, description, prix, stock, image…)
   - vue sur les commandes passées et leur statut
@@ -40,7 +41,7 @@ si les tables sont vides.
 
 ```bash
 cd backend
-cp .env.example .env   # renseigner DATABASE_URL, ADMIN_EMAIL/ADMIN_PASSWORD, JWT_SECRET et les clés Stripe
+cp .env.example .env   # renseigner DATABASE_URL, ADMIN_EMAIL/ADMIN_PASSWORD, JWT_SECRET et les clés PayDunya
 npm install
 npm run dev             # http://localhost:4000
 ```
@@ -78,8 +79,8 @@ du **backend** (Project Settings > Environment Variables), puis redéployer :
 - `DATABASE_URL` — chaîne de connexion Postgres (pooler Supabase, port 6543)
 - `JWT_SECRET` — valeur aléatoire longue
 - `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` — compte propriétaire initial
-- `FRONTEND_URL` — URL du site déployé (pour les redirections Stripe et CORS)
-- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` — clés Stripe
+- `FRONTEND_URL` — URL du site déployé (pour les redirections PayDunya et CORS)
+- `PAYDUNYA_MASTER_KEY`, `PAYDUNYA_PRIVATE_KEY`, `PAYDUNYA_PUBLIC_KEY`, `PAYDUNYA_TOKEN` — clés PayDunya
 
 Ces valeurs contiennent des secrets : à saisir directement dans le tableau de
 bord Vercel, jamais commitées dans le dépôt.
@@ -90,16 +91,17 @@ Les coordonnées affichées (adresse, WhatsApp, téléphone, réseaux sociaux)
 sont codées dans `frontend/src/components/Footer.jsx` — à mettre à jour si
 elles changent.
 
-## Paiement Stripe
+## Paiement PayDunya
 
-Le backend utilise l'API Stripe Checkout. En développement, utiliser une clé
-secrète de test (`sk_test_...`) depuis le
-[dashboard Stripe](https://dashboard.stripe.com/test/apikeys). Sans clé
-valide, le tunnel de paiement renvoie une erreur explicite côté panier — le
-reste du site (catalogue, panier, admin) fonctionne indépendamment de Stripe.
+Le backend utilise l'API PayDunya (« Checkout Invoice ») via `fetch` natif —
+aucune dépendance supplémentaire. En développement, utiliser les clés de test
+depuis le tableau de bord PayDunya (Compte > API & Webhooks). Sans clés
+valides, le tunnel de paiement renvoie une erreur explicite côté panier — le
+reste du site (catalogue, panier, admin) fonctionne indépendamment de
+PayDunya. Les prix sont exprimés en Francs CFA (XOF), sans sous-unité.
 
 ## Stack technique
 
-- **Backend** : Node.js, Express, PostgreSQL (`pg`), Stripe SDK — déployé en
-  fonction serverless Vercel
+- **Backend** : Node.js, Express, PostgreSQL (`pg`), API PayDunya via `fetch`
+  natif — déployé en fonction serverless Vercel
 - **Frontend** : React 18, React Router, Vite

@@ -20,7 +20,7 @@ async function init() {
       category TEXT NOT NULL DEFAULT 'Autre',
       gender TEXT NOT NULL DEFAULT 'Mixte',
       volume_ml INTEGER NOT NULL DEFAULT 0,
-      price_cents INTEGER NOT NULL,
+      price_xof INTEGER NOT NULL,
       stock INTEGER NOT NULL DEFAULT 0,
       image_url TEXT NOT NULL DEFAULT '',
       featured BOOLEAN NOT NULL DEFAULT FALSE,
@@ -29,9 +29,9 @@ async function init() {
 
     CREATE TABLE IF NOT EXISTS faty_store.orders (
       id BIGSERIAL PRIMARY KEY,
-      stripe_session_id TEXT UNIQUE,
+      payment_token TEXT UNIQUE,
       customer_email TEXT,
-      total_cents INTEGER NOT NULL,
+      total_xof INTEGER NOT NULL,
       status TEXT NOT NULL DEFAULT 'pending',
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
@@ -42,7 +42,7 @@ async function init() {
       product_id BIGINT NOT NULL REFERENCES faty_store.products(id),
       product_name TEXT NOT NULL,
       quantity INTEGER NOT NULL,
-      price_cents INTEGER NOT NULL
+      price_xof INTEGER NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS faty_store.admin_users (
@@ -90,7 +90,7 @@ async function init() {
         category: "Boisé",
         gender: "Mixte",
         volume_ml: 100,
-        price_cents: 8900,
+        price_xof: 58500,
         stock: 24,
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-5-gold-trio.jpg",
@@ -104,7 +104,7 @@ async function init() {
         category: "Floral",
         gender: "Femme",
         volume_ml: 75,
-        price_cents: 7400,
+        price_xof: 48500,
         stock: 30,
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
@@ -118,7 +118,7 @@ async function init() {
         category: "Oriental",
         gender: "Homme",
         volume_ml: 100,
-        price_cents: 9900,
+        price_xof: 65000,
         stock: 18,
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-1-ysl.jpg",
@@ -132,7 +132,7 @@ async function init() {
         category: "Hespéridé",
         gender: "Mixte",
         volume_ml: 50,
-        price_cents: 5400,
+        price_xof: 35500,
         stock: 40,
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-6-vials.jpg",
@@ -146,7 +146,7 @@ async function init() {
         category: "Gourmand",
         gender: "Femme",
         volume_ml: 100,
-        price_cents: 8200,
+        price_xof: 54000,
         stock: 22,
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-3-hypnotic.jpg",
@@ -160,7 +160,7 @@ async function init() {
         category: "Floral",
         gender: "Femme",
         volume_ml: 75,
-        price_cents: 8600,
+        price_xof: 56500,
         stock: 15,
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
@@ -174,7 +174,7 @@ async function init() {
         category: "Oriental",
         gender: "Mixte",
         volume_ml: 100,
-        price_cents: 14900,
+        price_xof: 98000,
         stock: 10,
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-4-my-way.jpg",
@@ -188,7 +188,7 @@ async function init() {
         category: "Aquatique",
         gender: "Homme",
         volume_ml: 100,
-        price_cents: 6900,
+        price_xof: 45000,
         stock: 28,
         image_url: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=800",
         featured: false,
@@ -202,7 +202,7 @@ async function init() {
         category: "Soin visage",
         gender: "Mixte",
         volume_ml: 50,
-        price_cents: 6500,
+        price_xof: 42500,
         stock: 20,
         image_url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800",
         featured: true,
@@ -215,7 +215,7 @@ async function init() {
         category: "Soin visage",
         gender: "Mixte",
         volume_ml: 30,
-        price_cents: 7900,
+        price_xof: 52000,
         stock: 16,
         image_url: "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=800",
         featured: true,
@@ -228,7 +228,7 @@ async function init() {
         category: "Soin corps",
         gender: "Mixte",
         volume_ml: 200,
-        price_cents: 5200,
+        price_xof: 34000,
         stock: 25,
         image_url: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800",
         featured: false,
@@ -241,7 +241,7 @@ async function init() {
         category: "Soin cheveux",
         gender: "Mixte",
         volume_ml: 100,
-        price_cents: 4800,
+        price_xof: 31500,
         stock: 30,
         image_url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800",
         featured: false,
@@ -255,7 +255,7 @@ async function init() {
         category: "Sacs",
         gender: "Femme",
         volume_ml: 0,
-        price_cents: 15900,
+        price_xof: 104000,
         stock: 8,
         image_url: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800",
         featured: true,
@@ -268,7 +268,7 @@ async function init() {
         category: "Écharpes",
         gender: "Femme",
         volume_ml: 0,
-        price_cents: 6900,
+        price_xof: 45000,
         stock: 14,
         image_url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=800",
         featured: false,
@@ -281,7 +281,7 @@ async function init() {
         category: "Bijoux",
         gender: "Femme",
         volume_ml: 0,
-        price_cents: 4500,
+        price_xof: 29500,
         stock: 20,
         image_url: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800",
         featured: true,
@@ -294,7 +294,7 @@ async function init() {
         category: "Maroquinerie",
         gender: "Mixte",
         volume_ml: 0,
-        price_cents: 3900,
+        price_xof: 25500,
         stock: 18,
         image_url: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=800",
         featured: false,
@@ -304,7 +304,7 @@ async function init() {
     for (const p of seedProducts) {
       await pool.query(
         `INSERT INTO faty_store.products
-          (name, brand, description, type, category, gender, volume_ml, price_cents, stock, image_url, featured)
+          (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
         [
           p.name,
@@ -314,7 +314,7 @@ async function init() {
           p.category,
           p.gender,
           p.volume_ml,
-          p.price_cents,
+          p.price_xof,
           p.stock,
           p.image_url,
           p.featured,

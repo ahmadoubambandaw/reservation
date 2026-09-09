@@ -60,7 +60,7 @@ const COLLECTIONS = [
 const TRUST_BADGES = [
   { icon: SparkleIcon, title: "Sélection soignée", text: "Choisie avec exigence" },
   { icon: TruckIcon, title: "Livraison Dakar", text: "Rapide et suivie" },
-  { icon: LockIcon, title: "Paiement sécurisé", text: "Via Stripe" },
+  { icon: LockIcon, title: "Paiement sécurisé", text: "Via PayDunya" },
   { icon: ChatIcon, title: "Toujours disponible", text: "Sur WhatsApp" },
 ];
 
@@ -78,7 +78,7 @@ const CATEGORY_ICONS = [
 const WHY_CHOOSE = [
   { icon: HeartIcon, title: "Sélection exigeante", text: "Des produits choisis avec soin pour leur qualité." },
   { icon: RocketIcon, title: "Livraison rapide", text: "Expédition soignée partout à Dakar et environs." },
-  { icon: ShieldIcon, title: "Paiement sécurisé", text: "Transactions protégées grâce à Stripe." },
+  { icon: ShieldIcon, title: "Paiement sécurisé", text: "Transactions protégées grâce à PayDunya." },
   { icon: MailIcon, title: "Un service à l'écoute", text: "Une équipe disponible pour vous conseiller." },
 ];
 

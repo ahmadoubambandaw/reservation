@@ -12,16 +12,16 @@ adminRouter.get("/products", async (req, res) => {
 });
 
 adminRouter.post("/products", async (req, res) => {
-  const { name, brand, description, type, category, gender, volume_ml, price_cents, stock, image_url, featured } =
+  const { name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured } =
     req.body;
 
-  if (!name || !brand || !price_cents) {
+  if (!name || !brand || !price_xof) {
     return res.status(400).json({ error: "Nom, marque et prix sont obligatoires." });
   }
 
   const { rows } = await pool.query(
     `INSERT INTO faty_store.products
-      (name, brand, description, type, category, gender, volume_ml, price_cents, stock, image_url, featured)
+      (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
      RETURNING *`,
     [
@@ -32,7 +32,7 @@ adminRouter.post("/products", async (req, res) => {
       category ?? "Autre",
       gender ?? "Mixte",
       volume_ml ?? 0,
-      price_cents,
+      price_xof,
       stock ?? 0,
       image_url ?? "",
       Boolean(featured),
@@ -57,7 +57,7 @@ adminRouter.put("/products/:id", async (req, res) => {
   const { rows } = await pool.query(
     `UPDATE faty_store.products SET
       name = $1, brand = $2, description = $3, type = $4, category = $5, gender = $6,
-      volume_ml = $7, price_cents = $8, stock = $9, image_url = $10, featured = $11
+      volume_ml = $7, price_xof = $8, stock = $9, image_url = $10, featured = $11
      WHERE id = $12
      RETURNING *`,
     [
@@ -68,7 +68,7 @@ adminRouter.put("/products/:id", async (req, res) => {
       merged.category,
       merged.gender,
       merged.volume_ml,
-      merged.price_cents,
+      merged.price_xof,
       merged.stock,
       merged.image_url,
       Boolean(merged.featured),

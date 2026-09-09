@@ -44,7 +44,7 @@ export default function Product() {
           {product.category} · {product.gender}
           {product.volume_ml > 0 ? ` · ${product.volume_ml} ml` : ""}
         </p>
-        <p className="product-price">{formatPrice(product.price_cents)}</p>
+        <p className="product-price">{formatPrice(product.price_xof)}</p>
         <p className="product-description">{product.description}</p>
 
         {product.stock > 0 ? (

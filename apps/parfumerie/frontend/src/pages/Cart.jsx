@@ -5,7 +5,7 @@ import { formatPrice } from "../components/ProductCard.jsx";
 import { useCart } from "../context/CartContext.jsx";
 
 export default function Cart() {
-  const { items, updateQuantity, removeItem, totalCents } = useCart();
+  const { items, updateQuantity, removeItem, totalXof } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -46,7 +46,7 @@ export default function Cart() {
             <div className="cart-row-info">
               <p className="product-brand">{product.brand}</p>
               <h3>{product.name}</h3>
-              <p className="product-price">{formatPrice(product.price_cents)}</p>
+              <p className="product-price">{formatPrice(product.price_xof)}</p>
             </div>
             <input
               type="number"
@@ -55,7 +55,7 @@ export default function Cart() {
               value={quantity}
               onChange={(e) => updateQuantity(product.id, Number(e.target.value))}
             />
-            <p className="cart-row-subtotal">{formatPrice(product.price_cents * quantity)}</p>
+            <p className="cart-row-subtotal">{formatPrice(product.price_xof * quantity)}</p>
             <button className="link-button" onClick={() => removeItem(product.id)}>
               Retirer
             </button>
@@ -65,7 +65,7 @@ export default function Cart() {
 
       <div className="cart-summary">
         <p>
-          Total : <strong>{formatPrice(totalCents)}</strong>
+          Total : <strong>{formatPrice(totalXof)}</strong>
         </p>
         {error && <p className="error-text">{error}</p>}
         <button className="btn btn-primary" onClick={handleCheckout} disabled={loading}>

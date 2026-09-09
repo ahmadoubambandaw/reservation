@@ -5,18 +5,18 @@ import { useCart } from "../context/CartContext.jsx";
 
 export default function CheckoutSuccess() {
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get("session_id");
+  const orderId = searchParams.get("order_id");
   const { clearCart } = useCart();
   const [status, setStatus] = useState("loading");
 
   useEffect(() => {
-    if (!sessionId) {
+    if (!orderId) {
       setStatus("error");
       return;
     }
 
     api
-      .getCheckoutSession(sessionId)
+      .getCheckoutSession(orderId)
       .then((data) => {
         if (data.status === "paid") {
           clearCart();
@@ -27,7 +27,7 @@ export default function CheckoutSuccess() {
       })
       .catch(() => setStatus("error"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId]);
+  }, [orderId]);
 
   return (
     <div className="container checkout-result">

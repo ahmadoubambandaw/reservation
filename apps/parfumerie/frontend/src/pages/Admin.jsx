@@ -10,7 +10,7 @@ const EMPTY_PRODUCT = {
   category: "",
   gender: "Mixte",
   volume_ml: 100,
-  price_cents: 0,
+  price_xof: 0,
   stock: 0,
   image_url: "",
   featured: false,
@@ -109,7 +109,7 @@ export default function Admin() {
       const payload = {
         ...form,
         volume_ml: Number(form.volume_ml),
-        price_cents: Number(form.price_cents),
+        price_xof: Number(form.price_xof),
         stock: Number(form.stock),
       };
 
@@ -257,9 +257,9 @@ export default function Admin() {
               />
               <input
                 type="number"
-                placeholder="Prix (centimes)"
-                value={form.price_cents}
-                onChange={(e) => setForm({ ...form, price_cents: e.target.value })}
+                placeholder="Prix (FCFA)"
+                value={form.price_xof}
+                onChange={(e) => setForm({ ...form, price_xof: e.target.value })}
                 required
               />
               <input
@@ -316,7 +316,7 @@ export default function Admin() {
                   <td>{product.name}</td>
                   <td>{product.type}</td>
                   <td>{product.brand}</td>
-                  <td>{formatPrice(product.price_cents)}</td>
+                  <td>{formatPrice(product.price_xof)}</td>
                   <td className={product.stock === 0 ? "stock-empty" : ""}>{product.stock}</td>
                   <td className="admin-table-actions">
                     <button className="link-button" onClick={() => startEdit(product)}>
@@ -349,7 +349,7 @@ export default function Admin() {
               <tr key={order.id}>
                 <td>#{order.id}</td>
                 <td>{order.customer_email || "—"}</td>
-                <td>{formatPrice(order.total_cents)}</td>
+                <td>{formatPrice(order.total_xof)}</td>
                 <td>
                   <span className={`status-pill status-${order.status}`}>{order.status}</span>
                 </td>

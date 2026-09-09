@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 
-export function formatPrice(cents) {
-  return (cents / 100).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+export function formatPrice(xof) {
+  return `${Math.round(xof).toLocaleString("fr-FR")} FCFA`;
 }
 
 export default function ProductCard({ product }) {
@@ -45,7 +45,7 @@ export default function ProductCard({ product }) {
           {product.category}
           {product.volume_ml > 0 ? ` · ${product.volume_ml} ml` : ""}
         </p>
-        <p className="product-price">{formatPrice(product.price_cents)}</p>
+        <p className="product-price">{formatPrice(product.price_xof)}</p>
       </div>
     </Link>
   );
