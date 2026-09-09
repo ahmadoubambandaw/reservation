@@ -3,7 +3,9 @@ import { pool } from "../db.js";
 
 export const checkoutRouter = Router();
 
-const PAYDUNYA_BASE_URL = "https://app.paydunya.com/api/v1";
+const PAYDUNYA_BASE_URL = (process.env.PAYDUNYA_PRIVATE_KEY || "").startsWith("test_")
+  ? "https://app.paydunya.com/sandbox-api/v1"
+  : "https://app.paydunya.com/api/v1";
 
 function paydunyaHeaders() {
   const { PAYDUNYA_MASTER_KEY, PAYDUNYA_PRIVATE_KEY, PAYDUNYA_PUBLIC_KEY, PAYDUNYA_TOKEN } = process.env;
@@ -118,6 +120,7 @@ checkoutRouter.post("/", async (req, res) => {
 
     res.json({ url: `https://app.paydunya.com/checkout/invoice/${data.token}` });
   } catch (error) {
+    console.error("Échec de création de facture PayDunya :", error.message);
     await pool.query("UPDATE faty_store.orders SET status = 'failed' WHERE id = $1", [orderId]);
     res.status(500).json({ error: error.message });
   }
