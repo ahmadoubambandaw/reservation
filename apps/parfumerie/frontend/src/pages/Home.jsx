@@ -25,12 +25,16 @@ const ASSET_BASE =
   "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets";
 
 const heroPhoto = `${ASSET_BASE}/hero.jpg`;
-const tiktok1 = `${ASSET_BASE}/tiktok-1-ysl.jpg`;
 const tiktok2 = `${ASSET_BASE}/tiktok-2-violet-blossom.jpg`;
-const tiktok3 = `${ASSET_BASE}/tiktok-3-hypnotic.jpg`;
-const tiktok4 = `${ASSET_BASE}/tiktok-4-my-way.jpg`;
-const tiktok5 = `${ASSET_BASE}/tiktok-5-gold-trio.jpg`;
-const tiktok6 = `${ASSET_BASE}/tiktok-6-vials.jpg`;
+
+const SHOPPABLE_PHOTO_URLS = [
+  `${ASSET_BASE}/tiktok-1-ysl.jpg`,
+  `${ASSET_BASE}/tiktok-2-violet-blossom.jpg`,
+  `${ASSET_BASE}/tiktok-3-hypnotic.jpg`,
+  `${ASSET_BASE}/tiktok-4-my-way.jpg`,
+  `${ASSET_BASE}/tiktok-5-gold-trio.jpg`,
+  `${ASSET_BASE}/tiktok-6-vials.jpg`,
+];
 
 const COLLECTIONS = [
   {
@@ -78,11 +82,10 @@ const WHY_CHOOSE = [
   { icon: MailIcon, title: "Un service à l'écoute", text: "Une équipe disponible pour vous conseiller." },
 ];
 
-const INSTAGRAM_IMAGES = [tiktok1, tiktok3, tiktok4, tiktok5, tiktok6, heroPhoto];
-
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [error, setError] = useState(null);
+  const [shoppablePosts, setShoppablePosts] = useState([]);
 
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterMessage, setNewsletterMessage] = useState(null);
@@ -93,6 +96,15 @@ export default function Home() {
       .getProducts({ featured: "true" })
       .then(setFeatured)
       .catch((err) => setError(err.message));
+  }, []);
+
+  useEffect(() => {
+    api
+      .getProducts({})
+      .then((products) =>
+        setShoppablePosts(products.filter((p) => SHOPPABLE_PHOTO_URLS.includes(p.image_url)))
+      )
+      .catch(() => {});
   }, []);
 
   async function handleNewsletterSubmit(e) {
@@ -268,15 +280,10 @@ export default function Home() {
           </a>
         </div>
         <div className="instagram-grid">
-          {INSTAGRAM_IMAGES.map((src, i) => (
-            <a
-              href="https://instagram.com/fatystore01"
-              target="_blank"
-              rel="noreferrer"
-              key={i}
-            >
-              <img src={src} alt="Faty Store sur Instagram" loading="lazy" />
-            </a>
+          {shoppablePosts.map((product) => (
+            <Link to={`/produit/${product.id}`} key={product.id}>
+              <img src={product.image_url} alt={product.name} loading="lazy" />
+            </Link>
           ))}
         </div>
       </section>

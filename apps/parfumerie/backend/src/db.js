@@ -92,7 +92,8 @@ async function init() {
         volume_ml: 100,
         price_cents: 8900,
         stock: 24,
-        image_url: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800",
+        image_url:
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-5-gold-trio.jpg",
         featured: true,
       },
       {
@@ -105,7 +106,8 @@ async function init() {
         volume_ml: 75,
         price_cents: 7400,
         stock: 30,
-        image_url: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800",
+        image_url:
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
         featured: true,
       },
       {
@@ -118,7 +120,8 @@ async function init() {
         volume_ml: 100,
         price_cents: 9900,
         stock: 18,
-        image_url: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=800",
+        image_url:
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-1-ysl.jpg",
         featured: true,
       },
       {
@@ -131,7 +134,8 @@ async function init() {
         volume_ml: 50,
         price_cents: 5400,
         stock: 40,
-        image_url: "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=800",
+        image_url:
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-6-vials.jpg",
         featured: false,
       },
       {
@@ -144,7 +148,8 @@ async function init() {
         volume_ml: 100,
         price_cents: 8200,
         stock: 22,
-        image_url: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=800",
+        image_url:
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-3-hypnotic.jpg",
         featured: false,
       },
       {
@@ -157,7 +162,8 @@ async function init() {
         volume_ml: 75,
         price_cents: 8600,
         stock: 15,
-        image_url: "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800",
+        image_url:
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
         featured: false,
       },
       {
@@ -170,7 +176,8 @@ async function init() {
         volume_ml: 100,
         price_cents: 14900,
         stock: 10,
-        image_url: "https://images.unsplash.com/photo-1595425964272-3a3b7f6f8f96?w=800",
+        image_url:
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-4-my-way.jpg",
         featured: true,
       },
       {
