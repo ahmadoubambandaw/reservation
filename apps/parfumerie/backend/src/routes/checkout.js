@@ -118,7 +118,7 @@ checkoutRouter.post("/", async (req, res) => {
       orderId,
     ]);
 
-    res.json({ url: `https://app.paydunya.com/checkout/invoice/${data.token}` });
+    res.json({ url: data.response_text });
   } catch (error) {
     console.error("Échec de création de facture PayDunya :", error.message);
     await pool.query("UPDATE faty_store.orders SET status = 'failed' WHERE id = $1", [orderId]);
