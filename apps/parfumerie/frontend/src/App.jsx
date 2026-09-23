@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import AnnouncementBar from "./components/AnnouncementBar.jsx";
 import Footer from "./components/Footer.jsx";
 import Header from "./components/Header.jsx";
 import Admin from "./pages/Admin.jsx";
@@ -13,6 +14,7 @@ import Product from "./pages/Product.jsx";
 export default function App() {
   return (
     <div className="app-shell">
+      <AnnouncementBar />
       <Header />
       <main>
         <Routes>

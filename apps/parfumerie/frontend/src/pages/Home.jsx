@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api.js";
-import ProductCard from "../components/ProductCard.jsx";
+import HeroSlider from "../components/HeroSlider.jsx";
+import ProductCarousel from "../components/ProductCarousel.jsx";
 import {
   BagIcon,
   ChatIcon,
@@ -25,8 +26,37 @@ import {
 const ASSET_BASE =
   "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets";
 
-const heroPhoto = `${ASSET_BASE}/hero.jpg`;
 const tiktok2 = `${ASSET_BASE}/tiktok-2-violet-blossom.jpg`;
+
+const HERO_SLIDES = [
+  {
+    image: `${ASSET_BASE}/hero.jpg`,
+    alt: "Faty Store — Beauty & Co",
+    kicker: "Faty Store · Beauty & Co",
+    title: "Révélez votre",
+    highlight: "éclat naturel",
+    text: "Parfums, soins premium et accessoires chic pour révéler votre beauté au quotidien, sélectionnés avec exigence par Faty Store.",
+    cta: { label: "Découvrir la boutique", to: "/catalogue" },
+  },
+  {
+    image: `${ASSET_BASE}/tiktok-5-gold-trio.jpg`,
+    alt: "Trio de parfums dorés",
+    kicker: "Collection parfums",
+    title: "Des parfums",
+    highlight: "d'exception",
+    text: "Des fragrances choisies avec exigence pour sublimer chaque moment de votre journée.",
+    cta: { label: "Voir les parfums", to: "/catalogue?type=Parfum" },
+  },
+  {
+    image: `${ASSET_BASE}/tiktok-1-ysl.jpg`,
+    alt: "Flacon de parfum en boutique",
+    kicker: "Nouveautés",
+    title: "Les nouveautés",
+    highlight: "du moment",
+    text: "Découvrez les dernières arrivées en boutique : parfums, soins et accessoires chic.",
+    cta: { label: "Voir les nouveautés", to: "/catalogue" },
+  },
+];
 
 const SHOPPABLE_PHOTO_URLS = [
   `${ASSET_BASE}/tiktok-1-ysl.jpg`,
@@ -141,26 +171,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="hero">
-        <div className="container hero-inner">
-          <div className="hero-text">
-            <span className="hero-kicker">Faty Store · Beauty &amp; Co</span>
-            <h1>
-              Révélez votre <em>éclat naturel</em>
-            </h1>
-            <p>
-              Parfums, soins premium et accessoires chic pour révéler votre beauté au
-              quotidien, sélectionnés avec exigence par Faty Store.
-            </p>
-            <Link to="/catalogue" className="btn btn-primary">
-              Découvrir la boutique
-            </Link>
-          </div>
-          <div className="hero-photo">
-            <img src={heroPhoto} alt="Faty Store — Beauty & Co" />
-          </div>
-        </div>
-      </section>
+      <HeroSlider slides={HERO_SLIDES} />
 
       <div className="container trust-badges">
         {TRUST_BADGES.map((badge) => (
@@ -188,6 +199,7 @@ export default function Home() {
               <div className="collection-card-label">
                 <h3>{col.title}</h3>
                 <p>{col.description}</p>
+                <span className="collection-card-cta">Découvrir →</span>
               </div>
             </Link>
           ))}
@@ -200,11 +212,7 @@ export default function Home() {
           <Link to="/catalogue">Voir tout</Link>
         </div>
         {error && <p className="error-text">{error}</p>}
-        <div className="product-grid">
-          {featured.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <ProductCarousel products={featured} />
       </section>
 
       <section className="container">
@@ -307,12 +315,25 @@ export default function Home() {
             @fatystore01
           </a>
         </div>
-        <div className="instagram-grid">
-          {shoppablePosts.map((product) => (
-            <Link to={`/produit/${product.id}`} key={product.id}>
-              <img src={product.image_url} alt={product.name} loading="lazy" />
-            </Link>
-          ))}
+        <div className="marquee instagram-marquee">
+          <div className="marquee-track">
+            {/* Liste doublée pour une boucle continue ; la copie est masquée aux lecteurs d'écran. */}
+            {[...shoppablePosts, ...shoppablePosts].map((product, i) => {
+              const isCopy = i >= shoppablePosts.length;
+              return (
+                <Link
+                  to={`/produit/${product.id}`}
+                  key={`${product.id}-${i}`}
+                  className="instagram-item"
+                  aria-hidden={isCopy}
+                  tabIndex={isCopy ? -1 : undefined}
+                >
+                  <img src={product.image_url} alt={product.name} loading="lazy" />
+                  <span className="instagram-overlay">{product.name}</span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
     </div>

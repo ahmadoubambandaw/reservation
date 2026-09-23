@@ -53,6 +53,8 @@ main {
 }
 
 .btn {
+  position: relative;
+  overflow: hidden;
   display: inline-block;
   padding: 14px 30px;
   border-radius: 30px;
@@ -73,6 +75,23 @@ main {
   background: var(--gold-dark);
   border-color: var(--gold-dark);
   transform: translateY(-1px);
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.btn-primary:hover::after {
+  left: 125%;
 }
 
 .btn:disabled {
@@ -154,14 +173,36 @@ main {
 }
 
 .main-nav a {
+  position: relative;
+  padding-bottom: 4px;
   color: var(--ink-soft);
   font-size: 0.85rem;
   letter-spacing: 0.03em;
+  transition: color 0.2s ease;
 }
 
 .main-nav a.active,
 .main-nav a:hover {
   color: var(--ink);
+}
+
+/* Soulignement au survol uniquement : plusieurs liens du menu pointent vers
+   /catalogue et seraient tous « actifs » en même temps. */
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--gold-dark);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.main-nav a:hover::after {
+  transform: scaleX(1);
 }
 
 .header-icons {
@@ -175,6 +216,7 @@ main {
   color: var(--ink);
   display: flex;
   align-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .cart-link {
@@ -182,6 +224,13 @@ main {
   color: var(--ink);
   display: flex;
   align-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.icon-link:hover,
+.cart-link:hover {
+  color: var(--gold-dark);
+  transform: translateY(-2px);
 }
 
 .cart-badge {
@@ -239,17 +288,70 @@ main {
   font-size: 1.02rem;
 }
 
+.hero-text {
+  animation: fade-up 0.7s ease both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .hero-photo {
+  position: relative;
+  height: 540px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 30px 60px rgba(169, 124, 92, 0.25);
 }
 
 .hero-photo img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 1s ease, transform 6s ease;
+}
+
+.hero-photo img.active {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.hero-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+
+.hero-dots button {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.hero-dots button.active {
+  width: 28px;
+  background: var(--gold-dark);
 }
 
 /* Trust badges */
@@ -272,6 +374,11 @@ main {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.trust-badge:hover .trust-badge-icon {
+  transform: scale(1.15) rotate(-8deg);
 }
 
 .trust-badge h4 {
@@ -361,6 +468,15 @@ main {
   opacity: 0.9;
 }
 
+.collection-card-cta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
 /* Product grid */
 .product-grid {
   display: grid;
@@ -395,6 +511,11 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-card-image img {
+  transform: scale(1.06);
 }
 
 .badge-new {
@@ -442,6 +563,31 @@ main {
 .quick-add:hover {
   background: var(--ink);
   color: var(--white);
+}
+
+/* Sur écran tactile, pas de survol : le bouton reste visible en permanence. */
+@media (hover: hover) {
+  .quick-add {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease, color 0.2s ease;
+  }
+
+  .product-card:hover .quick-add,
+  .quick-add:focus-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .collection-card-cta {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .collection-card:hover .collection-card-cta {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .wishlist-btn {
@@ -557,11 +703,24 @@ main {
   justify-content: center;
   color: var(--gold-dark);
   overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-icon-card:hover .category-icon-circle {
+  background: var(--gold-dark);
+  color: var(--white);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(169, 124, 92, 0.3);
 }
 
 .category-icon-card span:last-child {
   font-size: 0.82rem;
   color: var(--ink-soft);
+  transition: color 0.3s ease;
+}
+
+.category-icon-card:hover span:last-child {
+  color: var(--ink);
 }
 
 /* Why choose */
@@ -572,11 +731,28 @@ main {
   text-align: center;
 }
 
+.why-choose-grid > div {
+  padding: 24px 16px;
+  border-radius: 14px;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.why-choose-grid > div:hover {
+  background: var(--white);
+  box-shadow: 0 16px 32px rgba(36, 29, 29, 0.08);
+  transform: translateY(-4px);
+}
+
 .why-choose-icon {
   color: var(--gold-dark);
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.why-choose-grid > div:hover .why-choose-icon {
+  transform: scale(1.12);
 }
 
 .why-choose-grid h3 {
@@ -666,29 +842,154 @@ main {
   font-size: 0.85rem;
 }
 
-/* Instagram grid */
-.instagram-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
-}
-
-.instagram-grid a {
-  display: block;
-  aspect-ratio: 1;
-  border-radius: 10px;
+/* Défilement continu (bandeau d'annonces, Instagram) */
+.marquee {
   overflow: hidden;
 }
 
-.instagram-grid img {
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.announcement-bar {
+  --marquee-duration: 45s;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  padding: 9px 0;
+}
+
+/* Marge à droite plutôt que gap : le -50 % de l'animation reste exact. */
+.announcement-bar span {
+  position: relative;
+  padding-right: 56px;
+  white-space: nowrap;
+}
+
+.announcement-bar span::after {
+  content: "✦";
+  position: absolute;
+  right: 22px;
+  color: var(--gold);
+}
+
+.instagram-marquee {
+  --marquee-duration: 35s;
+  padding: 4px 0;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.instagram-item {
+  position: relative;
+  flex: 0 0 200px;
+  height: 200px;
+  margin-right: 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: block;
+}
+
+.instagram-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
-.instagram-grid a:hover img {
-  transform: scale(1.06);
+.instagram-item:hover img {
+  transform: scale(1.08);
+}
+
+.instagram-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(36, 29, 29, 0.75), transparent 60%);
+  color: var(--white);
+  font-size: 0.82rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.instagram-item:hover .instagram-overlay {
+  opacity: 1;
+}
+
+/* Carrousel des meilleures ventes */
+.carousel {
+  position: relative;
+  margin-bottom: 48px;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px 4px 16px;
+  scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-item {
+  flex: 0 0 calc((100% - 72px) / 4);
+  scroll-snap-align: start;
+}
+
+.carousel-item .product-card {
+  height: 100%;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(36, 29, 29, 0.12);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.carousel-arrow.prev {
+  left: -18px;
+}
+
+.carousel-arrow.next {
+  right: -18px;
 }
 
 /* Page title */
@@ -831,6 +1132,12 @@ main {
 
 .reviews-grid .review-card {
   margin-bottom: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reviews-grid .review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(36, 29, 29, 0.12);
 }
 
 .review-author {
@@ -1223,6 +1530,15 @@ main {
   color: var(--ink-soft);
 }
 
+.footer-col a {
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.footer-col a:hover {
+  color: var(--gold-dark);
+  padding-left: 4px;
+}
+
 .footer-icon {
   display: inline-flex;
   align-items: center;
@@ -1264,10 +1580,55 @@ main {
 
   .hero-photo {
     order: -1;
-    max-height: 360px;
+    height: 360px;
   }
 
   .footer-columns {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .carousel-arrow.prev {
+    left: 4px;
+  }
+
+  .carousel-arrow.next {
+    right: 4px;
+  }
+
+  .instagram-item {
+    flex-basis: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 960px) {
+  .carousel-item {
+    flex-basis: calc((100% - 24px) / 2);
+  }
+}
+
+@media (max-width: 560px) {
+  .carousel-item {
+    flex-basis: 80%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+  }
+
+  .marquee-track,
+  .hero-text {
+    animation: none;
+  }
+
+  .hero-photo img {
+    transition: none;
+    transform: none;
+  }
+
+  .hero-photo img.active {
+    transform: none;
   }
 }
