@@ -100,7 +100,7 @@ async function init() {
         price_xof: 58500,
         stock: 24,
         image_url:
-          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-5-gold-trio.jpg",
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/tiktok-5-gold-trio.jpg",
         featured: true,
         top_note: "Bergamote",
         heart_note: "Ambre",
@@ -117,7 +117,7 @@ async function init() {
         price_xof: 48500,
         stock: 30,
         image_url:
-          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
         featured: true,
         top_note: "Néroli",
         heart_note: "Jasmin",
@@ -134,7 +134,7 @@ async function init() {
         price_xof: 65000,
         stock: 18,
         image_url:
-          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-1-ysl.jpg",
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/tiktok-1-ysl.jpg",
         featured: true,
         top_note: "Poivre noir",
         heart_note: "Cardamome",
@@ -151,7 +151,7 @@ async function init() {
         price_xof: 35500,
         stock: 40,
         image_url:
-          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-6-vials.jpg",
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/tiktok-6-vials.jpg",
         featured: false,
         top_note: "Citron & Pamplemousse",
         heart_note: "Bergamote",
@@ -168,7 +168,7 @@ async function init() {
         price_xof: 54000,
         stock: 22,
         image_url:
-          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-3-hypnotic.jpg",
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/tiktok-3-hypnotic.jpg",
         featured: false,
         top_note: "Fève tonka",
         heart_note: "Vanille",
@@ -185,7 +185,7 @@ async function init() {
         price_xof: 56500,
         stock: 15,
         image_url:
-          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
         featured: false,
         top_note: "Framboise noire",
         heart_note: "Rose de Damas",
@@ -202,7 +202,7 @@ async function init() {
         price_xof: 98000,
         stock: 10,
         image_url:
-          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-4-my-way.jpg",
+          "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/tiktok-4-my-way.jpg",
         featured: true,
         top_note: "Safran",
         heart_note: "Rose noire",
