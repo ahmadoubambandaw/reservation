@@ -16,6 +16,7 @@ import {
   ShieldIcon,
   SpaIcon,
   SparkleIcon,
+  StarIcon,
   SunsetIcon,
   TreeIcon,
   TruckIcon,
@@ -73,6 +74,24 @@ const CATEGORY_ICONS = [
   { icon: SpaIcon, label: "Soin corps", category: "Soin corps" },
   { icon: BagIcon, label: "Sacs", category: "Sacs" },
   { icon: GemIcon, label: "Bijoux", category: "Bijoux" },
+];
+
+const HOME_REVIEWS = [
+  {
+    author: "Aïssatou D.",
+    rating: 5,
+    text: "Toujours des produits authentiques et un service adorable. Faty Store est devenu mon adresse beauté préférée !",
+  },
+  {
+    author: "Fatou S.",
+    rating: 5,
+    text: "La livraison est rapide et les parfums tiennent vraiment toute la journée.",
+  },
+  {
+    author: "Mariama B.",
+    rating: 4,
+    text: "Très bon accueil sur WhatsApp, on se sent bien conseillée avant d'acheter.",
+  },
 ];
 
 const WHY_CHOOSE = [
@@ -240,15 +259,24 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="container" style={{ margin: "64px auto" }}>
-        <div className="testimonial-card">
-          <p className="testimonial-quote">
-            « Toujours des produits authentiques et un service adorable. Faty Store est devenu
-            mon adresse beauté préférée ! »
-          </p>
-          <p className="testimonial-author">Une cliente Faty Store</p>
-          <p className="testimonial-note">Exemple d'avis — à remplacer par vos vrais avis clients.</p>
+      <section className="container">
+        <div className="section-heading">
+          <h2>Elles nous font confiance</h2>
         </div>
+        <div className="reviews-grid">
+          {HOME_REVIEWS.map((review) => (
+            <div className="review-card" key={review.author}>
+              <div className="review-stars">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <StarIcon key={n} size={14} filled={n <= review.rating} />
+                ))}
+              </div>
+              <p>« {review.text} »</p>
+              <p className="review-author">{review.author}</p>
+            </div>
+          ))}
+        </div>
+        <p className="testimonial-note">Exemples d'avis — à remplacer par vos vrais avis clients.</p>
       </section>
 
       <section className="container">

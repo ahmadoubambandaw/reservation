@@ -444,6 +444,39 @@ main {
   color: var(--white);
 }
 
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.08);
+}
+
+.wishlist-btn.active {
+  color: var(--danger);
+}
+
+.wishlist-btn.large {
+  position: static;
+  width: 40px;
+  height: 40px;
+  background: var(--pink-soft);
+  flex-shrink: 0;
+}
+
 .product-card-body {
   padding: 16px;
 }
@@ -721,6 +754,92 @@ main {
 .product-detail-info h1 {
   font-size: 2rem;
   margin: 8px 0;
+}
+
+.product-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--gold-dark);
+  margin: 4px 0 10px;
+}
+
+.product-rating span {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  margin-left: 6px;
+}
+
+.product-reviews {
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+
+.product-reviews h2 {
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+
+.review-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 16px rgba(36, 29, 29, 0.06);
+}
+
+.review-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.review-stars {
+  display: flex;
+  gap: 2px;
+  color: var(--gold-dark);
+}
+
+.review-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.reviews-grid .review-card {
+  margin-bottom: 0;
+}
+
+.review-author {
+  margin-top: 10px !important;
+  font-weight: 600;
+  color: var(--ink) !important;
+  font-size: 0.85rem !important;
+}
+
+.favorites-empty {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.favorites-empty p {
+  margin-bottom: 20px;
+  color: var(--ink-soft);
 }
 
 .product-description {

@@ -66,10 +66,18 @@ export function ChatIcon({ size = 22, className }) {
   );
 }
 
-export function HeartIcon({ size = 22, className }) {
+export function HeartIcon({ size = 22, className, filled = false }) {
   return (
-    <svg {...base(size, className)}>
+    <svg {...base(size, className)} fill={filled ? "currentColor" : "none"}>
       <path d="M12 20s-7-4.4-9.5-8.6C.7 8 2 4.5 5.4 4c2-.3 3.7.7 4.6 2.2C10.9 4.7 12.6 3.7 14.6 4 18 4.5 19.3 8 17.5 11.4 15 15.6 12 20 12 20Z" />
+    </svg>
+  );
+}
+
+export function StarIcon({ size = 16, className, filled = true }) {
+  return (
+    <svg {...base(size, className)} fill={filled ? "currentColor" : "none"}>
+      <path d="M12 3.5l2.4 5 5.5.6-4 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-4-3.8 5.5-.6L12 3.5Z" />
     </svg>
   );
 }

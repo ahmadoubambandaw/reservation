@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
+import { useWishlist } from "../context/WishlistContext.jsx";
+import { HeartIcon } from "./Icons.jsx";
 
 export function formatPrice(xof) {
   return `${Math.round(xof).toLocaleString("fr-FR")} FCFA`;
@@ -8,7 +10,9 @@ export function formatPrice(xof) {
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
+  const { isFavorite, toggleFavorite } = useWishlist();
   const [added, setAdded] = useState(false);
+  const favorite = isFavorite(product.id);
 
   function handleQuickAdd(e) {
     e.preventDefault();
@@ -16,6 +20,12 @@ export default function ProductCard({ product }) {
     addItem(product, 1);
     setAdded(true);
     setTimeout(() => setAdded(false), 1200);
+  }
+
+  function handleToggleFavorite(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(product.id);
   }
 
   return (
@@ -27,6 +37,14 @@ export default function ProductCard({ product }) {
         ) : (
           product.featured && <span className="badge-new">Nouveau</span>
         )}
+        <button
+          className={`wishlist-btn${favorite ? " active" : ""}`}
+          onClick={handleToggleFavorite}
+          aria-label={favorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+          title={favorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+        >
+          <HeartIcon size={16} filled={favorite} />
+        </button>
         {product.stock > 0 && (
           <button
             className="quick-add"
