@@ -92,6 +92,29 @@ export default function Product() {
         <p className="product-price">{formatPrice(product.price_xof)}</p>
         <p className="product-description">{product.description}</p>
 
+        {(product.top_note || product.heart_note || product.base_note) && (
+          <div className="fragrance-notes">
+            {product.top_note && (
+              <div className="fragrance-note">
+                <span className="fragrance-note-circle">Tête</span>
+                <p>{product.top_note}</p>
+              </div>
+            )}
+            {product.heart_note && (
+              <div className="fragrance-note">
+                <span className="fragrance-note-circle">Cœur</span>
+                <p>{product.heart_note}</p>
+              </div>
+            )}
+            {product.base_note && (
+              <div className="fragrance-note">
+                <span className="fragrance-note-circle">Fond</span>
+                <p>{product.base_note}</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {product.stock > 0 ? (
           <>
             <p className="stock-info">{product.stock} en stock</p>

@@ -725,8 +725,16 @@ main {
 /* Filters */
 .filters {
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
   margin-bottom: 32px;
+}
+
+.filters .category-pills {
+  flex: 1;
+  min-width: 220px;
 }
 
 .filters select {
@@ -846,6 +854,77 @@ main {
   line-height: 1.6;
   color: var(--ink-soft);
   margin: 20px 0;
+}
+
+.fragrance-notes {
+  display: flex;
+  gap: 24px;
+  margin: 8px 0 24px;
+  flex-wrap: wrap;
+}
+
+.fragrance-note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  max-width: 110px;
+}
+
+.fragrance-note-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gold-dark);
+  font-weight: 600;
+}
+
+.fragrance-note p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.catalog-search {
+  width: 100%;
+  padding: 13px 18px;
+  border-radius: 30px;
+  border: 1px solid var(--line);
+  font-family: inherit;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  background: var(--white);
+}
+
+.category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.category-pills button {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-radius: 20px;
+}
+
+.category-pills button.active {
+  background: var(--ink);
+  color: var(--white);
+  border-color: var(--ink);
 }
 
 .stock-info {

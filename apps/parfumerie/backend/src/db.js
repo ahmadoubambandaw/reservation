@@ -24,8 +24,15 @@ async function init() {
       stock INTEGER NOT NULL DEFAULT 0,
       image_url TEXT NOT NULL DEFAULT '',
       featured BOOLEAN NOT NULL DEFAULT FALSE,
+      top_note TEXT NOT NULL DEFAULT '',
+      heart_note TEXT NOT NULL DEFAULT '',
+      base_note TEXT NOT NULL DEFAULT '',
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
+
+    ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS top_note TEXT NOT NULL DEFAULT '';
+    ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS heart_note TEXT NOT NULL DEFAULT '';
+    ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS base_note TEXT NOT NULL DEFAULT '';
 
     CREATE TABLE IF NOT EXISTS faty_store.orders (
       id BIGSERIAL PRIMARY KEY,
@@ -95,6 +102,9 @@ async function init() {
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-5-gold-trio.jpg",
         featured: true,
+        top_note: "Bergamote",
+        heart_note: "Ambre",
+        base_note: "Vanille & Patchouli",
       },
       {
         name: "Fleur de Jasmin",
@@ -109,6 +119,9 @@ async function init() {
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
         featured: true,
+        top_note: "Néroli",
+        heart_note: "Jasmin",
+        base_note: "Musc blanc",
       },
       {
         name: "Cuir & Épices",
@@ -123,6 +136,9 @@ async function init() {
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-1-ysl.jpg",
         featured: true,
+        top_note: "Poivre noir",
+        heart_note: "Cardamome",
+        base_note: "Cuir",
       },
       {
         name: "Agrumes du Matin",
@@ -137,6 +153,9 @@ async function init() {
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-6-vials.jpg",
         featured: false,
+        top_note: "Citron & Pamplemousse",
+        heart_note: "Bergamote",
+        base_note: "Musc léger",
       },
       {
         name: "Vanille Sauvage",
@@ -151,6 +170,9 @@ async function init() {
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-3-hypnotic.jpg",
         featured: false,
+        top_note: "Fève tonka",
+        heart_note: "Vanille",
+        base_note: "Bois de santal",
       },
       {
         name: "Rose Impériale",
@@ -165,6 +187,9 @@ async function init() {
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-2-violet-blossom.jpg",
         featured: false,
+        top_note: "Framboise noire",
+        heart_note: "Rose de Damas",
+        base_note: "Musc",
       },
       {
         name: "Oud Royal",
@@ -179,6 +204,9 @@ async function init() {
         image_url:
           "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/tiktok-4-my-way.jpg",
         featured: true,
+        top_note: "Safran",
+        heart_note: "Rose noire",
+        base_note: "Oud",
       },
       {
         name: "Brise Marine",
@@ -192,6 +220,9 @@ async function init() {
         stock: 28,
         image_url: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=800",
         featured: false,
+        top_note: "Notes marines",
+        heart_note: "Fleur de sel",
+        base_note: "Figuier",
       },
       // Soins
       {
@@ -304,8 +335,8 @@ async function init() {
     for (const p of seedProducts) {
       await pool.query(
         `INSERT INTO faty_store.products
-          (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+          (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured, top_note, heart_note, base_note)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
         [
           p.name,
           p.brand,
@@ -318,6 +349,9 @@ async function init() {
           p.stock,
           p.image_url,
           p.featured,
+          p.top_note ?? "",
+          p.heart_note ?? "",
+          p.base_note ?? "",
         ]
       );
     }

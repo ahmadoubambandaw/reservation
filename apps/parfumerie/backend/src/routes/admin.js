@@ -12,8 +12,22 @@ adminRouter.get("/products", async (req, res) => {
 });
 
 adminRouter.post("/products", async (req, res) => {
-  const { name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured } =
-    req.body;
+  const {
+    name,
+    brand,
+    description,
+    type,
+    category,
+    gender,
+    volume_ml,
+    price_xof,
+    stock,
+    image_url,
+    featured,
+    top_note,
+    heart_note,
+    base_note,
+  } = req.body;
 
   if (!name || !brand || !price_xof) {
     return res.status(400).json({ error: "Nom, marque et prix sont obligatoires." });
@@ -21,8 +35,8 @@ adminRouter.post("/products", async (req, res) => {
 
   const { rows } = await pool.query(
     `INSERT INTO faty_store.products
-      (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured, top_note, heart_note, base_note)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
      RETURNING *`,
     [
       name,
@@ -36,6 +50,9 @@ adminRouter.post("/products", async (req, res) => {
       stock ?? 0,
       image_url ?? "",
       Boolean(featured),
+      top_note ?? "",
+      heart_note ?? "",
+      base_note ?? "",
     ]
   );
 
@@ -57,8 +74,9 @@ adminRouter.put("/products/:id", async (req, res) => {
   const { rows } = await pool.query(
     `UPDATE faty_store.products SET
       name = $1, brand = $2, description = $3, type = $4, category = $5, gender = $6,
-      volume_ml = $7, price_xof = $8, stock = $9, image_url = $10, featured = $11
-     WHERE id = $12
+      volume_ml = $7, price_xof = $8, stock = $9, image_url = $10, featured = $11,
+      top_note = $12, heart_note = $13, base_note = $14
+     WHERE id = $15
      RETURNING *`,
     [
       merged.name,
@@ -72,6 +90,9 @@ adminRouter.put("/products/:id", async (req, res) => {
       merged.stock,
       merged.image_url,
       Boolean(merged.featured),
+      merged.top_note ?? "",
+      merged.heart_note ?? "",
+      merged.base_note ?? "",
       req.params.id,
     ]
   );

@@ -14,6 +14,9 @@ const EMPTY_PRODUCT = {
   stock: 0,
   image_url: "",
   featured: false,
+  top_note: "",
+  heart_note: "",
+  base_note: "",
 };
 
 export default function Admin() {
@@ -287,6 +290,25 @@ export default function Admin() {
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
+            {form.type === "Parfum" && (
+              <div className="form-grid">
+                <input
+                  placeholder="Note de tête (ex: Bergamote)"
+                  value={form.top_note}
+                  onChange={(e) => setForm({ ...form, top_note: e.target.value })}
+                />
+                <input
+                  placeholder="Note de cœur (ex: Jasmin)"
+                  value={form.heart_note}
+                  onChange={(e) => setForm({ ...form, heart_note: e.target.value })}
+                />
+                <input
+                  placeholder="Note de fond (ex: Musc)"
+                  value={form.base_note}
+                  onChange={(e) => setForm({ ...form, base_note: e.target.value })}
+                />
+              </div>
+            )}
             <div className="form-actions">
               <button className="btn btn-primary" type="submit">
                 {editingId ? "Enregistrer" : "Ajouter"}

@@ -18,6 +18,7 @@ export default function Catalog() {
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState(() => searchParams.get("category") || "");
   const [gender, setGender] = useState("");
+  const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,9 +48,23 @@ export default function Catalog() {
       .finally(() => setLoading(false));
   }, [type, category, gender]);
 
+  const visibleProducts = search.trim()
+    ? products.filter((p) =>
+        `${p.name} ${p.brand}`.toLowerCase().includes(search.trim().toLowerCase())
+      )
+    : products;
+
   return (
     <div className="container">
       <h1 className="page-title">Notre catalogue</h1>
+
+      <input
+        type="search"
+        className="catalog-search"
+        placeholder="Rechercher un parfum, une marque…"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       <div className="type-tabs">
         {TYPES.map((t) => (
@@ -64,14 +79,20 @@ export default function Catalog() {
       </div>
 
       <div className="filters">
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">Toutes les catégories</option>
+        <div className="category-pills">
+          <button className={category === "" ? "active" : ""} onClick={() => setCategory("")}>
+            Toutes les catégories
+          </button>
           {categories.map((c) => (
-            <option key={c} value={c}>
+            <button
+              key={c}
+              className={category === c ? "active" : ""}
+              onClick={() => setCategory(c)}
+            >
               {c}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
 
         <select value={gender} onChange={(e) => setGender(e.target.value)}>
           <option value="">Tous les genres</option>
@@ -84,11 +105,11 @@ export default function Catalog() {
       {error && <p className="error-text">{error}</p>}
       {loading ? (
         <p>Chargement…</p>
-      ) : products.length === 0 ? (
+      ) : visibleProducts.length === 0 ? (
         <p>Aucun produit ne correspond à ces critères.</p>
       ) : (
         <div className="product-grid">
-          {products.map((product) => (
+          {visibleProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
