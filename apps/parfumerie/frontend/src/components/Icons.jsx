@@ -230,3 +230,12 @@ export function WhatsAppIcon({ size = 22, className }) {
     </svg>
   );
 }
+
+export function SearchIcon({ size = 18, className }) {
+  return (
+    <svg {...base(size, className)}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  );
+}

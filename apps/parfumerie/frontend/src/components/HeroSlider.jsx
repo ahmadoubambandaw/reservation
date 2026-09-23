@@ -15,6 +15,10 @@ export default function HeroSlider({ slides, interval = 5500 }) {
     return () => clearInterval(timer);
   }, [paused, slides.length, interval]);
 
+  function go(direction) {
+    setIndex((i) => (i + direction + slides.length) % slides.length);
+  }
+
   const slide = slides[index];
 
   return (
@@ -23,8 +27,17 @@ export default function HeroSlider({ slides, interval = 5500 }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <span className="hero-orb hero-orb-gold" aria-hidden="true" />
-      <span className="hero-orb hero-orb-rose" aria-hidden="true" />
+      {slides.map((s, i) => (
+        <img
+          key={i}
+          src={s.image}
+          alt={s.alt}
+          className={`hero-bg${i === index ? " active" : ""}`}
+          aria-hidden={i !== index}
+        />
+      ))}
+      <div className="hero-scrim" aria-hidden="true" />
+
       <div className="container hero-inner">
         {/* La clé force le remontage pour rejouer l'animation d'entrée à chaque slide. */}
         <div className="hero-text" key={index}>
@@ -37,34 +50,28 @@ export default function HeroSlider({ slides, interval = 5500 }) {
             {slide.cta.label}
           </Link>
         </div>
-        <div className="hero-photo">
-          {slides.map((s, i) => (
-            <img
-              key={i}
-              src={s.image}
-              alt={s.alt}
-              className={i === index ? "active" : ""}
-              aria-hidden={i !== index}
-            />
-          ))}
-          <div className="hero-glass-chip glass">
-            <span className="hero-glass-chip-icon">✦</span>
-            <span>
-              <strong>Sélection Faty Store</strong>
-              <small>Livraison rapide à Dakar</small>
-            </span>
-          </div>
-          <div className="hero-dots glass">
-            {slides.map((s, i) => (
-              <button
-                key={i}
-                className={i === index ? "active" : ""}
-                onClick={() => setIndex(i)}
-                aria-label={`Afficher la diapositive ${i + 1}`}
-              />
-            ))}
-          </div>
-        </div>
+      </div>
+
+      {slides.length > 1 && (
+        <>
+          <button className="hero-arrow prev" onClick={() => go(-1)} aria-label="Diapositive précédente">
+            ‹
+          </button>
+          <button className="hero-arrow next" onClick={() => go(1)} aria-label="Diapositive suivante">
+            ›
+          </button>
+        </>
+      )}
+
+      <div className="hero-dots glass">
+        {slides.map((s, i) => (
+          <button
+            key={i}
+            className={i === index ? "active" : ""}
+            onClick={() => setIndex(i)}
+            aria-label={`Afficher la diapositive ${i + 1}`}
+          />
+        ))}
       </div>
     </section>
   );

@@ -18,7 +18,7 @@ export default function Catalog() {
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState(() => searchParams.get("category") || "");
   const [gender, setGender] = useState("");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(() => searchParams.get("search") || "");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
