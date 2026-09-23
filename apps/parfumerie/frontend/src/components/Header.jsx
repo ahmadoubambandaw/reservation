@@ -4,7 +4,7 @@ import { useWishlist } from "../context/WishlistContext.jsx";
 import { BagIcon, HeartIcon, UserIcon } from "./Icons.jsx";
 
 const monogram =
-  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/fs-monogram.png";
+  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/fs-monogram.png";
 
 export default function Header() {
   const { totalItems } = useCart();

@@ -23,7 +23,7 @@ import {
 } from "../components/Icons.jsx";
 
 const ASSET_BASE =
-  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets";
+  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets";
 
 const heroPhoto = `${ASSET_BASE}/hero.jpg`;
 const tiktok2 = `${ASSET_BASE}/tiktok-2-violet-blossom.jpg`;

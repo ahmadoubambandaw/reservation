@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { CameraIcon, ChatIcon, GhostIcon, MusicIcon, PhoneIcon, PinIcon } from "./Icons.jsx";
 
 const monogram =
-  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/claude/fervent-shannon-2vkwes/apps/parfumerie/frontend/src/assets/fs-monogram.png";
+  "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/fs-monogram.png";
 
 export default function Footer() {
   return (
