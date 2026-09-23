@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import AnnouncementBar from "./components/AnnouncementBar.jsx";
 import Footer from "./components/Footer.jsx";
 import Header from "./components/Header.jsx";
+import WhatsAppButton from "./components/WhatsAppButton.jsx";
 import Admin from "./pages/Admin.jsx";
 import Cart from "./pages/Cart.jsx";
 import Catalog from "./pages/Catalog.jsx";
@@ -29,6 +30,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import { useWishlist } from "../context/WishlistContext.jsx";
-import { HeartIcon } from "./Icons.jsx";
+import { formatPrice } from "../format.js";
+import { productOrderMessage, whatsappLink } from "../whatsapp.js";
+import { HeartIcon, WhatsAppIcon } from "./Icons.jsx";
 
-export function formatPrice(xof) {
-  return `${Math.round(xof).toLocaleString("fr-FR")} FCFA`;
-}
+export { formatPrice };
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
@@ -20,6 +20,13 @@ export default function ProductCard({ product }) {
     addItem(product, 1);
     setAdded(true);
     setTimeout(() => setAdded(false), 1200);
+  }
+
+  function handleWhatsAppOrder(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    // Le bouton est dans un lien (<a>) : on ouvre WhatsApp par script plutôt qu'avec un <a> imbriqué.
+    window.open(whatsappLink(productOrderMessage(product)), "_blank", "noopener");
   }
 
   function handleToggleFavorite(e) {
@@ -46,14 +53,24 @@ export default function ProductCard({ product }) {
           <HeartIcon size={16} filled={favorite} />
         </button>
         {product.stock > 0 && (
-          <button
-            className="quick-add"
-            onClick={handleQuickAdd}
-            aria-label="Ajouter au panier"
-            title="Ajouter au panier"
-          >
-            {added ? "✓" : "+"}
-          </button>
+          <div className="card-actions">
+            <button
+              className="quick-whatsapp"
+              onClick={handleWhatsAppOrder}
+              aria-label="Commander sur WhatsApp"
+              title="Commander sur WhatsApp"
+            >
+              <WhatsAppIcon size={17} />
+            </button>
+            <button
+              className="quick-add"
+              onClick={handleQuickAdd}
+              aria-label="Ajouter au panier"
+              title="Ajouter au panier"
+            >
+              {added ? "✓" : "+"}
+            </button>
+          </div>
         )}
       </div>
       <div className="product-card-body">

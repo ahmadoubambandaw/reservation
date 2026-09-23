@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
 import { useWishlist } from "../context/WishlistContext.jsx";
@@ -9,9 +10,17 @@ const monogram =
 export default function Header() {
   const { totalItems } = useCart();
   const { productIds } = useWishlist();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="site-header">
+    <header className={`site-header${scrolled ? " scrolled" : ""}`}>
       <div className="container header-inner">
         <Link to="/" className="logo">
           <img src={monogram} alt="Faty Store" className="logo-mark" />

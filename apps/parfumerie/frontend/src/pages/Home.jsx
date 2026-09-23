@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { api } from "../api.js";
 import HeroSlider from "../components/HeroSlider.jsx";
 import ProductCarousel from "../components/ProductCarousel.jsx";
+import Reveal from "../components/Reveal.jsx";
+import { GENERAL_MESSAGE, whatsappLink } from "../whatsapp.js";
 import {
   BagIcon,
   ChatIcon,
@@ -21,6 +23,7 @@ import {
   SunsetIcon,
   TreeIcon,
   TruckIcon,
+  WhatsAppIcon,
 } from "../components/Icons.jsx";
 
 const ASSET_BASE =
@@ -173,7 +176,7 @@ export default function Home() {
     <div>
       <HeroSlider slides={HERO_SLIDES} />
 
-      <div className="container trust-badges">
+      <div className="container trust-badges glass">
         {TRUST_BADGES.map((badge) => (
           <div className="trust-badge" key={badge.title}>
             <span className="trust-badge-icon">
@@ -187,7 +190,7 @@ export default function Home() {
         ))}
       </div>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Nos collections</h2>
           <Link to="/catalogue">Voir tout</Link>
@@ -204,18 +207,18 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Nos meilleures ventes</h2>
           <Link to="/catalogue">Voir tout</Link>
         </div>
         {error && <p className="error-text">{error}</p>}
         <ProductCarousel products={featured} />
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="promo-banner">
           <div className="promo-banner-text">
             <h2>Retrait en boutique</h2>
@@ -223,14 +226,24 @@ export default function Home() {
               Rendez-vous à Ouest Foire pour récupérer votre commande, ou faites-vous livrer
               directement à Dakar.
             </p>
-            <Link to="/catalogue" className="btn btn-primary">
-              Commander maintenant
-            </Link>
+            <div className="promo-actions">
+              <Link to="/catalogue" className="btn btn-primary">
+                Commander maintenant
+              </Link>
+              <a
+                href={whatsappLink(GENERAL_MESSAGE)}
+                className="btn btn-whatsapp"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <WhatsAppIcon size={18} /> Commander sur WhatsApp
+              </a>
+            </div>
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Parcourir par catégorie</h2>
         </div>
@@ -248,9 +261,9 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Pourquoi choisir Faty Store</h2>
         </div>
@@ -265,9 +278,9 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Elles nous font confiance</h2>
         </div>
@@ -285,9 +298,9 @@ export default function Home() {
           ))}
         </div>
         <p className="testimonial-note">Exemples d'avis — à remplacer par vos vrais avis clients.</p>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="newsletter-section">
           <h2>Restez à la mode</h2>
           <p>Inscrivez-vous pour recevoir nos nouveautés et offres exclusives.</p>
@@ -306,9 +319,9 @@ export default function Home() {
           {newsletterMessage && <p className="newsletter-message success-text">{newsletterMessage}</p>}
           {newsletterError && <p className="newsletter-message error-text">{newsletterError}</p>}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Suivez-nous sur Instagram</h2>
           <a href="https://instagram.com/fatystore01" target="_blank" rel="noreferrer">
@@ -335,7 +348,7 @@ export default function Home() {
             })}
           </div>
         </div>
-      </section>
+      </Reveal>
     </div>
   );
 }

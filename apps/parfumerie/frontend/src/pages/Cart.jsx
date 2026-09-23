@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api.js";
+import { WhatsAppIcon } from "../components/Icons.jsx";
 import { formatPrice } from "../components/ProductCard.jsx";
 import { useCart } from "../context/CartContext.jsx";
+import { cartOrderMessage, whatsappLink } from "../whatsapp.js";
 
 export default function Cart() {
   const { items, updateQuantity, removeItem, totalXof } = useCart();
@@ -68,9 +70,22 @@ export default function Cart() {
           Total : <strong>{formatPrice(totalXof)}</strong>
         </p>
         {error && <p className="error-text">{error}</p>}
-        <button className="btn btn-primary" onClick={handleCheckout} disabled={loading}>
-          {loading ? "Redirection vers le paiement…" : "Passer au paiement"}
-        </button>
+        <div className="cart-actions">
+          <a
+            href={whatsappLink(cartOrderMessage(items, totalXof))}
+            className="btn btn-whatsapp"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <WhatsAppIcon size={18} /> Commander sur WhatsApp
+          </a>
+          <button className="btn btn-primary" onClick={handleCheckout} disabled={loading}>
+            {loading ? "Redirection vers le paiement…" : "Payer en ligne"}
+          </button>
+        </div>
+        <p className="whatsapp-hint">
+          Sur WhatsApp, votre panier est envoyé automatiquement à notre équipe.
+        </p>
       </div>
     </div>
   );

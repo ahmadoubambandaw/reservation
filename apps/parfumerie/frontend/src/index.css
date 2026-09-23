@@ -11,6 +11,14 @@
   --white: #ffffff;
   --danger: #c0392b;
   --success: #4a7c59;
+  --whatsapp: #1fb855;
+  --whatsapp-dark: #128c4b;
+  /* Verre dépoli */
+  --glass-bg: rgba(255, 255, 255, 0.52);
+  --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-blur: blur(18px) saturate(170%);
+  --glass-shadow: 0 12px 40px rgba(122, 82, 64, 0.14);
 }
 
 * {
@@ -19,7 +27,12 @@
 
 body {
   margin: 0;
-  background: var(--cream);
+  background:
+    radial-gradient(900px 620px at -10% 0%, rgba(242, 205, 208, 0.55), transparent 60%),
+    radial-gradient(760px 560px at 110% 35%, rgba(199, 154, 123, 0.2), transparent 60%),
+    radial-gradient(700px 520px at 20% 100%, rgba(242, 205, 208, 0.4), transparent 60%),
+    var(--cream);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
 }
@@ -34,6 +47,33 @@ h1, h2, h3 {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+/* Verre dépoli */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--glass-bg-strong);
+  }
+}
+
+/* Apparition au défilement */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
 }
 
 .container {
@@ -77,7 +117,36 @@ main {
   transform: translateY(-1px);
 }
 
-.btn-primary::after {
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--whatsapp);
+  border-color: var(--whatsapp);
+  color: var(--white);
+  box-shadow: 0 10px 24px rgba(31, 184, 85, 0.28);
+}
+
+.btn-whatsapp:hover {
+  background: var(--whatsapp-dark);
+  border-color: var(--whatsapp-dark);
+  transform: translateY(-1px);
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.whatsapp-hint {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.btn-primary::after,
+.btn-whatsapp::after {
   content: "";
   position: absolute;
   top: 0;
@@ -90,7 +159,8 @@ main {
   pointer-events: none;
 }
 
-.btn-primary:hover::after {
+.btn-primary:hover::after,
+.btn-whatsapp:hover::after {
   left: 125%;
 }
 
@@ -115,11 +185,19 @@ main {
 
 /* Header */
 .site-header {
-  background: var(--white);
-  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   position: sticky;
   top: 0;
   z-index: 10;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-header.scrolled {
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 8px 30px rgba(122, 82, 64, 0.12);
 }
 
 .header-inner {
@@ -250,8 +328,85 @@ main {
 
 /* Hero */
 .hero {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, var(--pink) 0%, var(--pink-deep) 100%);
-  padding: 60px 24px;
+  padding: 60px 24px 100px;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  animation: orb-float 14s ease-in-out infinite alternate;
+}
+
+.hero-orb-gold {
+  width: 420px;
+  height: 420px;
+  top: -140px;
+  left: 30%;
+  background: rgba(199, 154, 123, 0.45);
+}
+
+.hero-orb-rose {
+  width: 360px;
+  height: 360px;
+  bottom: -160px;
+  right: -60px;
+  background: rgba(255, 255, 255, 0.7);
+  animation-delay: -7s;
+}
+
+@keyframes orb-float {
+  to {
+    transform: translate(60px, 40px) scale(1.1);
+  }
+}
+
+.hero-glass-chip {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 16px;
+  color: var(--ink);
+}
+
+.hero-glass-chip-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: var(--gold);
+}
+
+.hero-glass-chip strong,
+.hero-glass-chip small {
+  display: block;
+}
+
+.hero-glass-chip strong {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.hero-glass-chip small {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
 }
 
 .hero-inner {
@@ -336,6 +491,8 @@ main {
   display: flex;
   gap: 8px;
   z-index: 1;
+  padding: 8px 12px;
+  border-radius: 20px;
 }
 
 .hero-dots button {
@@ -344,7 +501,7 @@ main {
   padding: 0;
   border: none;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(36, 29, 29, 0.25);
   cursor: pointer;
   transition: width 0.3s ease, background 0.3s ease;
 }
@@ -356,11 +513,16 @@ main {
 
 /* Trust badges */
 .trust-badges {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  padding: 36px 24px;
-  border-bottom: 1px solid var(--line);
+  width: calc(100% - 48px);
+  max-width: 1132px;
+  margin: -56px auto 0;
+  padding: 28px 32px;
+  border-radius: 20px;
 }
 
 .trust-badge {
@@ -452,8 +614,13 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 20px 16px;
-  background: linear-gradient(to top, rgba(36, 29, 29, 0.75), transparent);
+  margin: 12px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: rgba(36, 29, 29, 0.28);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: var(--white);
 }
 
@@ -495,9 +662,13 @@ main {
   box-shadow: 0 4px 16px rgba(36, 29, 29, 0.06);
 }
 
+.product-card {
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(36, 29, 29, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 22px 44px rgba(122, 82, 64, 0.2);
 }
 
 .product-card-image {
@@ -522,7 +693,10 @@ main {
   position: absolute;
   top: 12px;
   left: 12px;
-  background: var(--ink);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(36, 29, 29, 0.6);
   color: var(--white);
   padding: 4px 10px;
   font-size: 0.68rem;
@@ -543,15 +717,43 @@ main {
   text-transform: uppercase;
 }
 
-.quick-add {
+.card-actions {
   position: absolute;
   right: 10px;
   bottom: 10px;
-  width: 36px;
-  height: 36px;
+  display: flex;
+  gap: 8px;
+}
+
+.quick-add,
+.quick-whatsapp {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.quick-whatsapp {
   border: none;
+  background: var(--whatsapp);
+  color: var(--white);
+  box-shadow: 0 6px 14px rgba(31, 184, 85, 0.35);
+}
+
+.quick-whatsapp:hover {
+  background: var(--whatsapp-dark);
+  transform: scale(1.08);
+}
+
+.quick-add {
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   cursor: pointer;
   font-size: 1rem;
   box-shadow: 0 4px 10px rgba(36, 29, 29, 0.2);
@@ -567,14 +769,14 @@ main {
 
 /* Sur écran tactile, pas de survol : le bouton reste visible en permanence. */
 @media (hover: hover) {
-  .quick-add {
+  .card-actions {
     opacity: 0;
     transform: translateY(8px);
-    transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease, color 0.2s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
-  .product-card:hover .quick-add,
-  .quick-add:focus-visible {
+  .product-card:hover .card-actions,
+  .card-actions:focus-within {
     opacity: 1;
     transform: none;
   }
@@ -597,8 +799,10 @@ main {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -655,7 +859,11 @@ main {
 
 /* Promo banner */
 .promo-banner {
-  background: linear-gradient(120deg, var(--pink) 0%, var(--pink-deep) 100%);
+  background:
+    linear-gradient(120deg, rgba(247, 223, 224, 0.35), rgba(36, 29, 29, 0.1)),
+    url("https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/hero.jpg")
+      right 30% / cover,
+    var(--pink-deep);
   border-radius: 18px;
   padding: 48px;
   display: flex;
@@ -664,6 +872,23 @@ main {
   gap: 24px;
   flex-wrap: wrap;
   margin: 64px 0;
+}
+
+.promo-banner-text {
+  max-width: 660px;
+  padding: 32px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.promo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .promo-banner-text h2 {
@@ -732,13 +957,17 @@ main {
 }
 
 .why-choose-grid > div {
-  padding: 24px 16px;
-  border-radius: 14px;
+  padding: 28px 18px;
+  border-radius: 18px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .why-choose-grid > div:hover {
-  background: var(--white);
+  background: var(--glass-bg-strong);
   box-shadow: 0 16px 32px rgba(36, 29, 29, 0.08);
   transform: translateY(-4px);
 }
@@ -802,11 +1031,39 @@ main {
 
 /* Newsletter */
 .newsletter-section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: linear-gradient(120deg, var(--pink-deep) 0%, var(--pink) 100%);
   border-radius: 18px;
   padding: 48px;
   text-align: center;
   margin: 64px 0;
+}
+
+.newsletter-section::before,
+.newsletter-section::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(50px);
+}
+
+.newsletter-section::before {
+  width: 280px;
+  height: 280px;
+  top: -120px;
+  left: -60px;
+  background: rgba(199, 154, 123, 0.5);
+}
+
+.newsletter-section::after {
+  width: 260px;
+  height: 260px;
+  bottom: -130px;
+  right: -40px;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .newsletter-section h2 {
@@ -833,7 +1090,10 @@ main {
   min-width: 220px;
   padding: 13px 18px;
   border-radius: 30px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   font-family: inherit;
 }
 
@@ -922,7 +1182,9 @@ main {
   display: flex;
   align-items: flex-end;
   padding: 12px;
-  background: linear-gradient(to top, rgba(36, 29, 29, 0.75), transparent 60%);
+  background: linear-gradient(to top, rgba(36, 29, 29, 0.55), transparent 60%);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   color: var(--white);
   font-size: 0.82rem;
   opacity: 0;
@@ -969,8 +1231,10 @@ main {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid var(--line);
-  background: var(--white);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   color: var(--ink);
   font-size: 1.5rem;
   line-height: 1;
@@ -1057,7 +1321,19 @@ main {
 
 .product-detail-image img {
   width: 100%;
-  border-radius: 16px;
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(122, 82, 64, 0.2);
+}
+
+.product-detail-info {
+  align-self: start;
+  padding: 32px;
+  border-radius: 22px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 .product-detail-info h1 {
@@ -1098,8 +1374,11 @@ main {
 }
 
 .review-card {
-  background: var(--white);
-  border-radius: 12px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
   padding: 18px;
   margin-bottom: 12px;
   box-shadow: 0 4px 16px rgba(36, 29, 29, 0.06);
@@ -1301,6 +1580,18 @@ main {
   padding: 24px 0 60px;
 }
 
+.cart-summary .whatsapp-hint {
+  margin-top: 12px;
+  font-size: 0.8rem;
+}
+
+.cart-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .cart-summary p {
   font-size: 1.2rem;
   margin-bottom: 16px;
@@ -1474,6 +1765,93 @@ main {
   color: var(--danger);
 }
 
+/* Bouton WhatsApp flottant */
+.whatsapp-float {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 16px 40px rgba(36, 29, 29, 0.18);
+  color: var(--ink);
+}
+
+.whatsapp-float-icon {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--whatsapp);
+  color: var(--white);
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-float-icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--whatsapp);
+  animation: whatsapp-pulse 2.4s ease-out infinite;
+}
+
+.whatsapp-float-icon svg {
+  position: relative;
+}
+
+@keyframes whatsapp-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.whatsapp-float-label {
+  display: flex;
+  flex-direction: column;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: max-width 0.4s ease, opacity 0.3s ease, padding 0.4s ease;
+}
+
+.whatsapp-float-label strong {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.whatsapp-float-label small {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.whatsapp-float:hover .whatsapp-float-label,
+.whatsapp-float:focus-visible .whatsapp-float-label {
+  max-width: 240px;
+  opacity: 1;
+  padding: 0 18px 0 14px;
+}
+
+.whatsapp-float:hover .whatsapp-float-icon {
+  transform: rotate(-10deg);
+}
+
 /* Footer */
 .site-footer {
   background: var(--pink-soft);
@@ -1571,7 +1949,25 @@ main {
 
   .header-inner {
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px 12px;
+  }
+
+  /* Menu sur une seule ligne défilante, sous le logo et les icônes */
+  .main-nav {
+    order: 3;
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 22px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .main-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .main-nav a {
+    white-space: nowrap;
   }
 
   .hero-inner {
@@ -1581,6 +1977,24 @@ main {
   .hero-photo {
     order: -1;
     height: 360px;
+  }
+
+  .trust-badges {
+    margin-top: -40px;
+    padding: 22px;
+  }
+
+  .product-detail-info {
+    padding: 22px;
+  }
+
+  .cart-actions {
+    flex-direction: column;
+  }
+
+  .whatsapp-float {
+    right: 16px;
+    bottom: 16px;
   }
 
   .footer-columns {
@@ -1616,6 +2030,17 @@ main {
 @media (prefers-reduced-motion: reduce) {
   .marquee {
     overflow-x: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-orb,
+  .whatsapp-float-icon::before {
+    animation: none;
   }
 
   .marquee-track,

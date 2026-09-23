@@ -23,6 +23,8 @@ export default function HeroSlider({ slides, interval = 5500 }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
+      <span className="hero-orb hero-orb-gold" aria-hidden="true" />
+      <span className="hero-orb hero-orb-rose" aria-hidden="true" />
       <div className="container hero-inner">
         {/* La clé force le remontage pour rejouer l'animation d'entrée à chaque slide. */}
         <div className="hero-text" key={index}>
@@ -45,7 +47,14 @@ export default function HeroSlider({ slides, interval = 5500 }) {
               aria-hidden={i !== index}
             />
           ))}
-          <div className="hero-dots">
+          <div className="hero-glass-chip glass">
+            <span className="hero-glass-chip-icon">✦</span>
+            <span>
+              <strong>Sélection Faty Store</strong>
+              <small>Livraison rapide à Dakar</small>
+            </span>
+          </div>
+          <div className="hero-dots glass">
             {slides.map((s, i) => (
               <button
                 key={i}
