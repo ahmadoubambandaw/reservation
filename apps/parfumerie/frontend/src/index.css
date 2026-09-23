@@ -568,6 +568,25 @@ main {
   font-size: 1.9rem;
 }
 
+.section-eyebrow {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  margin-bottom: 6px;
+}
+
+/* Section « Produits vedettes », mise en avant juste sous le héros */
+.featured-section {
+  margin-top: -12px;
+}
+
+.featured-section .section-heading {
+  margin-top: 40px;
+}
+
 .section-heading a {
   border: 1px solid var(--ink);
   padding: 8px 18px;
@@ -829,6 +848,20 @@ main {
 
 .product-card-body {
   padding: 16px;
+}
+
+.card-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--gold-dark);
+  margin: 2px 0 6px;
+}
+
+.card-rating span {
+  margin-left: 5px;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
 }
 
 .product-brand {

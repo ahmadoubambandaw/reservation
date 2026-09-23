@@ -4,15 +4,25 @@ import { useCart } from "../context/CartContext.jsx";
 import { useWishlist } from "../context/WishlistContext.jsx";
 import { formatPrice } from "../format.js";
 import { productOrderMessage, whatsappLink } from "../whatsapp.js";
-import { HeartIcon, WhatsAppIcon } from "./Icons.jsx";
+import { HeartIcon, StarIcon, WhatsAppIcon } from "./Icons.jsx";
 
 export { formatPrice };
+
+// Note factice déterministe (même logique que les avis d'exemple de la fiche produit),
+// en attendant un vrai système d'avis client.
+function pseudoRating(id) {
+  const sum = String(id)
+    .split("")
+    .reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return 4 + (sum % 11) / 10;
+}
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
   const { isFavorite, toggleFavorite } = useWishlist();
   const [added, setAdded] = useState(false);
   const favorite = isFavorite(product.id);
+  const rating = pseudoRating(product.id);
 
   function handleQuickAdd(e) {
     e.preventDefault();
@@ -76,6 +86,12 @@ export default function ProductCard({ product }) {
       <div className="product-card-body">
         <p className="product-brand">{product.brand}</p>
         <h3>{product.name}</h3>
+        <div className="card-rating">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <StarIcon key={n} size={12} filled={n <= Math.round(rating)} />
+          ))}
+          <span>{rating.toFixed(1)}</span>
+        </div>
         <p className="product-meta">
           {product.category}
           {product.volume_ml > 0 ? ` · ${product.volume_ml} ml` : ""}

@@ -190,6 +190,18 @@ export default function Home() {
         ))}
       </div>
 
+      <Reveal as="section" className="container featured-section">
+        <div className="section-heading">
+          <div>
+            <span className="section-eyebrow">Sélection</span>
+            <h2>Produits vedettes</h2>
+          </div>
+          <Link to="/catalogue">Tout voir →</Link>
+        </div>
+        {error && <p className="error-text">{error}</p>}
+        <ProductCarousel products={featured} />
+      </Reveal>
+
       <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Nos collections</h2>
@@ -207,15 +219,6 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      </Reveal>
-
-      <Reveal as="section" className="container">
-        <div className="section-heading">
-          <h2>Nos meilleures ventes</h2>
-          <Link to="/catalogue">Voir tout</Link>
-        </div>
-        {error && <p className="error-text">{error}</p>}
-        <ProductCarousel products={featured} />
       </Reveal>
 
       <Reveal as="section" className="container">
