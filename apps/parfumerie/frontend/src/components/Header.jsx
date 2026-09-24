@@ -69,8 +69,6 @@ export default function Header() {
         </NavLink>
         <NavLink to="/catalogue">Boutique</NavLink>
         <NavLink to="/catalogue?type=Parfum">Parfums</NavLink>
-        <NavLink to="/catalogue?type=Soin">Soins</NavLink>
-        <NavLink to="/catalogue?type=Accessoire">Accessoires</NavLink>
       </nav>
     </header>
   );

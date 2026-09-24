@@ -15,8 +15,8 @@ export default function Footer() {
             <strong>Faty Store</strong>
           </div>
           <p className="footer-desc">
-            Parfums, soins premium et accessoires chic, sélectionnés avec exigence pour révéler
-            votre beauté au quotidien.
+            Des parfums d'exception, sélectionnés avec exigence pour révéler votre beauté au
+            quotidien.
           </p>
         </div>
 
@@ -24,8 +24,8 @@ export default function Footer() {
           <p className="footer-heading">Boutique</p>
           <Link to="/">Accueil</Link>
           <Link to="/catalogue?type=Parfum">Parfums</Link>
-          <Link to="/catalogue?type=Soin">Soins</Link>
-          <Link to="/catalogue?type=Accessoire">Accessoires</Link>
+          <Link to="/catalogue?gender=Femme">Féminin</Link>
+          <Link to="/catalogue?gender=Homme">Masculin</Link>
         </div>
 
         <div className="footer-col">
