@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api.js";
 import { formatPrice } from "../components/ProductCard.jsx";
-import { HeartIcon, StarIcon } from "../components/Icons.jsx";
+import { HeartIcon, StarIcon, WhatsAppIcon } from "../components/Icons.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import { useWishlist } from "../context/WishlistContext.jsx";
+import { productAvailabilityMessage, productOrderMessage, whatsappLink } from "../whatsapp.js";
 
 const SAMPLE_REVIEWS = [
   {
@@ -130,10 +131,29 @@ export default function Product() {
                 Ajouter au panier
               </button>
             </div>
+            <a
+              href={whatsappLink(productOrderMessage(product, quantity))}
+              className="btn btn-whatsapp btn-block"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <WhatsAppIcon size={18} /> Commander sur WhatsApp
+            </a>
+            <p className="whatsapp-hint">Commande confirmée en quelques minutes par notre équipe.</p>
             {added && <p className="success-text">Ajouté au panier !</p>}
           </>
         ) : (
-          <p className="error-text">Ce produit est actuellement épuisé.</p>
+          <>
+            <p className="error-text">Ce produit est actuellement épuisé.</p>
+            <a
+              href={whatsappLink(productAvailabilityMessage(product))}
+              className="btn btn-whatsapp btn-block"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <WhatsAppIcon size={18} /> Demander la disponibilité
+            </a>
+          </>
         )}
 
         <div className="product-reviews">

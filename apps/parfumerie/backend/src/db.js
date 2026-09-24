@@ -27,12 +27,16 @@ async function init() {
       top_note TEXT NOT NULL DEFAULT '',
       heart_note TEXT NOT NULL DEFAULT '',
       base_note TEXT NOT NULL DEFAULT '',
+      occasion TEXT NOT NULL DEFAULT '',
+      season TEXT NOT NULL DEFAULT '',
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
 
     ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS top_note TEXT NOT NULL DEFAULT '';
     ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS heart_note TEXT NOT NULL DEFAULT '';
     ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS base_note TEXT NOT NULL DEFAULT '';
+    ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS occasion TEXT NOT NULL DEFAULT '';
+    ALTER TABLE faty_store.products ADD COLUMN IF NOT EXISTS season TEXT NOT NULL DEFAULT '';
 
     CREATE TABLE IF NOT EXISTS faty_store.orders (
       id BIGSERIAL PRIMARY KEY,
@@ -105,6 +109,8 @@ async function init() {
         top_note: "Bergamote",
         heart_note: "Ambre",
         base_note: "Vanille & Patchouli",
+        occasion: "Soirée",
+        season: "Automne, Hiver",
       },
       {
         name: "Fleur de Jasmin",
@@ -122,6 +128,8 @@ async function init() {
         top_note: "Néroli",
         heart_note: "Jasmin",
         base_note: "Musc blanc",
+        occasion: "Quotidien",
+        season: "Printemps, Été",
       },
       {
         name: "Cuir & Épices",
@@ -139,6 +147,8 @@ async function init() {
         top_note: "Poivre noir",
         heart_note: "Cardamome",
         base_note: "Cuir",
+        occasion: "Soirée",
+        season: "Automne, Hiver",
       },
       {
         name: "Agrumes du Matin",
@@ -156,6 +166,8 @@ async function init() {
         top_note: "Citron & Pamplemousse",
         heart_note: "Bergamote",
         base_note: "Musc léger",
+        occasion: "Quotidien, Bureau",
+        season: "Printemps, Été",
       },
       {
         name: "Vanille Sauvage",
@@ -173,6 +185,8 @@ async function init() {
         top_note: "Fève tonka",
         heart_note: "Vanille",
         base_note: "Bois de santal",
+        occasion: "Rendez-vous",
+        season: "Automne, Hiver",
       },
       {
         name: "Rose Impériale",
@@ -190,6 +204,8 @@ async function init() {
         top_note: "Framboise noire",
         heart_note: "Rose de Damas",
         base_note: "Musc",
+        occasion: "Cérémonie, Rendez-vous",
+        season: "Toutes saisons",
       },
       {
         name: "Oud Royal",
@@ -207,6 +223,8 @@ async function init() {
         top_note: "Safran",
         heart_note: "Rose noire",
         base_note: "Oud",
+        occasion: "Soirée, Cérémonie",
+        season: "Automne, Hiver",
       },
       {
         name: "Brise Marine",
@@ -223,6 +241,8 @@ async function init() {
         top_note: "Notes marines",
         heart_note: "Fleur de sel",
         base_note: "Figuier",
+        occasion: "Quotidien, Sport",
+        season: "Printemps, Été",
       },
       // Soins
       {
@@ -237,6 +257,8 @@ async function init() {
         stock: 20,
         image_url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800",
         featured: true,
+        occasion: "Quotidien",
+        season: "Toutes saisons",
       },
       {
         name: "Sérum Vitamine C",
@@ -250,6 +272,8 @@ async function init() {
         stock: 16,
         image_url: "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=800",
         featured: true,
+        occasion: "Quotidien",
+        season: "Toutes saisons",
       },
       {
         name: "Baume Corps Karité",
@@ -263,6 +287,8 @@ async function init() {
         stock: 25,
         image_url: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800",
         featured: false,
+        occasion: "Quotidien",
+        season: "Automne, Hiver",
       },
       {
         name: "Huile Démêlante Cheveux",
@@ -276,6 +302,8 @@ async function init() {
         stock: 30,
         image_url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800",
         featured: false,
+        occasion: "Quotidien",
+        season: "Toutes saisons",
       },
       // Accessoires
       {
@@ -290,6 +318,8 @@ async function init() {
         stock: 8,
         image_url: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800",
         featured: true,
+        occasion: "Quotidien, Bureau",
+        season: "Toutes saisons",
       },
       {
         name: "Écharpe Soie Imprimée",
@@ -303,6 +333,8 @@ async function init() {
         stock: 14,
         image_url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=800",
         featured: false,
+        occasion: "Cérémonie, Bureau",
+        season: "Automne, Hiver",
       },
       {
         name: "Créoles Dorées",
@@ -316,6 +348,8 @@ async function init() {
         stock: 20,
         image_url: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800",
         featured: true,
+        occasion: "Cérémonie, Rendez-vous",
+        season: "Toutes saisons",
       },
       {
         name: "Portefeuille Compact",
@@ -329,14 +363,16 @@ async function init() {
         stock: 18,
         image_url: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=800",
         featured: false,
+        occasion: "Quotidien",
+        season: "Toutes saisons",
       },
     ];
 
     for (const p of seedProducts) {
       await pool.query(
         `INSERT INTO faty_store.products
-          (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured, top_note, heart_note, base_note)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+          (name, brand, description, type, category, gender, volume_ml, price_xof, stock, image_url, featured, top_note, heart_note, base_note, occasion, season)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
         [
           p.name,
           p.brand,
@@ -352,6 +388,8 @@ async function init() {
           p.top_note ?? "",
           p.heart_note ?? "",
           p.base_note ?? "",
+          p.occasion ?? "",
+          p.season ?? "",
         ]
       );
     }

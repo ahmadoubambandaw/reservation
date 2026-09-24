@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { CameraIcon, ChatIcon, GhostIcon, MusicIcon, PhoneIcon, PinIcon } from "./Icons.jsx";
+import { GENERAL_MESSAGE, whatsappLink } from "../whatsapp.js";
+import { CameraIcon, GhostIcon, MusicIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "./Icons.jsx";
 
 const monogram =
   "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets/fs-monogram.png";
@@ -32,9 +33,9 @@ export default function Footer() {
           <p>
             <span className="footer-icon"><PinIcon size={16} /></span> Ouest Foire, Dakar
           </p>
-          <p>
-            <span className="footer-icon"><ChatIcon size={16} /></span> WhatsApp : 76 179 68 58
-          </p>
+          <a href={whatsappLink(GENERAL_MESSAGE)} target="_blank" rel="noreferrer">
+            <span className="footer-icon"><WhatsAppIcon size={16} /></span> WhatsApp : 76 179 68 58
+          </a>
           <p>
             <span className="footer-icon"><PhoneIcon size={16} /></span> 70 111 89 74
           </p>

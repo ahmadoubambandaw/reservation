@@ -17,6 +17,8 @@ const EMPTY_PRODUCT = {
   top_note: "",
   heart_note: "",
   base_note: "",
+  occasion: "",
+  season: "",
 };
 
 export default function Admin() {
@@ -309,6 +311,18 @@ export default function Admin() {
                 />
               </div>
             )}
+            <div className="form-grid">
+              <input
+                placeholder="Occasion (ex: Soirée, Bureau)"
+                value={form.occasion}
+                onChange={(e) => setForm({ ...form, occasion: e.target.value })}
+              />
+              <input
+                placeholder="Saison (ex: Automne, Hiver)"
+                value={form.season}
+                onChange={(e) => setForm({ ...form, season: e.target.value })}
+              />
+            </div>
             <div className="form-actions">
               <button className="btn btn-primary" type="submit">
                 {editingId ? "Enregistrer" : "Ajouter"}

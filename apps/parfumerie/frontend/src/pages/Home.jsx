@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api.js";
-import ProductCard from "../components/ProductCard.jsx";
+import HeroSlider from "../components/HeroSlider.jsx";
+import ProductCarousel from "../components/ProductCarousel.jsx";
+import Reveal from "../components/Reveal.jsx";
+import { GENERAL_MESSAGE, whatsappLink } from "../whatsapp.js";
 import {
   BagIcon,
   ChatIcon,
@@ -20,13 +23,46 @@ import {
   SunsetIcon,
   TreeIcon,
   TruckIcon,
+  WhatsAppIcon,
 } from "../components/Icons.jsx";
 
 const ASSET_BASE =
   "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets";
 
-const heroPhoto = `${ASSET_BASE}/hero.jpg`;
 const tiktok2 = `${ASSET_BASE}/tiktok-2-violet-blossom.jpg`;
+const tiktok1 = `${ASSET_BASE}/tiktok-1-ysl.jpg`;
+const tiktok5 = `${ASSET_BASE}/tiktok-5-gold-trio.jpg`;
+const tiktok6 = `${ASSET_BASE}/tiktok-6-vials.jpg`;
+
+const HERO_SLIDES = [
+  {
+    image: `${ASSET_BASE}/hero.jpg`,
+    alt: "Faty Store — Beauty & Co",
+    kicker: "Faty Store · Beauty & Co",
+    title: "Révélez votre",
+    highlight: "éclat naturel",
+    text: "Parfums, soins premium et accessoires chic pour révéler votre beauté au quotidien, sélectionnés avec exigence par Faty Store.",
+    cta: { label: "Découvrir la boutique", to: "/catalogue" },
+  },
+  {
+    image: `${ASSET_BASE}/tiktok-5-gold-trio.jpg`,
+    alt: "Trio de parfums dorés",
+    kicker: "Collection parfums",
+    title: "Des parfums",
+    highlight: "d'exception",
+    text: "Des fragrances choisies avec exigence pour sublimer chaque moment de votre journée.",
+    cta: { label: "Voir les parfums", to: "/catalogue?type=Parfum" },
+  },
+  {
+    image: `${ASSET_BASE}/tiktok-1-ysl.jpg`,
+    alt: "Flacon de parfum en boutique",
+    kicker: "Nouveautés",
+    title: "Les nouveautés",
+    highlight: "du moment",
+    text: "Découvrez les dernières arrivées en boutique : parfums, soins et accessoires chic.",
+    cta: { label: "Voir les nouveautés", to: "/catalogue" },
+  },
+];
 
 const SHOPPABLE_PHOTO_URLS = [
   `${ASSET_BASE}/tiktok-1-ysl.jpg`,
@@ -39,22 +75,32 @@ const SHOPPABLE_PHOTO_URLS = [
 
 const COLLECTIONS = [
   {
-    type: "Parfum",
-    title: "Parfums",
-    description: "Des senteurs uniques pour chaque occasion",
+    to: "/catalogue?gender=Femme",
+    emoji: "🌹",
+    title: "Féminin",
+    description: "Des senteurs et soins pensés pour elle",
     image: tiktok2,
   },
   {
-    type: "Soin",
-    title: "Soins",
-    description: "Prenez soin de vous au quotidien",
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600",
+    to: "/catalogue?gender=Homme",
+    emoji: "🖤",
+    title: "Masculin",
+    description: "Des signatures affirmées pour lui",
+    image: tiktok1,
   },
   {
-    type: "Accessoire",
-    title: "Accessoires",
-    description: "L'élégance se complète dans les détails",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600",
+    to: "/catalogue?gender=Mixte",
+    emoji: "✨",
+    title: "Unisexe",
+    description: "Des créations à partager sans distinction",
+    image: tiktok5,
+  },
+  {
+    whatsapp: true,
+    emoji: "🎁",
+    title: "Coffrets & Cadeaux",
+    description: "Composez un coffret sur mesure avec notre équipe",
+    image: tiktok6,
   },
 ];
 
@@ -141,28 +187,9 @@ export default function Home() {
 
   return (
     <div>
-      <section className="hero">
-        <div className="container hero-inner">
-          <div className="hero-text">
-            <span className="hero-kicker">Faty Store · Beauty &amp; Co</span>
-            <h1>
-              Révélez votre <em>éclat naturel</em>
-            </h1>
-            <p>
-              Parfums, soins premium et accessoires chic pour révéler votre beauté au
-              quotidien, sélectionnés avec exigence par Faty Store.
-            </p>
-            <Link to="/catalogue" className="btn btn-primary">
-              Découvrir la boutique
-            </Link>
-          </div>
-          <div className="hero-photo">
-            <img src={heroPhoto} alt="Faty Store — Beauty & Co" />
-          </div>
-        </div>
-      </section>
+      <HeroSlider slides={HERO_SLIDES} />
 
-      <div className="container trust-badges">
+      <div className="container trust-badges glass">
         {TRUST_BADGES.map((badge) => (
           <div className="trust-badge" key={badge.title}>
             <span className="trust-badge-icon">
@@ -176,38 +203,72 @@ export default function Home() {
         ))}
       </div>
 
-      <section className="container">
+      <Reveal as="section" className="container featured-section">
         <div className="section-heading">
-          <h2>Nos collections</h2>
+          <div>
+            <span className="section-eyebrow">Sélection</span>
+            <h2>Produits vedettes</h2>
+          </div>
+          <Link to="/catalogue">Tout voir →</Link>
+        </div>
+        {error && <p className="error-text">{error}</p>}
+        <ProductCarousel products={featured} />
+      </Reveal>
+
+      <Reveal as="section" className="container">
+        <div className="wishlist-promo">
+          <span className="wishlist-promo-icon">
+            <HeartIcon size={20} filled />
+          </span>
+          <div>
+            <strong>Wishlist</strong>
+            <p>Enregistrez vos coups de cœur et retrouvez-les à tout moment.</p>
+          </div>
+          <Link to="/favoris" className="btn btn-primary">
+            Voir ma wishlist
+          </Link>
+        </div>
+
+        <div className="section-heading">
+          <h2>Collections</h2>
           <Link to="/catalogue">Voir tout</Link>
         </div>
         <div className="collections-grid">
-          {COLLECTIONS.map((col) => (
-            <Link to={`/catalogue?type=${col.type}`} className="collection-card" key={col.type}>
-              <img src={col.image} alt={col.title} />
-              <div className="collection-card-label">
-                <h3>{col.title}</h3>
-                <p>{col.description}</p>
-              </div>
-            </Link>
-          ))}
+          {COLLECTIONS.map((col) =>
+            col.whatsapp ? (
+              <a
+                href={whatsappLink(
+                  "Bonjour Faty Store 👋 Je souhaite composer un coffret cadeau sur mesure."
+                )}
+                target="_blank"
+                rel="noreferrer"
+                className="collection-card"
+                key={col.title}
+              >
+                <img src={col.image} alt={col.title} />
+                <span className="collection-card-emoji">{col.emoji}</span>
+                <div className="collection-card-label">
+                  <h3>{col.title}</h3>
+                  <p>{col.description}</p>
+                  <span className="collection-card-cta">Nous écrire →</span>
+                </div>
+              </a>
+            ) : (
+              <Link to={col.to} className="collection-card" key={col.title}>
+                <img src={col.image} alt={col.title} />
+                <span className="collection-card-emoji">{col.emoji}</span>
+                <div className="collection-card-label">
+                  <h3>{col.title}</h3>
+                  <p>{col.description}</p>
+                  <span className="collection-card-cta">Découvrir →</span>
+                </div>
+              </Link>
+            )
+          )}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
-        <div className="section-heading">
-          <h2>Nos meilleures ventes</h2>
-          <Link to="/catalogue">Voir tout</Link>
-        </div>
-        {error && <p className="error-text">{error}</p>}
-        <div className="product-grid">
-          {featured.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="promo-banner">
           <div className="promo-banner-text">
             <h2>Retrait en boutique</h2>
@@ -215,14 +276,24 @@ export default function Home() {
               Rendez-vous à Ouest Foire pour récupérer votre commande, ou faites-vous livrer
               directement à Dakar.
             </p>
-            <Link to="/catalogue" className="btn btn-primary">
-              Commander maintenant
-            </Link>
+            <div className="promo-actions">
+              <Link to="/catalogue" className="btn btn-primary">
+                Commander maintenant
+              </Link>
+              <a
+                href={whatsappLink(GENERAL_MESSAGE)}
+                className="btn btn-whatsapp"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <WhatsAppIcon size={18} /> Commander sur WhatsApp
+              </a>
+            </div>
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Parcourir par catégorie</h2>
         </div>
@@ -240,9 +311,9 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Pourquoi choisir Faty Store</h2>
         </div>
@@ -257,9 +328,9 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Elles nous font confiance</h2>
         </div>
@@ -277,9 +348,9 @@ export default function Home() {
           ))}
         </div>
         <p className="testimonial-note">Exemples d'avis — à remplacer par vos vrais avis clients.</p>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="newsletter-section">
           <h2>Restez à la mode</h2>
           <p>Inscrivez-vous pour recevoir nos nouveautés et offres exclusives.</p>
@@ -298,23 +369,36 @@ export default function Home() {
           {newsletterMessage && <p className="newsletter-message success-text">{newsletterMessage}</p>}
           {newsletterError && <p className="newsletter-message error-text">{newsletterError}</p>}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="container">
+      <Reveal as="section" className="container">
         <div className="section-heading">
           <h2>Suivez-nous sur Instagram</h2>
           <a href="https://instagram.com/fatystore01" target="_blank" rel="noreferrer">
             @fatystore01
           </a>
         </div>
-        <div className="instagram-grid">
-          {shoppablePosts.map((product) => (
-            <Link to={`/produit/${product.id}`} key={product.id}>
-              <img src={product.image_url} alt={product.name} loading="lazy" />
-            </Link>
-          ))}
+        <div className="marquee instagram-marquee">
+          <div className="marquee-track">
+            {/* Liste doublée pour une boucle continue ; la copie est masquée aux lecteurs d'écran. */}
+            {[...shoppablePosts, ...shoppablePosts].map((product, i) => {
+              const isCopy = i >= shoppablePosts.length;
+              return (
+                <Link
+                  to={`/produit/${product.id}`}
+                  key={`${product.id}-${i}`}
+                  className="instagram-item"
+                  aria-hidden={isCopy}
+                  tabIndex={isCopy ? -1 : undefined}
+                >
+                  <img src={product.image_url} alt={product.name} loading="lazy" />
+                  <span className="instagram-overlay">{product.name}</span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
-      </section>
+      </Reveal>
     </div>
   );
 }
