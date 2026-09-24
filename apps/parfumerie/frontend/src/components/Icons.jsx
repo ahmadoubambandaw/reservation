@@ -239,3 +239,24 @@ export function SearchIcon({ size = 18, className }) {
     </svg>
   );
 }
+
+export function CakeIcon({ size = 26, className }) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M3 20h18" />
+      <path d="M5 20v-6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6" />
+      <path d="M9 12V9a3 3 0 0 1 6 0v3" />
+      <path d="M12 6V3" />
+      <path d="M9 16h.01M12 16h.01M15 16h.01" />
+    </svg>
+  );
+}
+
+export function WaveIcon({ size = 26, className }) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M2 8c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0" />
+      <path d="M2 15c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0" />
+    </svg>
+  );
+}

@@ -4,13 +4,6 @@ import { api } from "../api.js";
 import ProductCard from "../components/ProductCard.jsx";
 import { SearchIcon } from "../components/Icons.jsx";
 
-const TYPES = [
-  { value: "", label: "Tout" },
-  { value: "Parfum", label: "Parfums" },
-  { value: "Soin", label: "Soins" },
-  { value: "Accessoire", label: "Accessoires" },
-];
-
 const GENDERS = [
   { value: "Femme", label: "Femme" },
   { value: "Homme", label: "Homme" },
@@ -37,8 +30,7 @@ function uniqueSorted(values) {
 }
 
 export default function Catalog() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const type = searchParams.get("type") || "";
+  const [searchParams] = useSearchParams();
 
   const [allProducts, setAllProducts] = useState([]);
   const [category, setCategory] = useState(() => searchParams.get("category") || "");
@@ -53,19 +45,16 @@ export default function Catalog() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  function selectType(nextType) {
-    setCategory("");
-    setSearchParams(nextType ? { type: nextType } : {});
-  }
-
+  // La boutique ne vend que des parfums : un seul chargement suffit, le backend
+  // ne renvoie de toute façon que ce type de produit.
   useEffect(() => {
     setLoading(true);
     api
-      .getProducts(type ? { type } : {})
+      .getProducts({})
       .then(setAllProducts)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [type]);
+  }, []);
 
   // Toutes les valeurs de filtre sont calculées à partir des produits déjà chargés
   // pour le type courant, afin de ne jamais proposer une option qui ne donnerait aucun résultat.
@@ -157,18 +146,6 @@ export default function Catalog() {
         />
       </div>
 
-      <div className="type-tabs">
-        {TYPES.map((t) => (
-          <button
-            key={t.value}
-            className={type === t.value ? "active" : ""}
-            onClick={() => selectType(t.value)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
       <button
         type="button"
         className="filters-toggle"
@@ -192,12 +169,7 @@ export default function Catalog() {
           <FilterGroup title="Prix" options={PRICE_RANGES.map((r) => r.label)} value={priceRange} onChange={setPriceRange} />
           <FilterGroup title="Genre" options={GENDERS} value={gender} onChange={setGender} />
           <FilterGroup title="Marque" options={brands} value={brand} onChange={setBrand} />
-          <FilterGroup
-            title={type === "Parfum" ? "Famille olfactive" : "Catégorie"}
-            options={categories}
-            value={category}
-            onChange={setCategory}
-          />
+          <FilterGroup title="Famille olfactive" options={categories} value={category} onChange={setCategory} />
           <FilterGroup title="Notes" options={notes} value={note} onChange={setNote} />
           <FilterGroup title="Occasion" options={occasions} value={occasion} onChange={setOccasion} />
           <FilterGroup title="Saison" options={seasons} value={season} onChange={setSeason} />

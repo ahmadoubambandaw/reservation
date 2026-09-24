@@ -6,23 +6,21 @@ import ProductCarousel from "../components/ProductCarousel.jsx";
 import Reveal from "../components/Reveal.jsx";
 import { GENERAL_MESSAGE, whatsappLink } from "../whatsapp.js";
 import {
-  BagIcon,
+  CakeIcon,
   ChatIcon,
   CitrusIcon,
-  DropletIcon,
   FlowerIcon,
-  GemIcon,
   HeartIcon,
   LockIcon,
   MailIcon,
   RocketIcon,
   ShieldIcon,
-  SpaIcon,
   SparkleIcon,
   StarIcon,
   SunsetIcon,
   TreeIcon,
   TruckIcon,
+  WaveIcon,
   WhatsAppIcon,
 } from "../components/Icons.jsx";
 
@@ -116,10 +114,8 @@ const CATEGORY_ICONS = [
   { icon: TreeIcon, label: "Boisé", category: "Boisé" },
   { icon: SunsetIcon, label: "Oriental", category: "Oriental" },
   { icon: CitrusIcon, label: "Hespéridé", category: "Hespéridé" },
-  { icon: DropletIcon, label: "Soin visage", category: "Soin visage" },
-  { icon: SpaIcon, label: "Soin corps", category: "Soin corps" },
-  { icon: BagIcon, label: "Sacs", category: "Sacs" },
-  { icon: GemIcon, label: "Bijoux", category: "Bijoux" },
+  { icon: CakeIcon, label: "Gourmand", category: "Gourmand" },
+  { icon: WaveIcon, label: "Aquatique", category: "Aquatique" },
 ];
 
 const HOME_REVIEWS = [

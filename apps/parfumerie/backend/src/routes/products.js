@@ -3,16 +3,16 @@ import { pool } from "../db.js";
 
 export const productsRouter = Router();
 
+// La boutique ne vend que des parfums : toutes les routes publiques sont
+// restreintes à ce type, quels que soient les paramètres reçus. Les produits
+// Soin/Accessoire restent en base (historique de commandes) mais ne sont
+// plus jamais exposés au client.
 productsRouter.get("/", async (req, res) => {
-  const { type, category, gender, featured } = req.query;
+  const { category, gender, featured } = req.query;
 
-  const conditions = [];
+  const conditions = ["type = 'Parfum'"];
   const params = [];
 
-  if (type) {
-    params.push(type);
-    conditions.push(`type = $${params.length}`);
-  }
   if (category) {
     params.push(category);
     conditions.push(`category = $${params.length}`);
@@ -34,22 +34,18 @@ productsRouter.get("/", async (req, res) => {
 });
 
 productsRouter.get("/categories", async (req, res) => {
-  const { type } = req.query;
-
-  const { rows } = type
-    ? await pool.query(
-        "SELECT DISTINCT category FROM faty_store.products WHERE type = $1 ORDER BY category",
-        [type]
-      )
-    : await pool.query("SELECT DISTINCT category FROM faty_store.products ORDER BY category");
+  const { rows } = await pool.query(
+    "SELECT DISTINCT category FROM faty_store.products WHERE type = 'Parfum' ORDER BY category"
+  );
 
   res.json(rows.map((row) => row.category));
 });
 
 productsRouter.get("/:id", async (req, res) => {
-  const { rows } = await pool.query("SELECT * FROM faty_store.products WHERE id = $1", [
-    req.params.id,
-  ]);
+  const { rows } = await pool.query(
+    "SELECT * FROM faty_store.products WHERE id = $1 AND type = 'Parfum'",
+    [req.params.id]
+  );
 
   if (!rows[0]) {
     return res.status(404).json({ error: "Produit introuvable." });
