@@ -30,6 +30,9 @@ const ASSET_BASE =
   "https://raw.githubusercontent.com/ahmadoubambandaw/reservation/main/apps/parfumerie/frontend/src/assets";
 
 const tiktok2 = `${ASSET_BASE}/tiktok-2-violet-blossom.jpg`;
+const tiktok1 = `${ASSET_BASE}/tiktok-1-ysl.jpg`;
+const tiktok5 = `${ASSET_BASE}/tiktok-5-gold-trio.jpg`;
+const tiktok6 = `${ASSET_BASE}/tiktok-6-vials.jpg`;
 
 const HERO_SLIDES = [
   {
@@ -72,22 +75,32 @@ const SHOPPABLE_PHOTO_URLS = [
 
 const COLLECTIONS = [
   {
-    type: "Parfum",
-    title: "Parfums",
-    description: "Des senteurs uniques pour chaque occasion",
+    to: "/catalogue?gender=Femme",
+    emoji: "🌹",
+    title: "Féminin",
+    description: "Des senteurs et soins pensés pour elle",
     image: tiktok2,
   },
   {
-    type: "Soin",
-    title: "Soins",
-    description: "Prenez soin de vous au quotidien",
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600",
+    to: "/catalogue?gender=Homme",
+    emoji: "🖤",
+    title: "Masculin",
+    description: "Des signatures affirmées pour lui",
+    image: tiktok1,
   },
   {
-    type: "Accessoire",
-    title: "Accessoires",
-    description: "L'élégance se complète dans les détails",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600",
+    to: "/catalogue?gender=Mixte",
+    emoji: "✨",
+    title: "Unisexe",
+    description: "Des créations à partager sans distinction",
+    image: tiktok5,
+  },
+  {
+    whatsapp: true,
+    emoji: "🎁",
+    title: "Coffrets & Cadeaux",
+    description: "Composez un coffret sur mesure avec notre équipe",
+    image: tiktok6,
   },
 ];
 
@@ -203,21 +216,55 @@ export default function Home() {
       </Reveal>
 
       <Reveal as="section" className="container">
+        <div className="wishlist-promo">
+          <span className="wishlist-promo-icon">
+            <HeartIcon size={20} filled />
+          </span>
+          <div>
+            <strong>Wishlist</strong>
+            <p>Enregistrez vos coups de cœur et retrouvez-les à tout moment.</p>
+          </div>
+          <Link to="/favoris" className="btn btn-primary">
+            Voir ma wishlist
+          </Link>
+        </div>
+
         <div className="section-heading">
-          <h2>Nos collections</h2>
+          <h2>Collections</h2>
           <Link to="/catalogue">Voir tout</Link>
         </div>
         <div className="collections-grid">
-          {COLLECTIONS.map((col) => (
-            <Link to={`/catalogue?type=${col.type}`} className="collection-card" key={col.type}>
-              <img src={col.image} alt={col.title} />
-              <div className="collection-card-label">
-                <h3>{col.title}</h3>
-                <p>{col.description}</p>
-                <span className="collection-card-cta">Découvrir →</span>
-              </div>
-            </Link>
-          ))}
+          {COLLECTIONS.map((col) =>
+            col.whatsapp ? (
+              <a
+                href={whatsappLink(
+                  "Bonjour Faty Store 👋 Je souhaite composer un coffret cadeau sur mesure."
+                )}
+                target="_blank"
+                rel="noreferrer"
+                className="collection-card"
+                key={col.title}
+              >
+                <img src={col.image} alt={col.title} />
+                <span className="collection-card-emoji">{col.emoji}</span>
+                <div className="collection-card-label">
+                  <h3>{col.title}</h3>
+                  <p>{col.description}</p>
+                  <span className="collection-card-cta">Nous écrire →</span>
+                </div>
+              </a>
+            ) : (
+              <Link to={col.to} className="collection-card" key={col.title}>
+                <img src={col.image} alt={col.title} />
+                <span className="collection-card-emoji">{col.emoji}</span>
+                <div className="collection-card-label">
+                  <h3>{col.title}</h3>
+                  <p>{col.description}</p>
+                  <span className="collection-card-cta">Découvrir →</span>
+                </div>
+              </Link>
+            )
+          )}
         </div>
       </Reveal>
 
